@@ -1,0 +1,116 @@
+{
+  "userNotFound": "Пользователь не найден!",
+  "tokenNotFound": "Токен не найден!",
+  "idNotFound": "ID не найден!",
+  "departmentNotFound": "Отдел не найден!",
+  "fileNotFound": "Отсутствует файл!",
+  "fileNotImage": "Файл не является изображением!",
+  "LIMIT_FILE_SIZE": "Размер файла не должен превышать 200 kb!",
+  "invalidFileType": "Неверный тип файла!",
+
+  "tokenInvalid": "Токен недействителен!",
+  "tokenExpired": "Срок жизни токена истек!",
+  "authError": "Ошибка аутентификации!",
+  "accessDenied": "Доступ запрещен!",
+  "youDontHaveAccess": "У вас недостаточно прав для данного действия!",
+
+  "incorectPassword": "Неверный пароль!",
+  "profileInactive": "Ваш профиль был деактивирован!",
+  "invalidId": "Не валидный ID!",
+
+  "deleted": "Удалено!",
+  "serverError": "Ошибка сервера!",
+
+
+
+  "_idCustom": "Неверный формат идентификатора.",
+  "_idBase": "Идентификатор должен быть строкой.",
+  "_idRequired": "Идентификатор обязателен для заполнения.",
+
+  "phoneEmpty": "Поле 'Телефон' не может быть пустым",
+  "phonePattern": "Номер телефона должен соответствовать формату 998 (XX) XXX-XX-XX.",
+  "phoneRequired": "Поле 'Телефон' обязательно для заполнения",
+
+  "passwordEmpty": "Поле password не может быть пустым.",
+  "passwordMin": "Пароль должен содержать минимум 5 символов.",
+  "passwordMax": "Пароль не должен превышать 50 символов.",
+  "passwordRequired": "Поле password обязательно для заполнения.",
+
+  "limitBase": "Тип должен быть числом.",
+  "limitOnly": "Тип может быть только 30, 50, 100.",
+
+  "pageBase": "Тип должен быть числом.",
+  "pageinteger": "Значение должно быть целым числом.",
+  "pagePositive": "Значение должно быть положительным числом.",
+
+
+  "departmentNameBase": "Название должно быть строкой.",
+  "departmentNameEmpty": "Название не может быть пустым.",
+  "departmentNameMin": "Название должно содержать минимум 3 символа.",
+  "departmentNameMax": "Название не должно превышать 150 символов.",
+  "departmentNameRequired": "Название обязательно для заполнения.",
+
+  "departmentTypeBase": "Тип должен быть числом.",
+  "departmentTypeOnly": "Тип может быть только 0 (Department) или 1 (Group).",
+  "departmentTypesRequired": "Тип обязательно для заполнения.",
+
+  "departmentWorkTimeBase": "Рабочее время должно быть массивом.",
+
+  "departmentWorkTimeDayBase": "День должен быть числом.",
+  "departmentWorkTimeDayInteger": "День должен быть целым числом.",
+  "departmentWorkTimeDayMin": "День не может быть меньше 0 (воскресенье).",
+  "departmentWorkTimeDayMax": "День не может быть больше 6 (суббота).",
+  "departmentWorkTimeDayRequired": "День недели обязателен.",
+
+  "departmentWorkTimeStartTimeBase": "Время начала должно быть датой.",
+  "departmentWorkTimeStartTimeRequired": "Время начала обязательно.",
+
+  "departmentWorkTimeEndTimeBase": "Время окончания должно быть датой.",
+  "departmentWorkTimeEndTimeGreater": "Время окончания должно быть позже времени начала.",
+  "departmentWorkTimeEndTimeRequired": "Время окончания обязательно.",
+
+  "departmentParentCustom": "Неверный формат родительского отдела.",
+  "departmentParentBase": "Родительский отдел должен быть строкой.",
+
+  "departmentChiefCustom": "Неверный формат идентификатора руководителя.",
+  "departmentChiefBase": "Руководитель должен быть строкой.",
+
+  "departmentStatusBase": "Статус должен быть строкой.",
+  "departmentStatusOnly": "Статус может быть только 'active' или 'inactive'.",
+
+
+  "userFullNameBase": "Поле 'ФИО' не может быть пустым",
+  "userFullNameMin": "Поле 'ФИО' должно содержать минимум 3 символа.",
+  "userFullNameMax": "Поле 'ФИО' не должно превышать 100 символов.",
+  "userFullNameRequired": "Поле 'ФИО' обязательно для заполнения",
+
+  "userRoleOnly": "Поле 'Роль' должно быть одним из: boss, chief, worker, guest",
+  "userRoleRequired": "Поле 'Роль' обязательно для заполнения",
+
+  "userFaceUrlBase": "Ссылка на фото должен быть строкой.",
+  "userFaceUrlRequired": "Ссылка на фото обязательна для заполнения.",
+
+  "userDepartmentCustom": "Неверный формат идентификатора отдела.",
+  "userDepartmentBase": "Отдел должен быть строкой.",
+
+  "userWorkTimeDayBase": "День должен быть числом.",
+  "userWorkTimeDayMin": "День недели должен быть от 0 (воскресенье) до 6 (суббота)",
+  "userWorkTimeDayMax": "День недели должен быть от 0 (воскресенье) до 6 (суббота)",
+  "userWorkTimeDayRequired": "День недели обязателен.",
+
+  "userWorkTimeStartTimeStartTimeBase": "Поле 'Время начала' должно быть датой.",
+  "userWorkTimeStartTimeRequired": "Поле 'Время начала' обязательно.",
+
+  "userWorkTimeEndTimeBase": "Поле 'Время окончания' должно быть датой.",
+  "userWorkTimeEndTimeGreater": "Поле 'Время окончания' должно быть позже 'Времени начала'.",
+  "userWorkTimeEndTimeRequired": "Поле 'Время окончания' обязательно.",
+
+  "userSyncIp": "Поле 'IP' должно быть валидным IP-адресом",
+  "userSyncIpRequired": "Поле 'IP' обязательно для заполнения",
+
+  "userSyncTypeBase": "Поле 'Тип' должно быть числом.",
+  "userSyncTypeOnly": "Поле 'Тип' должно быть 0 (выход) или 1 (вход).",
+  "userSyncTypeRequired": "Поле 'Тип' обязательно для заполнения",
+
+  "userSyncStatusBase": "Поле 'Статус' должно быть булевым значением"
+}
