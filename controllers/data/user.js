@@ -16,6 +16,7 @@ export const all = async (req, res, next) => {
     limit = limit || 30;
     let skip = (page - 1) * limit;
     let filter = {
+      role: { $ne: "admin" },
       ...(fullName && { fullName: new RegExp(fullName, 'i') }),
       ...(role && { role }),
       ...(department && { department }),

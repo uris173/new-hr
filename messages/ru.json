@@ -7,6 +7,7 @@
   "fileNotImage": "Файл не является изображением!",
   "LIMIT_FILE_SIZE": "Размер файла не должен превышать 200 kb!",
   "invalidFileType": "Неверный тип файла!",
+  "workerNotFound": "Сотрудник не найден!",
 
   "tokenInvalid": "Токен недействителен!",
   "tokenExpired": "Срок жизни токена истек!",
@@ -112,5 +113,48 @@
   "userSyncTypeOnly": "Поле 'Тип' должно быть 0 (выход) или 1 (вход).",
   "userSyncTypeRequired": "Поле 'Тип' обязательно для заполнения",
 
-  "userSyncStatusBase": "Поле 'Статус' должно быть булевым значением"
+  "userSyncStatusBase": "Поле 'Статус' должно быть булевым значением",
+
+
+  "workerUserCustom": "Неверный формат идентификатора пользователя.",
+  "workerUserBase": "Пользователь должен быть строкой.",
+  "workerUserRequired": "Пользователь обязателен для заполнения.",
+
+  "workerDepartmentCustom": "Неверный формат идентификатора отдела.",
+  "workerDepartmentBase": "Отдел должен быть строкой.",
+  "workerDepartmentRequired": "Отдел обязателен для заполнения.",
+
+  "workerGroupCustom": "Неверный формат идентификатора группы.",
+  "workerGroupBase": "Группа должна быть строкой.",
+
+  "workerGenderBase": "'gender' должен быть строкой.",
+  "workerGenderOnly": "Поле 'gender' должно быть одним из значений: male, female, custom.",
+  "workerGenderRequired": "Поле 'gender' обязательно для заполнения.",
+
+  "workerBirthDateBase": "Поле 'birthDay' должно быть датой.",
+  "workerBirthDayLess": "Дата рождения должна быть меньше текущей даты.",
+  "workerBirthDateRequired": "Поле 'birthDay' обязательно для заполнения.",
+
+  "workerAddressBase": "Поле 'address' должно быть строкой.",
+  "workerAddressRequired": "Поле 'address' обязательно для заполнения.",
+  "workerAddressMax": "Поле 'address' не должно превышать 255 символов.",
+
+  "workerHistoryCompanyBase": "Поле 'historyCompany' должно быть строкой.",
+  "workerHistoryCompanyRequired": "Поле 'historyCompany' обязательно для заполнения.",
+  "workerHistoryCompanyMax": "Поле 'historyCompany' не должно превышать 100 символов.",
+
+  "workerHistoryPositionBase": "Поле 'historyPosition' должно быть строкой.",
+  "workerHistoryPositionRequired": "Поле 'historyPosition' обязательно для заполнения.",
+  "workerHistoryPositionMax": "Поле 'historyPosition' не должно превышать 100 символов.",
+
+  "workerHistoryEnterDateBase": "Поле 'historyEnterDate' должно быть датой.",
+  "workerHistoryEnterDateLess": "Дата вступления должна быть меньше текущей даты.",
+  "workerHistoryEnterDateRequired": "Поле 'historyEnterDate' обязательно для заполнения.",
+
+  "workerHistoryLeaveDateBase": "Поле 'historyLeaveDate' должно быть датой.",
+  "workerHistoryLeaveDateLess": "Дата ухода должна быть меньше текущей даты.",
+  "workerHistoryLeaveDateRequired": "Поле 'historyLeaveDate' обязательно для заполнения.",
+
+  "workerHistoryCommentBase": "Поле 'historyComment' должно быть строкой.",
+  "workerHistoryCommentMax": "Поле 'historyComment' не должно превышать 255 символов."
 }

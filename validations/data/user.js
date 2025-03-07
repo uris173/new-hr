@@ -31,19 +31,19 @@ export const UserQueryFilter = (data) => Joi.object({
     }),
 
   limit: Joi.number()
-      .valid(30, 50, 100)
-      .optional()
-      .messages({
-        "number.base": "limitBase",
-        "any.only": "limitOnly",
-      }),
-    page: Joi.number()
-      .optional()
-      .messages({
-        "number.base": "pageBase",
-        "number.integer": "pageinteger",
-        "number.positive": "pagePositive"
-      })
+    .valid(30, 50, 100)
+    .optional()
+    .messages({
+      "number.base": "limitBase",
+      "any.only": "limitOnly",
+    }),
+  page: Joi.number()
+    .optional()
+    .messages({
+      "number.base": "pageBase",
+      "number.integer": "pageinteger",
+      "number.positive": "pagePositive"
+    })
 }).validate(data);
 
 export const UserCreate = (data) => Joi.object({
