@@ -45,7 +45,7 @@ export const create = async (req, res, next) => {
 
     let { name, type, workTime, parent, chief } = req.body;
     
-    const newDepartment = await DepartmentModel.create({ name, type, workTime, parent, chief });
+    const newDepartment = await DepartmentModel.create({ name, type, workTime, parent: parent || null, chief: chief || null });
     let data = await DepartmentModel.findById(newDepartment._id, select)
     .populate([
       { path: 'parent', select: 'name' },
@@ -104,7 +104,7 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { _id, name, type, workTime, parent, chief } = req.body;
-    let data = await DepartmentModel.findByIdAndUpdate(_id, { name, type, workTime, parent, chief }, { new: true, select })
+    let data = await DepartmentModel.findByIdAndUpdate(_id, { name, type, workTime, parent: parent || null, chief: chief || null }, { new: true, select })
     .populate([
       { path: 'parent', select: 'name' },
       { path: 'chief', select: 'fullName' }

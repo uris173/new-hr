@@ -5,6 +5,17 @@ import { UserQueryFilter, UserCreate, UserUpdate } from "../../validations/data/
 import { getIo } from "../../socket.io.js"
 let select = 'fullName role faceUrl department status employeeNo';
 
+export const canView = (user) => {
+  let returnedData = {
+    "admin": { role: { $in: ["boss", "chief", "worker", "guest"] } },
+    "boss": { role: { $in: ["chief", "worker", "guest"] } },
+    "chief": { role: "worker", department: user.department },
+    "worker": { _id: user._id }
+  };
+
+  return returnedData[user.role];
+};
+
 export const all = async (req, res, next) => {
   try {
     let { error } = UserQueryFilter(req.query);
@@ -16,11 +27,10 @@ export const all = async (req, res, next) => {
     limit = limit || 30;
     let skip = (page - 1) * limit;
     let filter = {
-      role: { $ne: "admin" },
       ...(fullName && { fullName: new RegExp(fullName, 'i') }),
-      ...(role && { role }),
       ...(department && { department }),
-      ...(employeeNo && { employeeNo }),
+      ...(role ? { role } : canView(req.user)),
+      ...(employeeNo && { employeeNo })
     };
 
     let count = await UserModel.countDocuments(filter);
