@@ -1,4 +1,5 @@
 import { UserModel } from "../../models/data/user.js";
+import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
 import { UserQueryFilter, UserCreate, UserUpdate } from "../../validations/data/user.js";
@@ -137,6 +138,7 @@ export const remove = async (req, res, next) => {
 
     let user = await UserModel.findByIdAndUpdate(id, { status: "deleted" }, { new: true, select: "_id" });
     if (!user) throw { status: 400, message: "userNotFound" };
+    await WorkerModel.findOneAndUpdate({ user: id }, { status: "deleted" });
 
     res.status(200).json({ message: "deleted" });
   } catch (error) {

@@ -64,7 +64,7 @@ export const changeStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const data = await DepartmentModel.findOneAndUpdate(
+    const department = await DepartmentModel.findOneAndUpdate(
       { _id: id, status: { $in: ["active", "inactive"] } },
       [{ $set: { status: { $cond: { if: { $eq: ["$status", "active"] }, then: "inactive", else: "active" } } } }],
       { new: true, select }
@@ -75,9 +75,9 @@ export const changeStatus = async (req, res, next) => {
     ])
     .lean();
 
-    if (!data) throw { status: 400, message: "departmentNotFound" };
+    if (!department) throw { status: 400, message: "departmentNotFound" };
 
-    res.status(200).json(data);
+    res.status(200).json(department);
   } catch (error) {
     console.error(error);
     next(error);
@@ -88,10 +88,10 @@ export const getOne = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    let data = await DepartmentModel.findById(id, `${select} -createdAt -status`);
-    if (!data) throw { status: 400, message: "departmentNotFound" };
+    let department = await DepartmentModel.findById(id, `${select} -createdAt -status`);
+    if (!department) throw { status: 400, message: "departmentNotFound" };
 
-    res.status(200).json(data);
+    res.status(200).json(department);
   } catch (error) {
     console.error(error);
     next(error);
@@ -104,14 +104,14 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { _id, name, type, workTime, parent, chief } = req.body;
-    let data = await DepartmentModel.findByIdAndUpdate(_id, { name, type, workTime, parent: parent || null, chief: chief || null }, { new: true, select })
+    let department = await DepartmentModel.findByIdAndUpdate(_id, { name, type, workTime, parent: parent || null, chief: chief || null }, { new: true, select })
     .populate([
       { path: 'parent', select: 'name' },
       { path: 'chief', select: 'fullName' }
     ])
     .lean();
 
-    res.status(200).json(data);
+    res.status(200).json(department);
   } catch (error) {
     console.error(error);
     next(error);
@@ -122,8 +122,8 @@ export const remove = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let data = await DepartmentModel.findByIdAndUpdate(id, { status: "deleted" }, { new: true, select: "_id" });
-    if (!data) throw { status: 400, message: "departmentNotFound" };
+    let department = await DepartmentModel.findByIdAndUpdate(id, { status: "deleted" }, { new: true, select: "_id" });
+    if (!department) throw { status: 400, message: "departmentNotFound" };
 
     res.status(200).json({ message: "deleted" });
   } catch (error) {

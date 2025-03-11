@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
 import { top } from "../../middleware/role.js";
+import { validateObjectId } from "../../middleware/validate.js";
 const router = Router();
 
 import {
@@ -18,10 +19,10 @@ router.route('/')
 .post(create)
 .put(update);
 
-router.get('/status/:id', passport.authenticate('jwt', { session: false }), top, changeStatus);
+router.get('/status/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top, changeStatus);
 
 router.route('/:id')
-.all(passport.authenticate('jwt', { session: false }), top)
+.all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
 .get(getOne)
 .delete(remove);
 

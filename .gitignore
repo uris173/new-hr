@@ -2,3 +2,4 @@
 /.env
 /files/*
 !/files/.gitkeep
+!/files/admin.jpg

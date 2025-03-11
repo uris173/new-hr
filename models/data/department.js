@@ -30,3 +30,29 @@ const departmentSchema = new Schema({
 
 
 export const DepartmentModel = model('department', departmentSchema);
+
+// {
+//   "day": 1,
+//   "startTime": "2025-03-11T04:00:00.000Z",
+//   "endTime": "2025-03-11T13:00:00.000Z"
+// },
+// {
+//   "day": 2,
+//   "startTime": "2025-03-11T04:00:00.000Z",
+//   "endTime": "2025-03-11T13:00:00.000Z"
+// },
+// {
+//   "day": 3,
+//   "startTime": "2025-03-11T04:00:00.000Z",
+//   "endTime": "2025-03-11T13:00:00.000Z"
+// },
+// {
+//   "day": 4,
+//   "startTime": "2025-03-11T04:00:00.000Z",
+//   "endTime": "2025-03-11T13:00:00.000Z"
+// },
+// {
+//   "day": 5,
+//   "startTime": "2025-03-11T04:00:00.000Z",
+//   "endTime": "2025-03-11T13:00:00.000Z"
+// }

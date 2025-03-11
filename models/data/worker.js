@@ -39,4 +39,4 @@ const workerHistorySchema = new Schema({
 
 
 export const WorkerModel = model("worker", workerSchema);
-export const WorkerModelHistory = model("worker_history", workerHistorySchema);
+export const WorkerHistoryModel = model("worker_history", workerHistorySchema);

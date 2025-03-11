@@ -1,6 +1,21 @@
-import { WorkerModel, WorkerModelHistory } from "../../models/data/worker.js";
+import { WorkerModel, WorkerHistoryModel } from "../../models/data/worker.js";
+import { StaffPositionModel } from "../../routers/settings/staff-position.js";
 import { WorkerCreate, WorkerQueryFilter, WorkerUpdate } from "../../validations/data/worker.js";
 let select = "user department createdAt status"
+
+export const getStaffPosition = async (req, res, next) => {
+  try {
+    let { title } = req.body;
+    if (!title) throw { status: 400, message: "titleNotFound" };
+
+    let findStaff = await StaffPositionModel.find({ title: new RegExp(title, 'i') }, '-_id title');
+    
+    res.status(200).json(findStaff);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
 
 export const all = async (req, res, next) => {
   try {
@@ -21,7 +36,7 @@ export const all = async (req, res, next) => {
       filter.user = { $in: userIds };
     }
 
-    let count = await WorkerModel.countDocuments(filter, select);
+    let count = await WorkerModel.countDocuments(filter);
     let data = await WorkerModel.find(filter, select)
       .populate([
         { path: "department", select: "-_id name" },
@@ -48,7 +63,9 @@ export const create = async (req, res, next) => {
 
     const newWorker = WorkerModel.create({ user, department, groups, gender, birthDay, address, status: "active" });
     await Promise.all(history.map(async item => {
-      await WorkerModelHistory.create({ worker: newWorker._id, ...item });
+      let findStaff = await StaffPositionModel.findOne({ title: item.staffPosition }, '_id');
+      if (!findStaff) await StaffPositionModel.create({ title: item.staffPosition });
+      await WorkerHistoryModel.create({ worker: newWorker._id, ...item });
     }));
 
     let worker = await WorkerModel.findById(newWorker._id, select)
@@ -64,13 +81,35 @@ export const create = async (req, res, next) => {
   }
 };
 
+export const getInfo = async (req, res, next) => {
+  try {
+    let { id } = req.params;
+
+    let worker = await WorkerModel.findOne({ user: id }, '-_id -status -updatedAt -__v')
+    .populate([
+      { path: "user", select: "-_id -status -createdAt -updatedAt -__v" },
+      { path: "department", select: "name" },
+      { path: "group", select: "name" }
+    ]).lean();
+
+    if (!worker) throw { status: 404, message: "workerNotFound" };
+
+    let history = await WorkerHistoryModel.findOne({ worker: worker._id }, '-_id -worker -createdAt -updatedAt').lean()
+
+    res.status(200).json({ worker, history });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export const getOne = async (req, res, next) => {
   try {
     let { id } = req.params;
 
     let worker = await WorkerModel.findById(id, `-__v -createdAt -updatedAt -status`).lean();
     if (!worker) throw { status: 404, message: "workerNotFound" };
-    let history = await WorkerModelHistory.find({ worker: id }, '-worker -createdAt -updatedAt -__v').lean();
+    let history = await WorkerHistoryModel.find({ worker: id }, '-worker -createdAt -updatedAt -__v').lean();
     
     res.status(200).json({ worker, history })
   } catch (error) {
@@ -94,25 +133,30 @@ export const update = async (req, res, next) => {
 
     if (!worker) throw { status: 404, message: "workerNotFound" };
 
-      await Promise.all(history.map(async item => {
-        if (item._id) await WorkerModelHistory.findByIdAndUpdate(item._id, { ...item })
-        else await WorkerModelHistory.create({ worker: _id, ...item })
-      }));
+    await Promise.all(history.map(async item => {
+      let findStaff = await StaffPositionModel.findOne({ title: item.staffPosition }, '_id');
+      if (!findStaff) await StaffPositionModel.create({ title: item.staffPosition });
+      if (item._id) await WorkerHistoryModel.findByIdAndUpdate(item._id, { ...item })
+      else await WorkerHistoryModel.create({ worker: _id, ...item })
+    }));
 
-      res.status(200).json(worker);
+    res.status(200).json(worker);
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
 
-const remove = async (req, res, next) => {
+export const remove = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let worker = await WorkerModel.findByIdAndUpdate(id, { status: "deleted" })
+    let worker = await WorkerModel.findByIdAndUpdate(id, { status: "deleted" }, { new: true, select: '_id' });
+    if (!worker) throw { status: 400, message: "workerNotFound" };
+
+    res.status(200).json({ message: "deleted" });
   } catch (error) {
     console.error(error);
     next(error);
   }
-}
+};

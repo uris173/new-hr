@@ -249,7 +249,7 @@ export const WorkerUpdate = (data) => Joi.object({
           }
           return value;
         })
-        .required()
+        .allow(null, "")
         .messages({
           "string.base": "_idBase",
           "any.required": "_idRequired"
