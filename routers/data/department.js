@@ -31,68 +31,188 @@ export default router;
 
 /**
  * @swagger
- * tags:
- *   name: Department
- *   description: Апи для работы с отделами
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
+ *   schemas:
+ *     Department:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Уникальный идентификатор отдела
+ *         name:
+ *           type: string
+ *           description: Название отдела
+ *         type:
+ *           type: integer
+ *           enum: [0, 1]
+ *           description: Тип отдела (0 - Отдел, 1 - Группа)
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время отдела
+ *         parent:
+ *           type: string
+ *           description: ID родительского отдела (ссылка на модель Department) или null
+ *         chief:
+ *           type: string
+ *           description: ID руководителя (ссылка на модель User) или null
+ *         status:
+ *           type: string
+ *           enum: ["active", "inactive", "deleted"]
+ *           description: Статус отдела
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Дата создания отдела
+ *       required:
+ *         - name
+ *         - type
+ * 
+ *     DepartmentCreateRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Название отдела
+ *         type:
+ *           type: integer
+ *           enum: [0, 1]
+ *           description: Тип отдела (0 - Отдел, 1 - Группа)
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время отдела
+ *         parent:
+ *           type: string
+ *           description: ID родительского отдела (ссылка на модель Department) или null
+ *         chief:
+ *           type: string
+ *           description: ID руководителя (ссылка на модель User) или null
+ *       required:
+ *         - name
+ *         - type
+ * 
+ *     DepartmentUpdateRequest:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Уникальный идентификатор отдела
+ *         name:
+ *           type: string
+ *           description: Название отдела
+ *         type:
+ *           type: integer
+ *           enum: [0, 1]
+ *           description: Тип отдела (0 - Отдел, 1 - Группа)
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 description: Уникальный идентификатор workTime
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время отдела
+ *         parent:
+ *           type: string
+ *           description: ID родительского отдела (ссылка на модель Department) или null
+ *         chief:
+ *           type: string
+ *           description: ID руководителя (ссылка на модель User) или null
+ *       required:
+ *         - _id
+ *         - name
+ *         - type
  */
 
 /**
  * @swagger
  * /department:
  *   get:
- *     summary: Получить список отделов
- *     tags: [Department]
+ *     summary: Получение списка отделов
+ *     tags: [Departments]
  *     security:
  *       - bearerAuth: []
- *     description: Возвращает список отделов с возможностью фильтрации и пагинации.
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
- *         description: Фильтр по названию отдела (регистронезависимый поиск).
+ *         description: Фильтр по названию отдела (регистронезависимый)
  *       - in: query
  *         name: type
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Фильтр по типу отдела (0 - Department, 1 - Group).
+ *         description: Фильтр по типу отдела (0 - Отдел, 1 - Группа)
  *       - in: query
  *         name: parent
  *         schema:
  *           type: string
- *         description: ID родительского отдела.
+ *         description: Фильтр по ID родительского отдела
  *       - in: query
  *         name: chief
  *         schema:
  *           type: string
- *         description: ID руководителя отдела.
+ *         description: Фильтр по ID руководителя
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *           enum: [active, inactive, deleted]
- *         description: Фильтр по статусу отдела.
+ *           enum: ["active", "inactive", "deleted"]
+ *         description: Фильтр по статусу отдела
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           enum: [30, 50, 100]
- *         description: Количество записей на странице (по умолчанию 30).
+ *         description: Лимит записей на страницу (по умолчанию 30)
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Номер страницы (по умолчанию 1).
+ *         description: Номер страницы (по умолчанию 1)
  *     responses:
  *       200:
- *         description: Успешный ответ. Возвращает список отделов.
+ *         description: Успешный ответ со списком отделов
  *         content:
  *           application/json:
  *             schema:
@@ -100,312 +220,197 @@ export default router;
  *               properties:
  *                 count:
  *                   type: integer
- *                   description: Общее количество найденных отделов.
+ *                   description: Общее количество отделов
  *                 data:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                         description: ID отдела.
- *                       name:
- *                         type: string
- *                         description: Название отдела.
- *                       type:
- *                         type: integer
- *                         description: Тип отдела (0 - Department, 1 - Group).
- *                       parent:
- *                         type: object
- *                         properties:
- *                           _id:
- *                             type: string
- *                           name:
- *                             type: string
- *                         description: Родительский отдел.
- *                       chief:
- *                         type: object
- *                         properties:
- *                           _id:
- *                             type: string
- *                           fullName:
- *                             type: string
- *                         description: Руководитель отдела.
+ *                     $ref: '#/components/schemas/Department'
  *       400:
- *         description: Ошибка валидации запроса.
- *       500:
- *         description: Внутренняя ошибка сервера.
- * 
- *   post:
- *     tags: [Department]
- *     security:
- *       - bearerAuth: []
- *     summary: Создать новый отдел
- *     description: Добавляет новый отдел в базу данных.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - type
- *             properties:
- *               name:
- *                 type: string
- *                 description: Название отдела (от 3 до 100 символов).
- *               type:
- *                 type: integer
- *                 enum: [0, 1]
- *                 description: Тип отдела (0 - Department, 1 - Group).
- *               workTime:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     day:
- *                       type: integer
- *                       description: День недели (0 - воскресенье, 6 - суббота).
- *                     startTime:
- *                       type: string
- *                       format: date-time
- *                       description: Время начала работы.
- *                     endTime:
- *                       type: string
- *                       format: date-time
- *                       description: Время окончания работы.
- *               parent:
- *                 type: string
- *                 description: ID родительского отдела (может быть null).
- *               chief:
- *                 type: string
- *                 description: ID руководителя (может быть null).
- *     responses:
- *       201:
- *         description: Отдел успешно создан.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID созданного отдела.
- *                 name:
- *                   type: string
- *                   description: Название отдела.
- *                 type:
- *                   type: integer
- *                   description: Тип отдела (0 - Department, 1 - Group).
- *                 workTime:
- *                   type: array
- *                   description: Рабочие часы отдела.
- *                 parent:
- *                   type: object
- *                   description: Родительский отдел.
- *                 chief:
- *                   type: object
- *                   description: Руководитель отдела.
- *       400:
- *         description: Ошибка валидации запроса.
- *       500:
- *         description: Внутренняя ошибка сервера.
- *   put:
- *     tags: [Department]
- *     security:
- *       - bearerAuth: []
- *     summary: Создать новый отдел
- *     description: Добавляет новый отдел в базу данных.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - type
- *             properties:
- *               _id:
- *                   type: string
- *                   description: ID отдела.
- *               name:
- *                 type: string
- *                 description: Название отдела (от 3 до 100 символов).
- *               type:
- *                 type: integer
- *                 enum: [0, 1]
- *                 description: Тип отдела (0 - Department, 1 - Group).
- *               workTime:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     day:
- *                       type: integer
- *                       description: День недели (0 - воскресенье, 6 - суббота).
- *                     startTime:
- *                       type: string
- *                       format: date-time
- *                       description: Время начала работы.
- *                     endTime:
- *                       type: string
- *                       format: date-time
- *                       description: Время окончания работы.
- *               parent:
- *                 type: string
- *                 description: ID родительского отдела (может быть null).
- *               chief:
- *                 type: string
- *                 description: ID руководителя (может быть null).
- *     responses:
- *       200:
- *         description: Отдел успешно создан.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID созданного отдела.
- *                 name:
- *                   type: string
- *                   description: Название отдела.
- *                 type:
- *                   type: integer
- *                   description: Тип отдела (0 - Department, 1 - Group).
- *                 workTime:
- *                   type: array
- *                   description: Рабочие часы отдела.
- *                 parent:
- *                   type: object
- *                   description: Родительский отдел.
- *                 chief:
- *                   type: object
- *                   description: Руководитель отдела.
- *       400:
- *         description: Ошибка валидации запроса.
- *       500:
- *         description: Внутренняя ошибка сервера.
+ *         description: Ошибка валидации параметров запроса
+ *       401:
+ *         description: Неавторизованный доступ
  */
 
 /**
  * @swagger
- * /departments/status/{id}:
- *   get:
- *     tags: [Department]
+ * /department:
+ *   post:
+ *     summary: Создание нового отдела
+ *     tags: [Departments]
  *     security:
  *       - bearerAuth: []
- *     summary: Изменить статус отдела
- *     description: Переключает статус отдела между 'active' и 'inactive'.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DepartmentCreateRequest'
+ *     responses:
+ *       201:
+ *         description: Отдел успешно создан
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Department'
+ *       400:
+ *         description: Ошибка валидации данных
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /department:
+ *   put:
+ *     summary: Обновление данных отдела
+ *     tags: [Departments]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DepartmentUpdateRequest'
+ *     responses:
+ *       200:
+ *         description: Данные отдела успешно обновлены
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Department'
+ *       400:
+ *         description: Ошибка валидации данных
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /department/status/{id}:
+ *   get:
+ *     summary: Изменение статуса отдела (active/inactive)
+ *     tags: [Departments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: ID отдела, статус которого нужно изменить.
+ *         description: ID отдела
  *     responses:
  *       200:
- *         description: Успешный ответ. Возвращает обновленный отдел.
+ *         description: Статус отдела успешно изменён
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Department'
+ *       400:
+ *         description: Отдел не найден или статус не может быть изменён
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID отдела.
- *                 name:
- *                   type: string
- *                   description: Название отдела.
- *                 type:
- *                   type: integer
- *                   description: Тип отдела (0 - Department, 1 - Group).
  *                 status:
+ *                   type: integer
+ *                   example: 400
+ *                 message:
  *                   type: string
- *                   enum: [active, inactive]
- *                   description: Новый статус отдела.
- *                 parent:
- *                   type: object
- *                   description: Родительский отдел.
- *                 chief:
- *                   type: object
- *                   description: Руководитель отдела.
- *       400:
- *         description: Ошибка запроса. Например, если отдел не найден.
- *       500:
- *         description: Внутренняя ошибка сервера.
- *
+ *                   example: "departmentNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
  * /department/{id}:
  *   get:
- *     tags: [Department]
+ *     summary: Получение данных отдела по ID
+ *     tags: [Departments]
  *     security:
  *       - bearerAuth: []
- *     summary: Получить информацию об отделе
- *     description: Возвращает данные конкретного отдела по его ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: ID отдела.
+ *         description: ID отдела
  *     responses:
  *       200:
- *         description: Успешный ответ. Возвращает данные отдела.
+ *         description: Успешный ответ с данными отдела
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Department'
+ *       400:
+ *         description: Отдел не найден
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID отдела.
- *                 name:
- *                   type: string
- *                   description: Название отдела.
- *                 type:
+ *                 status:
  *                   type: integer
- *                   description: Тип отдела (0 - Department, 1 - Group).
- *                 parent:
- *                   type: object
- *                   description: Родительский отдел.
- *                 chief:
- *                   type: object
- *                   description: Руководитель отдела.
- *       400:
- *         description: Ошибка запроса. Например, если отдел не найден.
- *       500:
- *         description: Внутренняя ошибка сервера.
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "departmentNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /department/{id}:
  *   delete:
- *     tags: [Department]
+ *     summary: Удаление отдела (пометка как deleted)
+ *     tags: [Departments]
  *     security:
  *       - bearerAuth: []
- *     summary: Удалить отдел
- *     description: Меняет статус отдела на 'deleted'.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: ID отдела, который нужно удалить.
+ *         description: ID отдела
  *     responses:
  *       200:
- *         description: Успешный ответ. Возвращает ID удаленного отдела.
+ *         description: Отдел успешно помечен как удалённый
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
+ *                 message:
  *                   type: string
- *                   description: ID удаленного отдела.
+ *                   example: "deleted"
  *       400:
- *         description: Ошибка запроса. Например, если отдел не найден.
- *       500:
- *         description: Внутренняя ошибка сервера.
+ *         description: Отдел не найден
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "departmentNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * securitySchemes:
+ *   bearerAuth:
+ *     type: http
+ *     scheme: bearer
+ *     bearerFormat: JWT
  */

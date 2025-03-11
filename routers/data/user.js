@@ -29,50 +29,266 @@ router.route('/:id')
 
 export default router;
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Уникальный идентификатор пользователя
+ *         fullName:
+ *           type: string
+ *           description: Полное имя пользователя
+ *         phone:
+ *           type: string
+ *           description: Номер телефона пользователя
+ *         role:
+ *           type: string
+ *           enum: ["admin", "boss", "chief", "worker", "guest"]
+ *           description: Роль пользователя
+ *         faceUrl:
+ *           type: string
+ *           description: URL изображения лица пользователя
+ *         department:
+ *           type: string
+ *           description: ID отдела (ссылка на модель Department) или null
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время пользователя
+ *         employeeNo:
+ *           type: string
+ *           description: Номер сотрудника
+ *         sync:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               ip:
+ *                 type: string
+ *                 description: IP-адрес
+ *               type:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 description: Тип синхронизации (0 - выход, 1 - вход)
+ *               status:
+ *                 type: boolean
+ *                 description: Статус синхронизации
+ *           description: Данные синхронизации
+ *         status:
+ *           type: string
+ *           enum: ["active", "inactive", "deleted"]
+ *           description: Статус пользователя
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Дата создания пользователя
+ *       required:
+ *         - fullName
+ *         - phone
+ *         - password
+ *         - role
+ *         - faceUrl
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserCreateRequest:
+ *       type: object
+ *       properties:
+ *         fullName:
+ *           type: string
+ *           description: Полное имя пользователя
+ *         phone:
+ *           type: string
+ *           description: Номер телефона пользователя (формат "998 (90) 123-45-67")
+ *         password:
+ *           type: string
+ *           description: Пароль пользователя
+ *         role:
+ *           type: string
+ *           enum: ["boss", "chief", "worker", "guest"]
+ *           description: Роль пользователя
+ *         faceUrl:
+ *           type: string
+ *           description: URL изображения лица пользователя
+ *         department:
+ *           type: string
+ *           description: ID отдела (ссылка на модель Department) или null
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время пользователя
+ *         sync:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               ip:
+ *                 type: string
+ *                 description: IP-адрес
+ *               type:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 description: Тип синхронизации (0 - выход, 1 - вход)
+ *               status:
+ *                 type: boolean
+ *                 description: Статус синхронизации
+ *           description: Данные синхронизации
+ *       required:
+ *         - fullName
+ *         - phone
+ *         - password
+ *         - role
+ *         - faceUrl
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserUpdateRequest:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Уникальный идентификатор пользователя
+ *         fullName:
+ *           type: string
+ *           description: Полное имя пользователя
+ *         phone:
+ *           type: string
+ *           description: Номер телефона пользователя (формат "998 (90) 123-45-67")
+ *         password:
+ *           type: string
+ *           description: Пароль пользователя
+ *         role:
+ *           type: string
+ *           enum: ["boss", "chief", "worker", "guest"]
+ *           description: Роль пользователя
+ *         faceUrl:
+ *           type: string
+ *           description: URL изображения лица пользователя
+ *         department:
+ *           type: string
+ *           description: ID отдела (ссылка на модель Department) или null
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время пользователя
+ *         sync:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               ip:
+ *                 type: string
+ *                 description: IP-адрес
+ *               type:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 description: Тип синхронизации (0 - выход, 1 - вход)
+ *               status:
+ *                 type: boolean
+ *                 description: Статус синхронизации
+ *           description: Данные синхронизации
+ *       required:
+ *         - _id
+ *         - fullName
+ *         - phone
+ *         - password
+ *         - role
+ *         - faceUrl
+ */
 
 /**
  * @swagger
  * /user:
  *   get:
- *     summary: Получить всех пользователей
- *     description: Возвращает список всех пользователей с возможностью фильтрации и пагинации.
+ *     summary: Получение списка пользователей
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags: [Users]
  *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *         description: Номер страницы для пагинации (по умолчанию 1)
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Количество записей на странице (по умолчанию 30)
  *       - in: query
  *         name: fullName
  *         schema:
  *           type: string
- *         description: Фильтр по полному имени пользователя
+ *         description: Фильтр по полному имени пользователя (регистронезависимый)
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
+ *           enum: ["boss", "chief", "worker", "guest"]
  *         description: Фильтр по роли пользователя
  *       - in: query
  *         name: department
  *         schema:
  *           type: string
- *         description: Фильтр по отделу пользователя
+ *         description: Фильтр по ID отдела
  *       - in: query
  *         name: employeeNo
  *         schema:
  *           type: string
  *         description: Фильтр по номеру сотрудника
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           enum: [30, 50, 100]
+ *         description: Лимит записей на страницу (по умолчанию 30)
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Номер страницы (по умолчанию 1)
  *     responses:
  *       200:
- *         description: Список пользователей успешно получен
+ *         description: Успешный ответ со списком пользователей
  *         content:
  *           application/json:
  *             schema:
@@ -84,354 +300,75 @@ export default router;
  *                 data:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                         description: ID пользователя
- *                       fullName:
- *                         type: string
- *                         description: Полное имя пользователя
- *                       role:
- *                         type: string
- *                         description: Роль пользователя
- *                       department:
- *                         type: string
- *                         description: Отдел пользователя
- *                       employeeNo:
- *                         type: string
- *                         description: Номер сотрудника
+ *                     $ref: '#/components/schemas/User'
  *       400:
- *         description: Ошибка валидации запроса
- *       500:
- *         description: Внутренняя ошибка сервера
+ *         description: Ошибка валидации параметров запроса
+ *       401:
+ *         description: Неавторизованный доступ
  */
 
 /**
  * @swagger
  * /user:
  *   post:
- *     summary: Создать нового пользователя
- *     description: Создает нового пользователя с указанными данными.
+ *     summary: Создание нового пользователя
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               fullName:
- *                 type: string
- *                 description: Полное имя пользователя
- *                 example: Иван Иванов
- *               phone:
- *                 type: string
- *                 description: Телефон пользователя в формате 998 (XX) XXX-XX-XX
- *                 example: 998 (90) 123-45-67
- *               password:
- *                 type: string
- *                 description: Пароль пользователя
- *                 example: password123
- *               role:
- *                 type: string
- *                 description: Роль пользователя
- *                 enum: [boss, chief, worker, guest]
- *                 example: worker
- *               faceUrl:
- *                 type: string
- *                 description: URL фотографии пользователя
- *                 example: http://example.com/photo.jpg
- *               department:
- *                 type: string
- *                 description: ID отдела пользователя
- *                 example: 60d0fe4f5311236168a109ca
- *               workTime:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     day:
- *                       type: integer
- *                       description: День недели (0 - воскресенье, 6 - суббота)
- *                       example: 1
- *                     startTime:
- *                       type: string
- *                       format: date-time
- *                       description: Время начала работы
- *                       example: 2023-01-01T09:00:00Z
- *                     endTime:
- *                       type: string
- *                       format: date-time
- *                       description: Время окончания работы
- *                       example: 2023-01-01T18:00:00Z
- *               sync:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     ip:
- *                       type: string
- *                       format: ipv4
- *                       description: IP адрес для синхронизации
- *                       example: 192.168.1.1
- *                     type:
- *                       type: integer
- *                       description: Тип синхронизации (0 или 1)
- *                       example: 0
- *                     status:
- *                       type: boolean
- *                       description: Статус синхронизации
- *                       example: true
+ *             $ref: '#/components/schemas/UserCreateRequest'
  *     responses:
  *       201:
  *         description: Пользователь успешно создан
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID пользователя
- *                 fullName:
- *                   type: string
- *                   description: Полное имя пользователя
- *                 phone:
- *                   type: string
- *                   description: Телефон пользователя
- *                 role:
- *                   type: string
- *                   description: Роль пользователя
- *                 faceUrl:
- *                   type: string
- *                   description: URL фотографии пользователя
- *                 department:
- *                   type: string
- *                   description: ID отдела пользователя
- *                 workTime:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       day:
- *                         type: integer
- *                         description: День недели
- *                       startTime:
- *                         type: string
- *                         format: date-time
- *                         description: Время начала работы
- *                       endTime:
- *                         type: string
- *                         format: date-time
- *                         description: Время окончания работы
- *                 sync:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       ip:
- *                         type: string
- *                         format: ipv4
- *                         description: IP адрес для синхронизации
- *                       type:
- *                         type: integer
- *                         description: Тип синхронизации
- *                       status:
- *                         type: boolean
- *                         description: Статус синхронизации
+ *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Ошибка валидации запроса
- *       500:
- *         description: Внутренняя ошибка сервера
- */
-
-/**
- * @swagger
- * /user/{id}:
- *   get:
- *     summary: Получить пользователя по ID
- *     description: Возвращает данные пользователя по его ID.
- *     security:
- *       - bearerAuth: []
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID пользователя
- *     responses:
- *       200:
- *         description: Данные пользователя успешно получены
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID пользователя
- *                 fullName:
- *                   type: string
- *                   description: Полное имя пользователя
- *                 phone:
- *                   type: string
- *                   description: Телефон пользователя
- *                 role:
- *                   type: string
- *                   description: Роль пользователя
- *                 faceUrl:
- *                   type: string
- *                   description: URL фотографии пользователя
- *                 department:
- *                   type: string
- *                   description: ID отдела пользователя
- *       404:
- *         description: Пользователь не найден
- *       500:
- *         description: Внутренняя ошибка сервера
- */
-
-/**
- * @swagger
- * /user/status/{id}:
- *   get:
- *     summary: Изменить статус пользователя
- *     description: Переключает статус пользователя между "active" и "inactive".
- *     security:
- *       - bearerAuth: []
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID пользователя
- *     responses:
- *       200:
- *         description: Статус пользователя успешно изменен
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: ID пользователя
- *                 fullName:
- *                   type: string
- *                   description: Полное имя пользователя
- *                 phone:
- *                   type: string
- *                   description: Телефон пользователя
- *                 role:
- *                   type: string
- *                   description: Роль пользователя
- *                 faceUrl:
- *                   type: string
- *                   description: URL фотографии пользователя
- *                 department:
- *                   type: string
- *                   description: ID отдела пользователя
- *       400:
- *         description: Пользователь не найден или неверный запрос
- *       500:
- *         description: Внутренняя ошибка сервера
+ *         description: Ошибка валидации данных или недостаточно прав
+ *       401:
+ *         description: Неавторизованный доступ
  */
 
 /**
  * @swagger
  * /user:
  *   put:
- *     summary: Обновление пользователя
- *     description: Обновляет данные пользователя по его ID.
+ *     summary: Обновление данных пользователя
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               fullName:
- *                 type: string
- *                 minLength: 3
- *                 maxLength: 100
- *                 example: "Иван Иванов"
- *               phone:
- *                 type: string
- *                 pattern: "^998 \\((90|91|93|94|95|97|98|99|33|88|50|77)\\) \\d{3}-\\d{2}-\\d{2}$"
- *                 example: "998 (90) 123-45-67"
- *               password:
- *                 type: string
- *                 minLength: 5
- *                 maxLength: 50
- *                 example: "securePassword"
- *               role:
- *                 type: string
- *                 enum: ["boss", "chief", "worker", "guest"]
- *                 example: "worker"
- *               faceUrl:
- *                 type: string
- *                 example: "https://example.com/photo.jpg"
- *               department:
- *                 type: string
- *                 nullable: true
- *                 example: "60d5ec49bcffdd1a3c4c6b77"
- *               workTime:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     day:
- *                       type: integer
- *                       minimum: 0
- *                       maximum: 6
- *                       example: 1
- *                     startTime:
- *                       type: string
- *                       format: date-time
- *                       example: "2023-10-01T08:00:00Z"
- *                     endTime:
- *                       type: string
- *                       format: date-time
- *                       example: "2023-10-01T17:00:00Z"
- *               sync:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     ip:
- *                       type: string
- *                       format: ipv4
- *                       example: "192.168.1.1"
- *                     type:
- *                       type: integer
- *                       enum: [0, 1]
- *                       example: 1
- *                     status:
- *                       type: boolean
- *                       example: true
+ *             $ref: '#/components/schemas/UserUpdateRequest'
  *     responses:
  *       200:
- *         description: Успешное обновление пользователя
+ *         description: Данные пользователя успешно обновлены
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Ошибка валидации или доступ запрещен
- *
- * /user/{id}:
- *   delete:
- *     summary: Удаление пользователя
- *     description: Помечает пользователя как удаленного.
+ *         description: Ошибка валидации данных или недостаточно прав
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/status/{id}:
+ *   get:
+ *     summary: Изменение статуса пользователя (active/inactive)
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags: [Users]
  *     parameters:
  *       - in: path
  *         name: id
@@ -441,7 +378,115 @@ export default router;
  *         description: ID пользователя
  *     responses:
  *       200:
- *         description: Успешное удаление пользователя
+ *         description: Статус пользователя успешно изменён
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Пользователь не найден или статус не может быть изменён
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "userNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/{id}:
+ *   get:
+ *     summary: Получение данных пользователя по ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID пользователя
+ *     responses:
+ *       200:
+ *         description: Успешный ответ с данными пользователя
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Пользователь не найден
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "userNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/{id}:
+ *   delete:
+ *     summary: Удаление пользователя (пометка как deleted)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID пользователя
+ *     responses:
+ *       200:
+ *         description: Пользователь успешно помечен как удалённый
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "deleted"
  *       400:
  *         description: Пользователь не найден
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "userNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * securitySchemes:
+ *   bearerAuth:
+ *     type: http
+ *     scheme: bearer
+ *     bearerFormat: JWT
  */
