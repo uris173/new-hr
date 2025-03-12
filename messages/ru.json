@@ -9,6 +9,7 @@
   "invalidFileType": "Неверный тип файла!",
   "workerNotFound": "Сотрудник не найден!",
   "titleNotFound": "Значение title не передан!",
+  "doorNotFound": "Дверь не найдена!",
 
   "tokenInvalid": "Токен недействителен!",
   "tokenExpired": "Срок жизни токена истек!",
@@ -157,5 +158,17 @@
   "workerHistoryLeaveDateRequired": "Поле 'historyLeaveDate' обязательно для заполнения.",
 
   "workerHistoryCommentBase": "Поле 'historyComment' должно быть строкой.",
-  "workerHistoryCommentMax": "Поле 'historyComment' не должно превышать 255 символов."
+  "workerHistoryCommentMax": "Поле 'historyComment' не должно превышать 255 символов.",
+
+  "doorTitleBase": "Поле 'title' должно быть строкой.",
+  "doorTitleEmpty": "Поле 'title' не может быть пустым.",
+  "doorTitleMin": "Поле 'title' должно содержать минимум 2 символа.",
+  "doorTitleMax": "Поле 'title' не должно превышать 150 символов.",
+  "doorTitleRequired": "Поле 'title' обязательно для заполнения.",
+
+  "doorIpBase": "Поле 'ip' должно быть строкой.",
+  "doorIpEmpty": "Поле 'ip' не может быть пустым.",
+  "doorIpRequired": "Поле 'ip' обязательно для заполнения.",
+  "doorIpIp": "IP-адрес должен соответствовать формату: '192.168.1.1'",
+  "doorIpIpv4": "IP-адрес должен соответствовать формату IPv4."
 }

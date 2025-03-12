@@ -1,5 +1,5 @@
 import { WorkerModel, WorkerHistoryModel } from "../../models/data/worker.js";
-import { StaffPositionModel } from "../../routers/settings/staff-position.js";
+import { StaffPositionModel } from "../../models/settings/staff-position.js";
 import { WorkerCreate, WorkerQueryFilter, WorkerUpdate } from "../../validations/data/worker.js";
 let select = "user department createdAt status"
 
@@ -27,7 +27,10 @@ export const all = async (req, res, next) => {
     page = page || 1;
     limit = limit || 30;
     let skip = (page - 1) * limit;
-    let filter = { status: { $ne: "deleted" } };
+    let filter = {
+      status: { $ne: "deleted" },
+      ...(department && { department }),
+    };
 
     if (department) filter.department = department;
     if (fullName) {

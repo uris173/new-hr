@@ -7,17 +7,17 @@ export const all = async (req, res, next) => {
     let { error } = DepartmentQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { limit, page, name, type, parent, chief, status } = req.query
+    let { limit, page, name, type, parent, chief } = req.query
 
     limit = limit || 30;
     page = page || 1;
     let skip = (page - 1) * limit;
     let filter = {
+      status: { $ne: "deleted" },
       ...(name && { name: new RegExp(name, 'i') }),
       ...(type && { type }),
       ...(parent && { parent }),
       ...(chief && { chief }),
-      ...(status && { status }),
     };
 
     let count = await DepartmentModel.countDocuments(filter);

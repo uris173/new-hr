@@ -28,6 +28,7 @@ export const all = async (req, res, next) => {
     limit = limit || 30;
     let skip = (page - 1) * limit;
     let filter = {
+      status: { $ne: "deleted" },
       ...(fullName && { fullName: new RegExp(fullName, 'i') }),
       ...(department && { department }),
       ...(role ? { role } : canView(req.user)),
