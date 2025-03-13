@@ -14,7 +14,7 @@ export const DepartmentQueryFilter = (data) => Joi.object({
     }),
 
   type: Joi.number()
-    .valid(0, 1)
+    .valid(1, 2)
     .messages({
       "number.base": "departmentTypeBase",
       "any.only": "departmentTypeOnly",
@@ -53,7 +53,7 @@ export const DepartmentQueryFilter = (data) => Joi.object({
     }),
 
   limit: Joi.number()
-    .valid(30, 50, 100)
+    .valid(1, 30, 50, 100)
     .optional()
     .messages({
       "number.base": "limitBase",
@@ -82,7 +82,7 @@ export const CreateDepartment = (data) => Joi.object({
     }),
 
   type: Joi.number()
-    .valid(0, 1)
+    .valid(1 2)
     .required()
     .messages({
       "number.base": "departmentTypeBase",
@@ -177,7 +177,7 @@ export const UpdateDepartment = (data) => Joi.object({
     }),
 
   type: Joi.number()
-    .valid(0, 1)
+    .valid(1, 2)
     .required()
     .messages({
       "number.base": "departmentTypeBase",
@@ -188,6 +188,19 @@ export const UpdateDepartment = (data) => Joi.object({
   workTime: Joi.array()
     .items(
       Joi.object({
+        _id: Joi.string()
+          .custom((value, helpers) => {
+            if (!Types.ObjectId.isValid(value)) {
+              return helpers.message("_idCustom");
+            }
+            return value;
+          })
+          .required()
+          .messages({
+            "string.base": "_idBase",
+            "any.required": "_idRequired"
+          }),
+        
         day: Joi.number()
           .integer()
           .min(0)

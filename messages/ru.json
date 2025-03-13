@@ -54,7 +54,7 @@
   "departmentNameRequired": "Название обязательно для заполнения.",
 
   "departmentTypeBase": "Тип должен быть числом.",
-  "departmentTypeOnly": "Тип может быть только 0 (Department) или 1 (Group).",
+  "departmentTypeOnly": "Тип может быть только 1 (Department) или 2 (Group).",
   "departmentTypesRequired": "Тип обязательно для заполнения.",
 
   "departmentWorkTimeBase": "Рабочее время должно быть массивом.",

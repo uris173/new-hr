@@ -45,7 +45,7 @@ export default router;
  *         type:
  *           type: integer
  *           enum: [0, 1]
- *           description: Тип отдела (0 - Отдел, 1 - Группа)
+ *           description: Тип отдела (1 - Отдел, 2 - Группа)
  *         workTime:
  *           type: array
  *           items:
@@ -90,7 +90,7 @@ export default router;
  *         type:
  *           type: integer
  *           enum: [0, 1]
- *           description: Тип отдела (0 - Отдел, 1 - Группа)
+ *           description: Тип отдела (1 - Отдел, 2 - Группа)
  *         workTime:
  *           type: array
  *           items:
@@ -130,7 +130,7 @@ export default router;
  *         type:
  *           type: integer
  *           enum: [0, 1]
- *           description: Тип отдела (0 - Отдел, 1 - Группа)
+ *           description: Тип отдела (1 - Отдел, 2 - Группа)
  *         workTime:
  *           type: array
  *           items:
@@ -182,7 +182,7 @@ export default router;
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Фильтр по типу отдела (0 - Отдел, 1 - Группа)
+ *         description: Фильтр по типу отдела (1 - Отдел, 2 - Группа)
  *       - in: query
  *         name: parent
  *         schema:
