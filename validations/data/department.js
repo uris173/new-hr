@@ -82,7 +82,7 @@ export const CreateDepartment = (data) => Joi.object({
     }),
 
   type: Joi.number()
-    .valid(1 2)
+    .valid(1, 2)
     .required()
     .messages({
       "number.base": "departmentTypeBase",
