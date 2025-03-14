@@ -150,22 +150,6 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время пользователя
- *         sync:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               ip:
- *                 type: string
- *                 description: IP-адрес
- *               type:
- *                 type: integer
- *                 enum: [0, 1]
- *                 description: Тип синхронизации (0 - выход, 1 - вход)
- *               status:
- *                 type: boolean
- *                 description: Статус синхронизации
- *           description: Данные синхронизации
  *       required:
  *         - fullName
  *         - phone
@@ -220,22 +204,6 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время пользователя
- *         sync:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               ip:
- *                 type: string
- *                 description: IP-адрес
- *               type:
- *                 type: integer
- *                 enum: [0, 1]
- *                 description: Тип синхронизации (0 - выход, 1 - вход)
- *               status:
- *                 type: boolean
- *                 description: Статус синхронизации
- *           description: Данные синхронизации
  *       required:
  *         - _id
  *         - fullName

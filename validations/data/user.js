@@ -126,24 +126,25 @@ export const UserCreate = (data) => Joi.object({
     })
   ),
   
-  sync: Joi.array().items(
-    Joi.object({
-      ip: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).required()
-        .messages({
-          'string.ip': 'userSyncIp',
-          'any.required': 'userSyncIpRequired'
-        }),
-      type: Joi.number().valid(0, 1).required()
-        .messages({
-          'number.base': 'userSyncTypeBase',
-          'any.only': 'userSyncTypeOnly',
-          'any.required': 'userSyncTypeRequired'
-        }),
-      status: Joi.boolean().messages({
-        'boolean.base': 'userSyncStatusBase'
-      })
-    })
-  )
+  // sync: Joi.array().items(
+  //   Joi.object({
+  //     ip: Joi.string().ip({ version: ['ipv4'], cidr: "forbidden" }).required()
+  //       .messages({
+  //         'string.ip': 'userSyncIp',
+  //         "string.ipVersion": "userSyncIpv4",
+  //         'any.required': 'userSyncIpRequired'
+  //       }),
+  //     type: Joi.number().valid(0, 1).required()
+  //       .messages({
+  //         'number.base': 'userSyncTypeBase',
+  //         'any.only': 'userSyncTypeOnly',
+  //         'any.required': 'userSyncTypeRequired'
+  //       }),
+  //     status: Joi.boolean().messages({
+  //       'boolean.base': 'userSyncStatusBase'
+  //     })
+  //   })
+  // )
 }).validate(data);
 
 export const UserUpdate = (data) => Joi.object({
@@ -239,22 +240,23 @@ export const UserUpdate = (data) => Joi.object({
     })
   ),
   
-  sync: Joi.array().items(
-    Joi.object({
-      ip: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).required()
-        .messages({
-          'string.ip': 'userSyncIp',
-          'any.required': 'userSyncIpRequired'
-        }),
-      type: Joi.number().valid(0, 1).required()
-        .messages({
-          'number.base': 'userSyncTypeBase',
-          'any.only': 'userSyncTypeOnly',
-          'any.required': 'userSyncTypeRequired'
-        }),
-      status: Joi.boolean().messages({
-        'boolean.base': 'userSyncStatusBase'
-      })
-    })
-  )
+  // sync: Joi.array().items(
+  //   Joi.object({
+  //     ip: Joi.string().ip({ version: ['ipv4'], cidr: "forbidden" }).required()
+  //       .messages({
+  //         'string.ip': 'userSyncIp',
+  //         "string.ipVersion": "userSyncIpv4",
+  //         'any.required': 'userSyncIpRequired'
+  //       }),
+  //     type: Joi.number().valid(0, 1).required()
+  //       .messages({
+  //         'number.base': 'userSyncTypeBase',
+  //         'any.only': 'userSyncTypeOnly',
+  //         'any.required': 'userSyncTypeRequired'
+  //       }),
+  //     status: Joi.boolean().messages({
+  //       'boolean.base': 'userSyncStatusBase'
+  //     })
+  //   })
+  // )
 }).validate(data);

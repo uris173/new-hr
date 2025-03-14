@@ -58,10 +58,11 @@ export const getOne = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    let { error } = UpdateDoor({ ...req.body, _id: req.params.id });
+    console.log(req/)
+    let { error } = UpdateDoor(req.body);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let door = await DoorModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    let door = await DoorModel.findByIdAndUpdate(req.body._id, req.body, { new: true });
     if (!door) throw { status: 400, message: "doorNotFound" };
 
     res.status(200).json(door);

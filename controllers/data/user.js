@@ -56,13 +56,13 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, department, workTime, sync } = req.body;
+    let { fullName, phone, password, role, faceUrl, department, workTime } = req.body;
 
     let latestEmployeeNo = await UserModel.findOne({}, 'employeeNo').sort({ employeeNo: -1 });
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
 
-    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), faceUrl, department, workTime, sync, employeeNo: latestEmployeeNo.employeeNo + 1 });
+    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), faceUrl, department, workTime, employeeNo: latestEmployeeNo.employeeNo + 1 });
     let user = await UserModel.findById(newUser._id, select)
     .populate({ path: "department", path: "-_id name" })
     .lean();
@@ -115,7 +115,7 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, department, workTime, sync } = req.body;
+    let { fullName, phone, password, role, faceUrl, department, workTime } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
@@ -124,7 +124,7 @@ export const update = async (req, res, next) => {
     if (!findUser) throw { status: 400, message: "userNotFound" };
     if (password) password = await hash(password) || password;
 
-    let user = await UserModel.findByIdAndUpdate(id, { fullName, phone, password, role, faceUrl, department, workTime, sync }, { new: true, select });
+    let user = await UserModel.findByIdAndUpdate(id, { fullName, phone, password, role, faceUrl, department, workTime }, { new: true, select });
 
     res.status(200).json(user);
   } catch (error) {

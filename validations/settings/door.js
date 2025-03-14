@@ -50,6 +50,7 @@ export const CreateDoor = (data) => Joi.object({
       "string.empty": "doorIpEmpty",
       "string.ip": "doorIpIp",
       "string.ipv4": "doorIpIpv4",
+      "string.ipVersion": "doorIpIpv4",
     }),
 }).validate(data);
 
@@ -88,5 +89,6 @@ export const UpdateDoor = (data) => Joi.object({
       "string.empty": "doorIpEmpty",
       "string.ip": "doorIpIp",
       "string.ipv4": "doorIpIpv4",
+      "string.ipVersion": "doorIpIpv4",
     }),
 }).validate(data);
