@@ -10,6 +10,10 @@ const eventSchema = new Schema({
     type: Types.ObjectId,
     ref: "user"
   },
+  door: {
+    type: Types.ObjectId,
+    ref: "door"
+  },
   branch: String,
   employeeNoString: String,
   serialNo: Number,

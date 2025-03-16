@@ -60,6 +60,32 @@ export const CreateDoor = (data) => Joi.object({
       "any.required": "doorTypeRequired",
       "string.base": "doorTypeBase",
       "any.only": "doorTypeOnly",
+    }),
+  
+  login: Joi.string()
+    .pattern(new RegExp("^[a-zA-Z0-9]"))
+    .min(3)
+    .max(50)
+    .required()
+    .messages({
+      "any.pattern": "doorLoginPattern",
+      "any.required": "doorLoginRequired",
+      "string.base": "doorLoginBase",
+      "string.min": "doorLoginMin",
+      "string.max": "doorLoginMax",
+    }),
+  
+  password: Joi.string()
+    .pattern(new RegExp("^[a-zA-Z0-9]"))
+    .min(3)
+    .max(50)
+    .required()
+    .messages({
+      "any.pattern": "doorPasswordPattern",
+      "any.required": "doorPasswordRequired",
+      "string.base": "doorPasswordBase",
+      "string.min": "doorPasswordMin",
+      "string.max": "doorPasswordMax",
     })
 }).validate(data);
 
@@ -108,5 +134,31 @@ export const UpdateDoor = (data) => Joi.object({
       "any.required": "doorTypeRequired",
       "string.base": "doorTypeBase",
       "any.only": "doorTypeOnly",
+    }),
+
+  login: Joi.string()
+    .pattern(new RegExp("^[a-zA-Z0-9]"))
+    .min(3)
+    .max(50)
+    .required()
+    .messages({
+      "string.pattern.base": "doorLoginPattern",
+      "any.required": "doorLoginRequired",
+      "string.base": "doorLoginBase",
+      "string.min": "doorLoginMin",
+      "string.max": "doorLoginMax",
+    }),
+  
+  password: Joi.string()
+    .pattern(new RegExp("^[a-zA-Z0-9]"))
+    .min(3)
+    .max(50)
+    .required()
+    .messages({
+      "string.pattern.base": "doorPasswordPattern",
+      "any.required": "doorPasswordRequired",
+      "string.base": "doorPasswordBase",
+      "string.min": "doorPasswordMin",
+      "string.max": "doorPasswordMax",
     })
 }).validate(data);

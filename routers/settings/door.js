@@ -53,6 +53,12 @@ export default router;
  *           type: string
  *           enum: [exit, enter]
  *           descpription: Тип двери
+ *         login:
+ *           type: string
+ *           description: Логин для доступа к двери
+ *         password:
+ *           type: string
+ *           description: Пароль для доступа к двери
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -67,6 +73,8 @@ export default router;
  *         - ip
  *         - status
  *         - type
+ *         - login
+ *         - password
  *         - createdAt
  *         - updatedAt
  * 
@@ -82,10 +90,18 @@ export default router;
  *         type:
  *           type: string
  *           description: Тип двери
+ *         login:
+ *           type: string
+ *           description: Логин для доступа к двери
+ *         password:
+ *           type: string
+ *           description: Пароль для доступа к двери
  *       required:
  *         - title
  *         - ip
  *         - type
+ *         - login
+ *         - password
  * 
  *     DoorUpdateRequest:
  *       type: object
@@ -102,11 +118,19 @@ export default router;
  *         type:
  *           type: string
  *           description: Тип двери
+ *         login:
+ *           type: string
+ *           description: Логин для доступа к двери
+ *         password:
+ *           type: string
+ *           description: Пароль для доступа к двери
  *       required:
  *         - _id
  *         - title
  *         - ip
  *         - type
+ *         - login
+ *         - password
  * 
  *   securitySchemes:
  *     bearerAuth:

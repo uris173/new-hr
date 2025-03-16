@@ -7,6 +7,8 @@ const doorSchema = new Schema({
     type: String,
     enum: ["enter", "exit"]
   },
+  login: String,
+  password: String,
   status: {
     type: String,
     enum: ["active", "inactive", "deleted"],

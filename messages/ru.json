@@ -174,5 +174,17 @@
 
   "doorTypeRequired": "Поле 'type' обязательно для заполнения.",
   "doorTypeBase": "Поле 'type' должно быть строкой.",
-  "doorTypeOnly": "Поле 'type' должен содержать лишь 'exit' или 'enter'"
+  "doorTypeOnly": "Поле 'type' должен содержать лишь 'exit' или 'enter'",
+
+  "doorLoginRequired": "Поле 'login' обязательно для заполнения.",
+  "doorLoginBase": "Поле 'login' должно быть строкой.",
+  "doorLoginMin": "Поле 'login' должно содержать минимум 3 символа.",
+  "doorLoginMax": "Поле 'login' не должно превышать 50 символов.",
+  "doorLoginPattern": "Поле 'login' должно содержать только латинские буквы и цифры.",
+
+  "doorPasswordRequired": "Поле 'password' обязательно для заполнения.",
+  "doorPasswordBase": "Поле 'password' должно быть строкой.",
+  "doorPasswordMin": "Поле 'password' должно содержать минимум 5 символов.",
+  "doorPasswordMax": "Поле 'password' не должно превышать 50 символов.",
+  "doorPasswordPattern": "Поле 'password' должно содержать только латинские буквы и цифры."
 }
