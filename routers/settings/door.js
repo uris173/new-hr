@@ -49,6 +49,10 @@ export default router;
  *           type: string
  *           enum: [active, inactive, deleted]
  *           description: Статус двери
+ *         type:
+ *           type: string
+ *           enum: [exit, enter]
+ *           descpription: Тип двери
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -62,6 +66,7 @@ export default router;
  *         - title
  *         - ip
  *         - status
+ *         - type
  *         - createdAt
  *         - updatedAt
  * 
@@ -74,9 +79,13 @@ export default router;
  *         ip:
  *           type: string
  *           description: IP-адрес двери
+ *         type:
+ *           type: string
+ *           description: Тип двери
  *       required:
  *         - title
  *         - ip
+ *         - type
  * 
  *     DoorUpdateRequest:
  *       type: object
@@ -90,10 +99,14 @@ export default router;
  *         ip:
  *           type: string
  *           description: IP-адрес двери
+ *         type:
+ *           type: string
+ *           description: Тип двери
  *       required:
  *         - _id
  *         - title
  *         - ip
+ *         - type
  * 
  *   securitySchemes:
  *     bearerAuth:

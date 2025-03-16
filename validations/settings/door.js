@@ -41,7 +41,7 @@ export const CreateDoor = (data) => Joi.object({
       "string.max": "doorTitleMax",
     }),
     
-    ip: Joi.string()
+  ip: Joi.string()
     .ip({ version: ["ipv4"] })
     .required()
     .messages({
@@ -52,6 +52,15 @@ export const CreateDoor = (data) => Joi.object({
       "string.ipv4": "doorIpIpv4",
       "string.ipVersion": "doorIpIpv4",
     }),
+
+  type: Joi.string()
+    .valid("exit", "enter")
+    .required()
+    .messages({
+      "any.required": "doorTypeRequired",
+      "string.base": "doorTypeBase",
+      "any.only": "doorTypeOnly",
+    })
 }).validate(data);
 
 export const UpdateDoor = (data) => Joi.object({
@@ -80,7 +89,7 @@ export const UpdateDoor = (data) => Joi.object({
       "string.max": "doorTitleMax",
     }),
     
-    ip: Joi.string()
+  ip: Joi.string()
     .ip({ version: ["ipv4"] })
     .required()
     .messages({
@@ -91,4 +100,13 @@ export const UpdateDoor = (data) => Joi.object({
       "string.ipv4": "doorIpIpv4",
       "string.ipVersion": "doorIpIpv4",
     }),
+
+  type: Joi.string()
+    .valid("exit", "enter")
+    .required()
+    .messages({
+      "any.required": "doorTypeRequired",
+      "string.base": "doorTypeBase",
+      "any.only": "doorTypeOnly",
+    })
 }).validate(data);

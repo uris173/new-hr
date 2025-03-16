@@ -18,6 +18,7 @@ export const all = async (req, res, next) => {
 
     let count = await DoorModel.countDocuments(filter);
     let data = await DoorModel.find(filter, select)
+      .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
@@ -58,7 +59,6 @@ export const getOne = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    console.log(req/)
     let { error } = UpdateDoor(req.body);
     if (error) throw { status: 400, message: error.details[0].message };
 
