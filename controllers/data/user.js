@@ -8,8 +8,8 @@ let select = 'fullName role faceUrl department status employeeNo';
 
 export const canView = (user) => {
   let returnedData = {
-    "admin": { role: { $in: ["boss", "chief", "worker", "guest"] } },
-    "boss": { role: { $in: ["chief", "worker", "guest"] } },
+    "admin": { role: { $in: ["boss", "chief", "worker", "security", "guest"] } },
+    "boss": { role: { $in: ["chief", "worker", "security", "guest"] } },
     "chief": { role: "worker", department: user.department },
     "worker": { _id: user._id }
   };
@@ -37,7 +37,7 @@ export const all = async (req, res, next) => {
 
     let count = await UserModel.countDocuments(filter);
     let data = await UserModel.find(filter)
-    .populate({ path: "department", path: "-_id name" })
+    .populate({ path: "department", select: "-_id name" })
     .sort({ _id: -1 })
     .limit(limit)
     .skip(skip)
@@ -58,13 +58,13 @@ export const create = async (req, res, next) => {
     let { role: userRole } = req.user;
     let { fullName, phone, password, role, faceUrl, department, workTime } = req.body;
 
-    let latestEmployeeNo = await UserModel.findOne({}, 'employeeNo').sort({ employeeNo: -1 });
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
 
-    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), faceUrl, department, workTime, employeeNo: latestEmployeeNo.employeeNo + 1 });
+    let latestEmployeeNo = await UserModel.findOne({}, 'employeeNo').sort({ employeeNo: -1 });
+    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, department, workTime, employeeNo: latestEmployeeNo.employeeNo + 1 || 1 });
     let user = await UserModel.findById(newUser._id, select)
-    .populate({ path: "department", path: "-_id name" })
+    .populate({ path: "department", select: "-_id name" })
     .lean();
 
     let io = await getIo();
@@ -99,7 +99,7 @@ export const changeStatus = async (req, res, next) => {
       { _id: id, status: { $in: ["active", "inactive"] } },
       [{ $set: { status: { $cond: { if: { $eq: ["$status", "active"] }, then: "inactive", else: "active" } } } }],
       { new: true, select }
-    );
+    ).populate({ path: "department", select: "-_id name" });
     if (!user) throw { status: 400, message: "userNotFound" };
 
     res.status(200).json(user);
@@ -124,7 +124,8 @@ export const update = async (req, res, next) => {
     if (!findUser) throw { status: 400, message: "userNotFound" };
     if (password) password = await hash(password) || password;
 
-    let user = await UserModel.findByIdAndUpdate(id, { fullName, phone, password, role, faceUrl, department, workTime }, { new: true, select });
+    let user = await UserModel.findByIdAndUpdate(id, { fullName, phone, password, role, faceUrl, department, workTime }, { new: true, select })
+      .populate({ path: "department", select: "-_id name" });
 
     res.status(200).json(user);
   } catch (error) {
