@@ -126,18 +126,21 @@ export const UserCreate = (data) => Joi.object({
     })
   ),
 
-  doors: Joi.array().items(
-    Joi.string().custom((value, helpers) => {
-      if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("userDoorsCustom");
-      }
-      return value;
-    })
-    .allow(null, "")
-    .messages({
-      "string.base": "userDoorsBase"
-    })
-  ).allow(null, []),
+  // doors: Joi.array().items(
+  //   Joi.string().custom((value, helpers) => {
+  //     if (!Types.ObjectId.isValid(value)) {
+  //       return helpers.message("userDoorsCustom");
+  //     }
+  //     return value;
+  //   })
+  //   .allow(null, "")
+  //   .messages({
+  //     "string.base": "userDoorsBase"
+  //   })
+  // )
+  //   .optional()
+  //   .allow(null)
+  //   .allow([])
     
   
   // sync: Joi.array().items(
