@@ -17,7 +17,7 @@ export const all = async (req, res, next) => {
     };
 
     let count = await DoorModel.countDocuments(filter);
-    let data = await DoorModel.find(filter, select)
+    let data = await DoorModel.find(filter, `${select} -password`)
       .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
@@ -36,7 +36,7 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let newDoor = await DoorModel.create(req.body);
-    let door = await DoorModel.findById(newDoor._id, select);
+    let door = await DoorModel.findById(newDoor._id, `${select} -password`);
 
     res.status(201).json(door);
   } catch (error) {
@@ -62,7 +62,7 @@ export const update = async (req, res, next) => {
     let { error } = UpdateDoor(req.body);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let door = await DoorModel.findByIdAndUpdate(req.body._id, req.body, { new: true });
+    let door = await DoorModel.findByIdAndUpdate(req.body._id, req.body, { new: true, select: `${select} -password` });
     if (!door) throw { status: 400, message: "doorNotFound" };
 
     res.status(200).json(door);

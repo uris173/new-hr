@@ -1,4 +1,4 @@
-import { parentPort } from "worker_threads";
+import { parentPort, workerData  } from "worker_threads";
 import { EventModel } from "../../models/data/event.js";
 import { UserModel } from "../../models/data/user.js";
 
@@ -41,11 +41,12 @@ const saveEventDoor = async (data) => {
   }
 };
 
-parentPort.on("message", async (data) => {
+if (workerData) {
   try {
-    const result = await saveEventDoor(data);
+    const result = await saveEventDoor(workerData);
     parentPort.postMessage(result);
-  } catch (err) {
-    parentPort.postMessage({ error: err.message });
+  } catch (error) {
+    console.log("Door-worker error:", error);
+    parentPort.postMessage({ error: error.message });
   }
-});
+}
