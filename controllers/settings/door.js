@@ -1,6 +1,6 @@
 import { DoorModel } from "../../models/settings/door.js";
 import { DoorQueryFilter, CreateDoor, UpdateDoor } from "../../validations/settings/door.js";
-let select = '-password -__v -updatedAt';
+let select = '-__v -updatedAt';
 
 export const all = async (req, res, next) => {
   try {

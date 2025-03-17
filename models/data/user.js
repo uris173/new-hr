@@ -6,7 +6,7 @@ const userSchema = new Schema({
   password: String,
   role: {
     type: String,
-    enum: ["admin", "boss", "chief", "worker", "guest"],
+    enum: ["admin", "boss", "chief", "worker", "security", "guest"],
   },
   faceUrl: String,
   department: {
@@ -20,6 +20,10 @@ const userSchema = new Schema({
     endTime: Date
   }],
   employeeNo: String,
+  doors: [{
+    type: Types.ObjectId,
+    ref: 'door'
+  }],
   sync: [{
     ip: String,
     type: {

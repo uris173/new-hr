@@ -125,6 +125,20 @@ export const UserCreate = (data) => Joi.object({
       })
     })
   ),
+
+  doors: Joi.array().items(
+    Joi.string().custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("userDoorsCustom");
+      }
+      return value;
+    })
+    .allow(null, "")
+    .messages({
+      "string.base": "userDoorsBase"
+    })
+  ).allow(null, []),
+    
   
   // sync: Joi.array().items(
   //   Joi.object({
@@ -239,6 +253,19 @@ export const UserUpdate = (data) => Joi.object({
       })
     })
   ),
+
+  doors: Joi.array().items(
+    Joi.string().custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("userDoorsCustom");
+      }
+      return value;
+    })
+    .allow(null, "")
+    .messages({
+      "string.base": "userDoorsBase"
+    })
+  ).allow(null, []),
   
   // sync: Joi.array().items(
   //   Joi.object({

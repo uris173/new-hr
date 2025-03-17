@@ -47,7 +47,7 @@ export default router;
  *           description: Номер телефона пользователя
  *         role:
  *           type: string
- *           enum: ["admin", "boss", "chief", "worker", "guest"]
+ *           enum: ["admin", "boss", "chief", "worker", "security", "guest"]
  *           description: Роль пользователя
  *         faceUrl:
  *           type: string
@@ -72,6 +72,11 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время пользователя
+ *         doors:
+ *           type: array
+ *           items:
+ *             type: string
+ *             description: ID дверей (ссылка на модель Door)
  *         employeeNo:
  *           type: string
  *           description: Номер сотрудника
@@ -125,7 +130,7 @@ export default router;
  *           description: Пароль пользователя
  *         role:
  *           type: string
- *           enum: ["boss", "chief", "worker", "guest"]
+ *           enum: ["boss", "chief", "worker", "security", "guest"]
  *           description: Роль пользователя
  *         faceUrl:
  *           type: string
@@ -150,6 +155,11 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время пользователя
+ *         doors:
+ *           type: array
+ *           items:
+ *             type: string
+ *             description: ID дверей (ссылка на модель Door)
  *       required:
  *         - fullName
  *         - phone
@@ -179,7 +189,7 @@ export default router;
  *           description: Пароль пользователя
  *         role:
  *           type: string
- *           enum: ["boss", "chief", "worker", "guest"]
+ *           enum: ["boss", "chief", "worker", "security", "guest"]
  *           description: Роль пользователя
  *         faceUrl:
  *           type: string
@@ -204,6 +214,11 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время пользователя
+ *         doors:
+ *           type: array
+ *           items:
+ *             type: string
+ *             description: ID дверей (ссылка на модель Door)
  *       required:
  *         - _id
  *         - fullName
@@ -231,7 +246,7 @@ export default router;
  *         name: role
  *         schema:
  *           type: string
- *           enum: ["boss", "chief", "worker", "guest"]
+ *           enum: ["boss", "chief", "worker", "security", "guest"]
  *         description: Фильтр по роли пользователя
  *       - in: query
  *         name: department

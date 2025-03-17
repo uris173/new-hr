@@ -108,6 +108,9 @@
   "userWorkTimeEndTimeGreater": "Поле 'Время окончания' должно быть позже 'Времени начала'.",
   "userWorkTimeEndTimeRequired": "Поле 'Время окончания' обязательно.",
 
+  "userDoorsCustom": "Неверный формат идентификатора двери.",
+  "userDoorsBase": "Дверь должна быть строкой.",
+
   "userSyncIp": "Поле 'IP' должно быть валидным IP-адресом",
   "userSyncIpRequired": "Поле 'IP' обязательно для заполнения",
 
@@ -187,4 +190,5 @@
   "doorPasswordMin": "Поле 'password' должно содержать минимум 5 символов.",
   "doorPasswordMax": "Поле 'password' не должно превышать 50 символов.",
   "doorPasswordPattern": "Поле 'password' должно содержать только латинские буквы и цифры."
+
 }
