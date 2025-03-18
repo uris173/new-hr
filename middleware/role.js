@@ -2,6 +2,7 @@ export const roleHierarchy = {
   admin: 4,
   boss: 3,
   chief: 2,
+  security: 1,
   worker: 1,
   guest: 0,
 };
@@ -44,7 +45,7 @@ export const top = async (req, res, next) => {
 export const all = async (req, res, next) => {
   if (req.user) {
     let { role } = req.user;
-    if (["admin", "boss", "chief", "worker"].includes(role)) return next();
+    if (["admin", "boss", "chief", "security", "worker"].includes(role)) return next();
 
     throw { status: 403, message: "accessDenied" };
   }

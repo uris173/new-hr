@@ -10,7 +10,7 @@ const userSchema = new Schema({
   },
   faceUrl: String,
   department: {
-    type  : Types.ObjectId,
+    type: Types.ObjectId,
     ref: 'department',
     default: null
   },

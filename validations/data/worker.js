@@ -109,11 +109,12 @@ export const WorkerCreate = (data) => Joi.object({
     "any.required": "workerAddressRequired",
   }),
 
-  history: Joi.array(
+  history: Joi.array().items(
     Joi.object({
       company: Joi.string()
         .max(100)
         .required()
+        .allow(null, "")
         .messages({
           "string.base": "workerHistoryCompanyBase",
           "string.max": "workerHistoryCompanyMax",
@@ -123,6 +124,7 @@ export const WorkerCreate = (data) => Joi.object({
       staffPosition: Joi.string()
         .max(100)
         .required()
+        .allow(null, "")
         .messages({
           "string.base": "workerHistoryPositionBase",
           "string.max": "workerHistoryPositionMax",
@@ -132,6 +134,7 @@ export const WorkerCreate = (data) => Joi.object({
       enterDate: Joi.date()
         .less("now")
         .required()
+        .allow(null, "")
         .messages({
           "date.base": "workerHistoryEnterDateBase",
           "date.less": "workerHistoryEnterDateLess",
@@ -141,6 +144,7 @@ export const WorkerCreate = (data) => Joi.object({
       leaveDate: Joi.date()
         .less("now")
         .required()
+        .allow(null, "")
         .messages({
           "date.base": "workerHistoryLeaveDateBase",
           "date.less": "workerHistoryLeaveDateLess",
@@ -156,6 +160,9 @@ export const WorkerCreate = (data) => Joi.object({
         })
     })
   )
+    .optional()
+    .default([])
+    .allow(null)
 }).validate(data);
 
 export const WorkerUpdate = (data) => Joi.object({
@@ -240,7 +247,7 @@ export const WorkerUpdate = (data) => Joi.object({
     "any.required": "workerAddressRequired",
   }),
 
-  history: Joi.array(
+  history: Joi.array().items(
     Joi.object({
       _id: Joi.string()
         .custom((value, helpers) => {

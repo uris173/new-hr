@@ -87,7 +87,7 @@
   "userFullNameMax": "Поле 'ФИО' не должно превышать 100 символов.",
   "userFullNameRequired": "Поле 'ФИО' обязательно для заполнения",
 
-  "userRoleOnly": "Поле 'Роль' должно быть одним из: boss, chief, worker, guest",
+  "userRoleOnly": "Поле 'Роль' должно быть одним из: boss, chief, worker, security, guest",
   "userRoleRequired": "Поле 'Роль' обязательно для заполнения",
 
   "userFaceUrlBase": "Ссылка на фото должен быть строкой.",

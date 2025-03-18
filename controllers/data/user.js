@@ -36,7 +36,7 @@ export const all = async (req, res, next) => {
     };
 
     let count = await UserModel.countDocuments(filter);
-    let data = await UserModel.find(filter)
+    let data = await UserModel.find(filter, select)
     .populate({ path: "department", select: "-_id name" })
     .sort({ _id: -1 })
     .limit(limit)
@@ -56,19 +56,19 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, department, workTime } = req.body;
+    let { fullName, phone, password, role, faceUrl, department, workTime, doors } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
 
     let latestEmployeeNo = await UserModel.findOne({}, 'employeeNo').sort({ employeeNo: -1 });
-    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, department, workTime, employeeNo: latestEmployeeNo.employeeNo + 1 || 1 });
+    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, department, workTime, employeeNo: parseInt(latestEmployeeNo.employeeNo) + 1 || 1, doors });
     let user = await UserModel.findById(newUser._id, select)
     .populate({ path: "department", select: "-_id name" })
     .lean();
 
-    let io = await getIo();
-    io.emit('new-user', { fullName, faceUrl, employeeNo: latestEmployeeNo.employeeNo + 1 })
+    // let io = await getIo();
+    // io.emit('new-user', { fullName, faceUrl, employeeNo: latestEmployeeNo.employeeNo + 1 })
 
     res.status(201).json(user);
   } catch (error) {
@@ -81,7 +81,7 @@ export const getOne = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let user = await UserModel.findById(id, `${select} workTime sync`);
+    let user = await UserModel.findById(id, `${select} workTime phone doors`);
     if (!user) throw { status: 404, message: "userNotFound" };
 
     res.status(200).json(user);
@@ -115,16 +115,16 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, department, workTime } = req.body;
+    let { _id, fullName, phone, password, role, faceUrl, department, workTime, doors } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
 
-    let findUser = await UserModel.findById(id, 'password').lean();
+    let findUser = await UserModel.findById(_id, 'password').lean();
     if (!findUser) throw { status: 400, message: "userNotFound" };
-    if (password) password = await hash(password) || password;
+    password = password ? await hash(password) : findUser.password;
 
-    let user = await UserModel.findByIdAndUpdate(id, { fullName, phone, password, role, faceUrl, department, workTime }, { new: true, select })
+    let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, department, workTime, doors }, { new: true, select })
       .populate({ path: "department", select: "-_id name" });
 
     res.status(200).json(user);

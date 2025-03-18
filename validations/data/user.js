@@ -12,7 +12,7 @@ export const UserQueryFilter = (data) => Joi.object({
     }),
 
   role: Joi.string()
-    .valid('boss', 'chief', 'worker', 'guest')
+    .valid('boss', 'chief', 'worker', "security", 'guest')
     .messages({
       'any.only': 'Роль должна быть одной из: boss, chief, worker, guest.',
       'string.empty': 'Роль не может быть пустой.'
@@ -79,7 +79,7 @@ export const UserCreate = (data) => Joi.object({
     }),
   
   role: Joi.string()
-    .valid("boss", "chief", "worker", "guest")
+    .valid("boss", "chief", "worker", "security", "security", "guest")
     .required()
     .messages({
       'any.only': 'userRoleOnly',
@@ -120,27 +120,24 @@ export const UserCreate = (data) => Joi.object({
       }),
       endTime: Joi.date().greater(Joi.ref('startTime')).required().messages({
         'date.base': 'userWorkTimeEndTimeBase',
-        'date.greater': 'userWorkTimeEndTimeGreater"',
+        'date.greater': 'userWorkTimeEndTimeGreater',
         'any.required': 'userWorkTimeEndTimeRequired'
       })
     })
   ),
 
-  // doors: Joi.array().items(
-  //   Joi.string().custom((value, helpers) => {
-  //     if (!Types.ObjectId.isValid(value)) {
-  //       return helpers.message("userDoorsCustom");
-  //     }
-  //     return value;
-  //   })
-  //   .allow(null, "")
-  //   .messages({
-  //     "string.base": "userDoorsBase"
-  //   })
-  // )
-  //   .optional()
-  //   .allow(null)
-  //   .allow([])
+  doors: Joi.array().items(
+    Joi.string().custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("userDoorsCustom");
+      }
+      return value;
+    })
+    .allow(null, "")
+    .messages({
+      "string.base": "userDoorsBase"
+    })
+  )
     
   
   // sync: Joi.array().items(
@@ -201,16 +198,14 @@ export const UserUpdate = (data) => Joi.object({
   password: Joi.string()
     .min(5)
     .max(50)
-    .required()
+    .allow(null, "")
     .messages({
-      'string.empty': 'passwordEmpty',
       'string.min': 'passwordMin',
       'string.max': 'passwordMax',
-      'any.required': 'passwordRequired'
     }),
   
   role: Joi.string()
-    .valid("boss", "chief", "worker", "guest")
+    .valid("boss", "chief", "worker", "security", "guest")
     .required()
     .messages({
       'any.only': 'userRoleOnly',
@@ -238,6 +233,17 @@ export const UserUpdate = (data) => Joi.object({
   
   workTime: Joi.array().items(
     Joi.object({
+      _id: Joi.string()
+        .custom((value, helpers) => {
+          if (!Types.ObjectId.isValid(value)) {
+            return helpers.message("_idCustom");
+          }
+          return value;
+        })
+        .allow(null, "")
+        .messages({
+          "string.base": "_idBase"
+        }),
       day: Joi.number().integer().min(0).max(6).required()
         .messages({
           'number.base': 'userWorkTimeDayBase',
@@ -264,11 +270,11 @@ export const UserUpdate = (data) => Joi.object({
       }
       return value;
     })
-    .allow(null, "")
-    .messages({
-      "string.base": "userDoorsBase"
-    })
-  ).allow(null, []),
+      .allow(null, "")
+      .messages({
+        "string.base": "userDoorsBase"
+      })
+  )
   
   // sync: Joi.array().items(
   //   Joi.object({
