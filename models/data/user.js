@@ -31,8 +31,8 @@ const userSchema = new Schema({
   sync: [{
     ip: String,
     type: {
-      type: Number,
-      enum: [0, 1] //  0 - exit | 1 - enter
+      type: String,
+      enum: ["enter", "exit"]
     },
     status: {
       type: Boolean,

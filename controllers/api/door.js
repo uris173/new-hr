@@ -73,3 +73,22 @@ export const postDoorEvents = async (req, res, next) => {
     next(error);
   }
 };
+
+export const syncDoors = async (req, res, next) => {
+  try {
+    let { userId, door } = req.body;
+
+    let findDoor = await DoorModel.findById(door, "-_id ip type").lean();
+    if (!findDoor) throw { status: 400, message: "doorNotFound" };
+
+    let user = await UserModel.findByIdAndUpdate(userId, { 
+      $addToSet: { sync: { ip: findDoor.ip, type: findDoor.type } }
+    }, { new: true, select: "_id" });
+    if (!user) throw { status: 400, message: "userNotFound" };
+
+    res.status(200).json({ message: "synced" });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};

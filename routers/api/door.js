@@ -1,12 +1,13 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js"
 import { all } from "../../middleware/role.js";
-import { getDoors, getLastDoorEvent, postDoorEvents } from "../../controllers/api/door.js";
+import { getDoors, getLastDoorEvent, postDoorEvents, syncDoors } from "../../controllers/api/door.js";
 const router = Router();
 
 router.get("/", passport.authenticate("jwt", { session: false }), all, getDoors);
 router.get('/last-event', passport.authenticate("jwt", { session: false }), all, getLastDoorEvent);
 router.post("/post-events", passport.authenticate("jwt",  { session: false }), all, postDoorEvents);
+router.post('/post-sync', passport.authenticate("jwt", { session: false }), all, syncDoors);
 
 
 export default router;
@@ -156,6 +157,46 @@ export default router;
  *         description: Не авторизован
  *       403:
  *         description: Доступ запрещен
+ */
+
+/**
+  * @swagger
+  * /api/door/post-sync:
+  *  post:
+  *    summary: Успешные синхронизации
+  *    description: Успешные синхронизации
+  *    tags:
+  *      - API Doors
+  *    security:
+  *      - bearerAuth: []
+  *    requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *          schema:
+  *            type: object
+  *            properties:
+  *              userId:
+  *                type: string
+  *                description: Уникальный идентификатор пользователя
+  *              door:
+  *                type: string
+  *                description: Уникальный идентификатор двери
+  *    responses:
+  *      200:
+  *        description: Успешный ответ
+  *        content:
+  *          application/json:
+  *            schema:
+  *              type: object
+  *              properties:
+  *                message:
+  *                  type: string
+  *                  example: "Дверь успешно синхронизирована"
+  *      400:
+  *        description: Неверные параметры запроса
+  *      401:
+  *        description: Не авторизован
  */
 
 /**

@@ -57,6 +57,24 @@ export const getOne = async (req, res, next) => {
   }
 };
 
+export const changeStatus = async (req, res, next) => {
+  try {
+    let { id } = req.params;
+
+    let door = await UserModel.findOneAndUpdate(
+      { _id: id, status: { $in: ["active", "inactive"] } },
+      [{ $set: { status: { $cond: { if: { $eq: ["$status", "active"] }, then: "inactive", else: "active" } } } }],
+      { new: true, select }
+    )
+    if (!door) throw { status: 400, message: "doorNotFound" };
+
+    res.status(200).json(door);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export const update = async (req, res, next) => {
   try {
     let { error } = UpdateDoor(req.body);

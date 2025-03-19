@@ -8,6 +8,7 @@ import {
   all,
   create,
   getOne,
+  changeStatus,
   update,
   remove
 } from "../../controllers/settings/door.js";
@@ -17,6 +18,8 @@ router.route('/')
 .get(all)
 .post(create)
 .put(update);
+
+router.get('/status/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), changeStatus);
 
 router.route('/:id')
 .all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
@@ -243,6 +246,33 @@ export default router;
  *         description: Доступ запрещен
  *       404:
  *         description: Дверь не найдена
+ * 
+ * /door/status/{id}:
+ *   get:
+ *     summary: Изменить статус двери
+ *     description: Изменяет статус двери на противоположный
+ *     tags:
+ *       - Doors
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID двери
+ *     responses:
+ *       200:
+ *         description: Статус двери изменен
+ *         content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Door'
+ *       400:
+ *         description: Неверный ID
+ *       401:
+ *         description: Не авторизован
  * 
  * /door/{id}:
  *   get:
