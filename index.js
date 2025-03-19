@@ -12,6 +12,7 @@ import Router from "./router.js";
 import { swaggerApiSpec, options } from "./swagger-doc.js";
 import { serve, setup } from "swagger-ui-express";
 import { initializeRedis } from "./redis.js";
+import { initSocket } from "./socket.io.js"
 
 
 const app = express();
@@ -31,6 +32,7 @@ app.use(ErrorMiddleware);
 
 (async () => {
   try {
+    initSocket(server);
     await initializeRedis();
     await connect(process.env.MONGO_URI);
     console.log('MongoDB connected!');

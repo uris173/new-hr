@@ -52,6 +52,10 @@ export default router;
  *         faceUrl:
  *           type: string
  *           description: URL изображения лица пользователя
+ *         gender:
+ *           type: string
+ *           enum: ["male", "female", "custom"]
+ *           description: Пол сотрудника
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
@@ -135,6 +139,10 @@ export default router;
  *         faceUrl:
  *           type: string
  *           description: URL изображения лица пользователя
+ *         gender:
+ *           type: string
+ *           enum: ["male", "female", "custom"]
+ *           description: Пол сотрудника
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
@@ -162,6 +170,7 @@ export default router;
  *             description: ID дверей (ссылка на модель Door)
  *       required:
  *         - fullName
+ *         - gender
  *         - phone
  *         - password
  *         - role
@@ -194,6 +203,10 @@ export default router;
  *         faceUrl:
  *           type: string
  *           description: URL изображения лица пользователя
+ *         gender:
+ *           type: string
+ *           enum: ["male", "female", "custom"]
+ *           description: Пол сотрудника
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
@@ -221,6 +234,7 @@ export default router;
  *             description: ID дверей (ссылка на модель Door)
  *       required:
  *         - _id
+ *         - gender
  *         - fullName
  *         - phone
  *         - password

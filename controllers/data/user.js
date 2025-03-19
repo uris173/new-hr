@@ -4,7 +4,8 @@ import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
 import { UserQueryFilter, UserCreate, UserUpdate } from "../../validations/data/user.js";
 import { getIo } from "../../socket.io.js"
-let select = 'fullName role faceUrl department status employeeNo';
+import { getRedisAllData } from "../../redis.js"
+let select = 'fullName role faceUrl department gender status employeeNo';
 
 export const canView = (user) => {
   let returnedData = {
@@ -56,19 +57,23 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, department, workTime, doors } = req.body;
+    let { fullName, phone, password, role, faceUrl, gender, department, workTime, doors } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
 
     let latestEmployeeNo = await UserModel.findOne({}, 'employeeNo').sort({ employeeNo: -1 });
-    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, department, workTime, employeeNo: parseInt(latestEmployeeNo.employeeNo) + 1 || 1, doors });
+    let employeeNo = parseInt(latestEmployeeNo.employeeNo) + 1 || 1
+    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, gender, department, workTime, employeeNo, doors });
     let user = await UserModel.findById(newUser._id, select)
     .populate({ path: "department", select: "-_id name" })
     .lean();
 
-    // let io = await getIo();
-    // io.emit('new-user', { fullName, faceUrl, employeeNo: latestEmployeeNo.employeeNo + 1 })
+    let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    let io = await getIo();
+    findSecuritySessions.forEach(session => {
+      io.to(session._id).emit('new-user', { fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo });
+    })
 
     res.status(201).json(user);
   } catch (error) {
@@ -102,6 +107,12 @@ export const changeStatus = async (req, res, next) => {
     ).populate({ path: "department", select: "-_id name" });
     if (!user) throw { status: 400, message: "userNotFound" };
 
+    let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    let io = await getIo();
+    findSecuritySessions.forEach(session => {
+      io.to(session._id).emit('new-user', { fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo })
+    })
+
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
@@ -115,7 +126,7 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { _id, fullName, phone, password, role, faceUrl, department, workTime, doors } = req.body;
+    let { _id, fullName, phone, password, role, faceUrl, gender, department, workTime, doors } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
@@ -124,7 +135,7 @@ export const update = async (req, res, next) => {
     if (!findUser) throw { status: 400, message: "userNotFound" };
     password = password ? await hash(password) : findUser.password;
 
-    let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, department, workTime, doors }, { new: true, select })
+    let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, workTime, doors }, { new: true, select })
       .populate({ path: "department", select: "-_id name" });
 
     res.status(200).json(user);

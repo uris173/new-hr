@@ -54,10 +54,6 @@ export default router;
  *           items:
  *             type: string
  *           description: Список ID групп (ссылки на модель Group)
- *         gender:
- *           type: string
- *           enum: ["male", "female", "custom"]
- *           description: Пол сотрудника
  *         birthDay:
  *           type: string
  *           format: date
@@ -75,7 +71,6 @@ export default router;
  *           description: Дата создания записи
  *       required:
  *         - department
- *         - gender
  *         - birthDay
  *         - address
  * 

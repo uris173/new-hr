@@ -1,3 +1,4 @@
+import { UserModel } from "../../models/data/user.js"
 import { WorkerModel, WorkerHistoryModel } from "../../models/data/worker.js";
 import { StaffPositionModel } from "../../models/settings/staff-position.js";
 import { WorkerCreate, WorkerQueryFilter, WorkerUpdate } from "../../validations/data/worker.js";
@@ -62,9 +63,9 @@ export const create = async (req, res, next) => {
     let { error } = WorkerCreate(req.body);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { user, department, groups, gender, birthDay, address, history } = req.body;
+    let { user, department, groups, birthDay, address, history } = req.body;
 
-    const newWorker = WorkerModel.create({ user, department, groups, gender, birthDay, address, status: "active" });
+    const newWorker = await WorkerModel.create({ user, department, groups, birthDay, address, status: "active" });
     await Promise.all(history.map(async item => {
       let findStaff = await StaffPositionModel.findOne({ title: item.staffPosition }, '_id');
       if (!findStaff) await StaffPositionModel.create({ title: item.staffPosition });
@@ -126,9 +127,9 @@ export const update = async (req, res, next) => {
     let { error } = WorkerUpdate(req.body);
     if (error) throw { status: 400, message: error.details[0].message };
     
-    let { _id, user, department, groups, gender, birthDay, address, history } = req.body;
+    let { _id, user, department, groups, birthDay, address, history } = req.body;
 
-    let worker = await WorkerModel.findByIdAndUpdate({ _id }, { user, department, groups, gender, birthDay, address }, { new: true, select: select })
+    let worker = await WorkerModel.findByIdAndUpdate({ _id }, { user, department, groups, birthDay, address }, { new: true, select: select })
       .populate([
         { path: "department", select: "-_id name" },
         { path: "user", select: "-_id fullName role faceUrl" }

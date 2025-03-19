@@ -82,15 +82,6 @@ export const WorkerCreate = (data) => Joi.object({
         })
     ),
 
-  gender: Joi.string()
-    .valid("male", "female", "custom")
-    .required()
-    .messages({
-      "string.base": "workerGenderBase",
-      "any.only": "workerGenderBase",
-      "any.required": "workerGenderRequired",
-    }),
-
   birthDay: Joi.date()
     .less("now")
     .required()
@@ -219,15 +210,6 @@ export const WorkerUpdate = (data) => Joi.object({
           "string.base": "workerGroupBase",
         })
     ),
-
-  gender: Joi.string()
-    .valid("male", "female", "custom")
-    .required()
-    .messages({
-      "string.base": "workerGenderBase",
-      "any.only": "workerGenderBase",
-      "any.required": "workerGenderRequired",
-    }),
 
   birthDay: Joi.date()
     .less("now")

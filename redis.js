@@ -39,13 +39,13 @@ export const getRedisData = async (key) => {
   }
 };
 
-export const getRedisAllData = async (key) => {
+export const getRedisAllData = async (pattern) => {
   try {
-    const keys = await client.keys(`new-hr:${key}`);
+    const keys = await client.keys(`new-hr:${pattern}`);
     let datas = [];
 
     for (const key of keys) {
-      const data = await getRedisData(`new-hr:${key}`);
+      const data = JSON.parse(await client.get(key));
       if (data) datas.push(data);
     }
 
@@ -59,8 +59,8 @@ export const getRedisAllData = async (key) => {
 export const setRedisData = async (key, value, exType) => {
   try {
     let ex = getEx(exType);
-    await client.set(key, JSON.stringify(`new-hr:${value}`), { EX: ex });
-    console.log(`Data set in Redis for key ${key} with expiration of ${ex} seconds.`);
+    await client.set(`new-hr:${key}`, JSON.stringify(value), { EX: ex });
+    // console.log(`Data set in Redis for key ${key} with expiration of ${ex} seconds.`);
   } catch (error) {
     console.error('Error setting Redis data:', error);
   }

@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import { UserModel } from "./models/data/user.js";
-import { getRedisData } from "./redis.js";
+import { getRedisData, setRedisData, deleteRedisData } from "./redis.js";
 
 /*
   new-user = fullName, faceUrl, employeeNo
@@ -13,14 +13,14 @@ export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
       origin: "*",
-      methods: ["GET"],
-      credentials: true,
+      methods: ["GET", "POST"],
+      // credentials: true,
     },
   });
 
   io.use(async (socket, next) => {
     let token = socket.handshake.headers["authorization"]?.split(" ")[1];
-    
+
     if (!token) return next(new Error("Не авторизован"));
     if (token === "null") return next(new Error("Не авторизован"));
 
@@ -48,10 +48,11 @@ export const initSocket = (server) => {
           _id: userId,
           role: user.role,
           fullName: user.fullName,
-          department: user.department.toString(),
+          department: user?.department?.toString() || null,
         };
+        await setRedisData(`session:${userId}:${user.role}`, socket.user);
       } else {
-        socket.join(userId)
+        socket.join(userId);
         socket.user = findSession;
       }
 
@@ -63,11 +64,12 @@ export const initSocket = (server) => {
   });
 
   io.on("connection", async (socket) => {
-    console.log("Socket connected", socket.user);
+    console.log("Socket connected", socket.user.fullName);
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", async () => {
       try {
         if (socket.user) {
+          await deleteRedisData(`session:${socket.user._id}:${socket.user.role}`);
           socket.leave(socket.user._id);
           console.log("Socket disconnected", socket.user.fullName);
         }

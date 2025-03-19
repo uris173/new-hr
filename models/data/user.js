@@ -9,6 +9,10 @@ const userSchema = new Schema({
     enum: ["admin", "boss", "chief", "worker", "security", "guest"],
   },
   faceUrl: String,
+  gender: {
+    type: String,
+    enum: ["male", "female"],
+  },
   department: {
     type: Types.ObjectId,
     ref: 'department',

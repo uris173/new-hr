@@ -93,6 +93,10 @@
   "userFaceUrlBase": "Ссылка на фото должен быть строкой.",
   "userFaceUrlRequired": "Ссылка на фото обязательна для заполнения.",
 
+  "userGenderBase": "'gender' должен быть строкой.",
+  "userGenderBase": "Поле 'gender' должно быть одним из значений: male, female, custom.",
+  "userGenderRequired": "Поле 'gender' обязательно для заполнения.",
+
   "userDepartmentCustom": "Неверный формат идентификатора отдела.",
   "userDepartmentBase": "Отдел должен быть строкой.",
 
@@ -131,10 +135,6 @@
 
   "workerGroupCustom": "Неверный формат идентификатора группы.",
   "workerGroupBase": "Группа должна быть строкой.",
-
-  "workerGenderBase": "'gender' должен быть строкой.",
-  "workerGenderOnly": "Поле 'gender' должно быть одним из значений: male, female, custom.",
-  "workerGenderRequired": "Поле 'gender' обязательно для заполнения.",
 
   "workerBirthDateBase": "Поле 'birthDay' должно быть датой.",
   "workerBirthDayLess": "Дата рождения должна быть меньше текущей даты.",

@@ -92,6 +92,15 @@ export const UserCreate = (data) => Joi.object({
       "string.base": "userFaceUrl",
       'any.required': 'userFaceUrlRequired'
     }),
+
+  gender: Joi.string()
+    .valid("male", "female", "custom")
+    .required()
+    .messages({
+      "string.base": "userGenderBase",
+      "any.only": "userGenderBase",
+      "any.required": "userGenderRequired",
+    }),
   
   department: Joi.string()
     .custom((value, helpers) => {
@@ -217,6 +226,15 @@ export const UserUpdate = (data) => Joi.object({
     .messages({
       "string.base": "userFaceUrl",
       'any.required': 'userFaceUrlRequired'
+    }),
+
+  gender: Joi.string()
+    .valid("male", "female", "custom")
+    .required()
+    .messages({
+      "string.base": "userGenderBase",
+      "any.only": "userGenderBase",
+      "any.required": "userGenderRequired",
     }),
   
   department: Joi.string()
