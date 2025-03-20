@@ -74,7 +74,7 @@ export const initSocket = (server) => {
     socket.on("event-sync", (data) => {
       await syncing(data);
     });
-    
+
     socket.on("disconnect", async () => {
       try {
         if (socket.user) {

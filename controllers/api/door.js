@@ -92,7 +92,7 @@ export const getNotSyncedUsers = async (req, res, next) => {
         status: "active",
         role: { $ne: "admin" }
       }, "fullName faceUrl employeeNo gender").lean();
-      
+
       obj[door] = users;
       doors.push(findDoor);
 

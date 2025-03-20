@@ -23,4 +23,4 @@ export const syncing = async (data) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
