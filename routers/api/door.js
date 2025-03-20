@@ -1,12 +1,13 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js"
 import { all } from "../../middleware/role.js";
-import { getDoors, getLastDoorEvent, postDoorEvents, syncDoors } from "../../controllers/api/door.js";
+import { getDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, syncDoors } from "../../controllers/api/door.js";
 const router = Router();
 
 router.get("/", passport.authenticate("jwt", { session: false }), all, getDoors);
 router.get('/last-event', passport.authenticate("jwt", { session: false }), all, getLastDoorEvent);
 router.post("/post-events", passport.authenticate("jwt",  { session: false }), all, postDoorEvents);
+router.get('/user-not-synced', passport.authenticate("jwt", { session: false }), all, getNotSyncedUsers);
 router.post('/post-sync', passport.authenticate("jwt", { session: false }), all, syncDoors);
 
 
@@ -157,6 +158,50 @@ export default router;
  *         description: Не авторизован
  *       403:
  *         description: Доступ запрещен
+ */
+
+/**
+ * @swagger
+ * /api/door/user-not-synced:
+ *   get:
+ *     summary: Получить массив сотрудников, не синхронизированных с девайсом
+ *     description: Получить массив сотрудников, не синхронизированных с девайсом Hikvision по IP
+ *     tags:
+ *       - API Doors
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 doorId:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                         description: Уникальный идентификатор пользователя
+ *                       fullName:
+ *                         type: string
+ *                         description: Полное имя сотрудника
+ *                       faceUrl:
+ *                         type: string
+ *                         description: Ссылка на фото лица
+ *                       employeeNo:
+ *                         type: string
+ *                         description: Уникальный идентификатор для девайса
+ *                       gender:
+ *                         type: string
+ *                         description: Пол пользователя
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован
  */
 
 /**

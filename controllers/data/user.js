@@ -72,7 +72,7 @@ export const create = async (req, res, next) => {
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();
     findSecuritySessions.forEach(session => {
-      io.to(session._id).emit('new-user', { fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo });
+      io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
     })
 
     res.status(201).json(user);
@@ -110,8 +110,8 @@ export const changeStatus = async (req, res, next) => {
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();
     findSecuritySessions.forEach(session => {
-      io.to(session._id).emit('new-user', { fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo })
-    })
+      io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
+    });
 
     res.status(200).json(user);
   } catch (error) {
@@ -149,9 +149,15 @@ export const remove = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let user = await UserModel.findByIdAndUpdate(id, { status: "deleted" }, { new: true, select: "_id" });
+    let user = await UserModel.findByIdAndUpdate(id, { status: "deleted", sync: [] }, { new: true, select: "_id employeeNo" });
     if (!user) throw { status: 400, message: "userNotFound" };
-    await WorkerModel.findOneAndUpdate({ user: id }, { status: "deleted" });
+    await WorkerModel.updateMany({ user: id }, { status: "deleted" });
+
+    let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    let io = await getIo();
+    findSecuritySessions.forEach(session => {
+      io.to(session._id).emit('user-remove', user.employeeNo);
+    });
 
     res.status(200).json({ message: "deleted" });
   } catch (error) {

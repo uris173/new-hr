@@ -74,11 +74,43 @@ export const postDoorEvents = async (req, res, next) => {
   }
 };
 
+export const getNotSyncedUsers = async (req, res, next) => {
+  try {
+    let { _id } = req.user;
+    let findSecurity = await UserModel.findById(_id, "-_id doors");
+
+    let doors = [];
+    let users = await Promise.all(findSecurity.doors.map(async door => {
+      let obj = {};
+      let findDoor = await DoorModel.findById(door, "_id ip login password").lean();
+      if (!obj[door]) {
+        obj[door] = [];
+      }
+
+      let users = await UserModel.find({
+        "sync.ip": { $ne: findDoor.ip },
+        status: "active",
+        role: { $ne: "admin" }
+      }, "fullName faceUrl employeeNo gender").lean();
+      
+      obj[door] = users;
+      doors.push(findDoor);
+
+      return obj;
+    }));
+
+    res.status(200).json({ users, doors });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export const syncDoors = async (req, res, next) => {
   try {
-    let { userId, door } = req.body;
+    let { userId, doorId } = req.body;
 
-    let findDoor = await DoorModel.findById(door, "-_id ip type").lean();
+    let findDoor = await DoorModel.findById(doorId, "-_id ip type").lean();
     if (!findDoor) throw { status: 400, message: "doorNotFound" };
 
     let user = await UserModel.findByIdAndUpdate(userId, { 

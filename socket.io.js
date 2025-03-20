@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import { UserModel } from "./models/data/user.js";
 import { getRedisData, setRedisData, deleteRedisData } from "./redis.js";
+import { syncing } from "./utils/event.sync.js";
 
 /*
   new-user = fullName, faceUrl, employeeNo
@@ -50,6 +51,7 @@ export const initSocket = (server) => {
           fullName: user.fullName,
           department: user?.department?.toString() || null,
         };
+
         await setRedisData(`session:${userId}:${user.role}`, socket.user);
       } else {
         socket.join(userId);
@@ -65,7 +67,14 @@ export const initSocket = (server) => {
 
   io.on("connection", async (socket) => {
     console.log("Socket connected", socket.user.fullName);
+    if (socket.user.role === "security") {
+      io.emit("start-user-sync");
+    }
 
+    socket.on("event-sync", (data) => {
+      await syncing(data);
+    });
+    
     socket.on("disconnect", async () => {
       try {
         if (socket.user) {
