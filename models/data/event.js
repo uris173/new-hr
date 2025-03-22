@@ -14,7 +14,7 @@ const eventSchema = new Schema({
     type: Types.ObjectId,
     ref: "door"
   },
-  branch: String,
+  // branch: String,
   employeeNoString: String,
   serialNo: Number,
   pictureURL: String,

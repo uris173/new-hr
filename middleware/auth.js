@@ -14,7 +14,7 @@ const opts = {
 passport.use(
   new Strategy(opts, async (jwtPayload, done) => {
     try {
-      const user = await UserModel.findById(jwtPayload._id, select);
+      const user = await UserModel.findById(jwtPayload._id, select).lean();
       if (!user) return done(null, false);
       return done(null, user);
     } catch (error) {

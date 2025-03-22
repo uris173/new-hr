@@ -19,7 +19,7 @@ const saveEventDoor = async (data) => {
               time: event.time,
               user: user._id,
               door: doorId,
-              branch: event.branch,
+              // branch: event.branch,
               employeeNoString: event.employeeNoString,
               serialNo: event.serialNo,
               pictureURL: event.pictureURL,
