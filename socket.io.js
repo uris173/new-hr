@@ -71,9 +71,9 @@ export const initSocket = (server) => {
       io.emit("start-user-sync");
     }
 
-    // socket.on("event-sync", async (data) => {
-    //   await syncing(data);
-    // });
+    socket.on("event-sync", async (data) => {
+      await syncing(data);
+    });
 
     socket.on("disconnect", async () => {
       try {

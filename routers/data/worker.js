@@ -47,7 +47,9 @@ export default router;
  *           type: string
  *           description: ID пользователя (ссылка на модель User)
  *         department:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: string
  *           description: ID отдела (ссылка на модель Department)
  *         groups:
  *           type: array
@@ -110,7 +112,9 @@ export default router;
  *           type: string
  *           description: ID пользователя (ссылка на модель User)
  *         department:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: string
  *           description: ID отдела (ссылка на модель Department)
  *         groups:
  *           type: array
@@ -167,7 +171,9 @@ export default router;
  *           type: string
  *           description: ID пользователя (ссылка на модель User)
  *         department:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: string
  *           description: ID отдела (ссылка на модель Department)
  *         groups:
  *           type: array

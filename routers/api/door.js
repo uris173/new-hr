@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js"
 import { all } from "../../middleware/role.js";
-import { getDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, syncDoors } from "../../controllers/api/door.js";
+import { getDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, syncDoors, existsDoorEvent } from "../../controllers/api/door.js";
 const router = Router();
 
 router.get("/", passport.authenticate("jwt", { session: false }), all, getDoors);
@@ -9,6 +9,7 @@ router.get('/last-event', passport.authenticate("jwt", { session: false }), all,
 router.post("/post-events", passport.authenticate("jwt",  { session: false }), all, postDoorEvents);
 router.get('/user-not-synced', passport.authenticate("jwt", { session: false }), all, getNotSyncedUsers);
 router.post('/post-sync', passport.authenticate("jwt", { session: false }), all, syncDoors);
+router.post('/exists-event', passport.authenticate("jwt", { session: false }), all, existsDoorEvent);
 
 
 export default router;
@@ -242,6 +243,53 @@ export default router;
   *        description: Неверные параметры запроса
   *      401:
   *        description: Не авторизован
+ */
+
+/**
+ * @swagger
+ * /api/door/exists-event:
+ *   post:
+ *     summary: Проверка наличия события
+ *     description: Проверка наличия события
+ *     tags:
+ *       - API Doors
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               door:
+ *                 type: string
+ *                 description: Уникальный идентификатор двери
+ *               employeeNoString:
+ *                 type: number
+ *                 description: Номер сотрудника
+ *               serialNo:
+ *                 type: number
+ *                 description: Серийный номер
+ *              time:
+ *                type: string
+ *                format: date-time
+ *                description: Время события
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exists:
+ *                   type: boolean
+ *                   description: Наличие события
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован 
  */
 
 /**

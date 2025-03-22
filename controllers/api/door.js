@@ -124,3 +124,18 @@ export const syncDoors = async (req, res, next) => {
     next(error);
   }
 };
+
+export const existsDoorEvent = async (req, res, next) => {
+  try {
+    let { door, serialNo, employeeNoString, time } = req.body;
+    let event = await EventModel.findOne({ door, serialNo, employeeNoString, time: new Date(time) }, "_id").lean();
+    if (!event) {
+      return res.status(200).json({ exists: false });
+    }
+
+    res.status(200).json({ exists: true });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};

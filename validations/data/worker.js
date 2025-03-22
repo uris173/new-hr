@@ -54,7 +54,8 @@ export const WorkerCreate = (data) => Joi.object({
       "any.required": "workerUserRequired",
     }),
 
-  department: Joi.string()
+  department: Joi.array().items(
+    Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {
         return helpers.message("workerDepartmentCustom");
@@ -65,7 +66,8 @@ export const WorkerCreate = (data) => Joi.object({
     .messages({
       "string.base": "workerDepartmentBase",
       "any.required": "workerDepartmentRequired",
-    }),
+    })
+  ),
 
   groups: Joi.array()
     .items(
@@ -183,7 +185,8 @@ export const WorkerUpdate = (data) => Joi.object({
       "any.required": "workerUserRequired",
     }),
 
-  department: Joi.string()
+  department: Joi.array().items(
+    Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {
         return helpers.message("workerDepartmentCustom");
@@ -194,7 +197,8 @@ export const WorkerUpdate = (data) => Joi.object({
     .messages({
       "string.base": "workerDepartmentBase",
       "any.required": "workerDepartmentRequired",
-    }),
+    })
+  ),
 
   groups: Joi.array()
     .items(

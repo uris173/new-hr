@@ -47,4 +47,4 @@ export const uploadSinglePhoto = async (req, res, next) => {
     console.error(error);
     next(error);
   }
-}
+};

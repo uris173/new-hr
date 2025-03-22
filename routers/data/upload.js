@@ -1,11 +1,11 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js"
-import { top } from "../../middleware/role.js";
+import { all } from "../../middleware/role.js";
 
 const router = Router();
 import { uploadPhoto, uploadSinglePhoto } from "../../controllers/data/upload.js";
 
-router.post('/photo/:path', passport.authenticate('jwt', { session: false }), top, uploadPhoto.single('file'), uploadSinglePhoto);
+router.post('/photo/:path', passport.authenticate('jwt', { session: false }), all, uploadPhoto.single('file'), uploadSinglePhoto);
 
 
 export default router;

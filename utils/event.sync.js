@@ -1,11 +1,22 @@
+import { UserModel } from "../models/data/user.js";
+import { EventModel } from "../models/data/event.js";
 import { Worker } from "worker_threads";
 
 export const syncing = async (data) => {
   try {
     const worker = new Worker('./utils/workers/door-worker.js', { workerData: data });
 
-    worker.on("message", (data) => {
-      console.log("Worker response:", data);
+    worker.on("message", async (data) => {
+      let events = await Promise.all(data.map(async (event) => {
+        let findUser = await UserModel.findOne({ employeeNo: event.employeeNoString }, "_id");
+        if (!findUser) return null;
+        event.user = findUser._id;
+
+        return event
+      }));
+      events = events.filter(e => e !== null);
+      
+      await EventModel.insertMany(events);
     });
 
     worker.on("error", (error) => {

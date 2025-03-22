@@ -5,10 +5,10 @@ const workerSchema = new Schema({
     type: Types.ObjectId,
     ref: "user"
   },
-  department: {
+  department: [{
     type: Types.ObjectId,
     ref: "department"
-  },
+  }],
   groups: [{
     type: Types.ObjectId,
     ref: "group"
