@@ -271,10 +271,10 @@ export default router;
  *               serialNo:
  *                 type: number
  *                 description: Серийный номер
- *              time:
- *                type: string
- *                format: date-time
- *                description: Время события
+ *               time:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время события
  *     responses:
  *       200:
  *         description: Успешный ответ
