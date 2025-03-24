@@ -61,7 +61,7 @@ export const changeStatus = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let door = await UserModel.findOneAndUpdate(
+    let door = await DoorModel.findOneAndUpdate(
       { _id: id, status: { $in: ["active", "inactive"] } },
       [{ $set: { status: { $cond: { if: { $eq: ["$status", "active"] }, then: "inactive", else: "active" } } } }],
       { new: true, select }

@@ -12,6 +12,7 @@ export const canView = (user) => {
     "admin": { role: { $in: ["boss", "chief", "worker", "security", "guest"] } },
     "boss": { role: { $in: ["chief", "worker", "security", "guest"] } },
     "chief": { role: "worker", department: user.department },
+    "security": { _id: user._id },
     "worker": { _id: user._id }
   };
 
@@ -107,11 +108,11 @@ export const changeStatus = async (req, res, next) => {
     ).populate({ path: "department", select: "-_id name" });
     if (!user) throw { status: 400, message: "userNotFound" };
 
-    let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    let io = await getIo();
-    findSecuritySessions.forEach(session => {
-      io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-    });
+    // let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    // let io = await getIo();
+    // findSecuritySessions.forEach(session => {
+    //   io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
+    // });
 
     res.status(200).json(user);
   } catch (error) {
