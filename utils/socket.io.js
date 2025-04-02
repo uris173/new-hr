@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
-import { UserModel } from "./models/data/user.js";
+import { UserModel } from "../models/data/user.js";
 import { getRedisData, setRedisData, deleteRedisData } from "./redis.js";
-import { syncing } from "./utils/event.sync.js";
+import { syncing } from "./event.sync.js";
 
 /*
   new-user = fullName, faceUrl, employeeNo
