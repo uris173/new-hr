@@ -3,8 +3,8 @@ import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
 import { UserQueryFilter, UserCreate, UserUpdate } from "../../validations/data/user.js";
-import { getIo } from "../../socket.io.js"
-import { getRedisAllData } from "../../redis.js"
+import { getIo } from "../../utils/socket.io.js"
+import { getRedisAllData } from "../../utils/redis.js"
 let select = 'fullName role faceUrl department gender status employeeNo';
 
 export const canView = (user) => {
