@@ -30,6 +30,7 @@ const userSchema = new Schema({
   }],
   sync: [{
     ip: String,
+    port: String,
     type: {
       type: String,
       enum: ["enter", "exit"]

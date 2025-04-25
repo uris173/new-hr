@@ -13,9 +13,12 @@ let io = null;
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: [
+        "http://localhost:9090",
+        "http://192.168.26.66"
+      ],
       methods: ["GET", "POST"],
-      // credentials: true,
+      credentials: true,
     },
   });
 
@@ -24,6 +27,12 @@ export const initSocket = (server) => {
 
     if (!token) return next(new Error("Не авторизован"));
     if (token === "null") return next(new Error("Не авторизован"));
+    if (token === "SCRIPT") {
+      socket.join("hr-script69")
+      socket.user = { _id: "hr-script69", fullName: "hr-script", role: "user" };
+      await setRedisData(`session:hr-script69:user`, socket.user)
+      return next();
+    }
 
     let decode = null;
     try {
@@ -66,7 +75,7 @@ export const initSocket = (server) => {
   });
 
   io.on("connection", async (socket) => {
-    console.log("Socket connected", socket.user.fullName);
+    console.log("Socket connected", socket?.user?.fullName);
     if (socket.user.role === "security") {
       io.emit("start-user-sync");
     }

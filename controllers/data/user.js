@@ -75,6 +75,7 @@ export const create = async (req, res, next) => {
     findSecuritySessions.forEach(session => {
       io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
     })
+    io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
 
     res.status(201).json(user);
   } catch (error) {
@@ -109,10 +110,11 @@ export const changeStatus = async (req, res, next) => {
     if (!user) throw { status: 400, message: "userNotFound" };
 
     // let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    // let io = await getIo();
+    let io = await getIo();
     // findSecuritySessions.forEach(session => {
     //   io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
     // });
+    io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
 
     res.status(200).json(user);
   } catch (error) {
@@ -159,6 +161,7 @@ export const remove = async (req, res, next) => {
     findSecuritySessions.forEach(session => {
       io.to(session._id).emit('user-remove', user.employeeNo);
     });
+    io.to("hr-script69").emit('user-remove', user.employeeNo);
 
     res.status(200).json({ message: "deleted" });
   } catch (error) {

@@ -1,15 +1,16 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js"
-import { all } from "../../middleware/role.js";
-import { getDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, syncDoors, existsDoorEvent } from "../../controllers/api/door.js";
+import { getDoors, getOpenDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, openDoorsNotSyncedUsers, syncDoors, existsDoorEvent } from "../../controllers/api/door.js";
 const router = Router();
 
-router.get("/", passport.authenticate("jwt", { session: false }), all, getDoors);
-router.get('/last-event', passport.authenticate("jwt", { session: false }), all, getLastDoorEvent);
-router.post("/post-events", passport.authenticate("jwt",  { session: false }), all, postDoorEvents);
-router.get('/user-not-synced', passport.authenticate("jwt", { session: false }), all, getNotSyncedUsers);
-router.post('/post-sync', passport.authenticate("jwt", { session: false }), all, syncDoors);
-router.post('/exists-event', passport.authenticate("jwt", { session: false }), all, existsDoorEvent);
+router.get("/", passport.authenticate("jwt", { session: false }), getDoors);
+router.get("/open-doors", getOpenDoors)
+router.get("/last-event", getLastDoorEvent);
+router.post("/post-events", postDoorEvents);
+router.get("/user-not-synced", passport.authenticate("jwt", { session: false }), getNotSyncedUsers);
+router.post("/open-doors/user-not-synced", openDoorsNotSyncedUsers);
+router.post("/post-sync", syncDoors);
+router.post("/exists-event", existsDoorEvent);
 
 
 export default router;
@@ -23,11 +24,45 @@ export default router;
  *     description: Возвращает список дверей
  *     tags:
  *       - API Doors
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Список дверей
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: Уникальный идентификатор двери
+ *                 ip:
+ *                   type: string
+ *                   description: IP-адрес двери
+ *                 login:
+ *                   type: string
+ *                   description: Логин для доступа к двери
+ *                 password:
+ *                   type: string
+ *                   description: Пароль для доступа к двери
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован
+ *       403:
+ *         description: Доступ запрещен
+ */
+
+/**
+ * @swagger
+ * /api/door/open-doors:
+ *   get:
+ *     summary: Получить список открытых дверей
+ *     description: Возвращает список открытых дверей
+ *     tags:
+ *       - API Doors
+ *     responses:
+ *       200:
+ *         description: Список открытых дверей
  *         content:
  *           application/json:
  *             schema:
@@ -61,8 +96,6 @@ export default router;
  *     description: Возвращает список дверей и последнее событие
  *     tags:
  *       - API Doors
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Список дверей и последних событий
@@ -111,8 +144,6 @@ export default router;
  *     description: Отправляет события дверей
  *     tags:
  *       - API Doors
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -153,6 +184,62 @@ export default router;
  *                 message:
  *                   type: string
  *                   example: "События успешно обработаны"
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован
+ *       403:
+ *         description: Доступ запрещен
+ */
+
+/**
+ * @swagger
+ * /api/door/open-doors/user-not-synced:
+ *   post:
+ *     summary: Получить пользователей, не синхронизированных с дверьми
+ *     description: Возвращает список дверей и пользователей, которые не синхронизированы с указанными дверьми (IP пользователей не совпадает с IP двери).
+ *     tags:
+ *       - API Doors
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: string
+ *               description: Уникальный идентификатор двери
+ *             example: ["door_id_1", "door_id_2"]
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 doorId:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                         description: Уникальный идентификатор пользователя
+ *                       fullName:
+ *                         type: string
+ *                         description: Полное имя сотрудника
+ *                       faceUrl:
+ *                         type: string
+ *                         description: Ссылка на фото лица
+ *                       employeeNo:
+ *                         type: string
+ *                         description: Уникальный идентификатор для девайса
+ *                       gender:
+ *                         type: string
+ *                         description: Пол пользователя
  *       400:
  *         description: Неверные параметры запроса
  *       401:
@@ -213,8 +300,6 @@ export default router;
   *    description: Успешные синхронизации
   *    tags:
   *      - API Doors
-  *    security:
-  *      - bearerAuth: []
   *    requestBody:
   *      required: true
   *      content:
@@ -253,8 +338,6 @@ export default router;
  *     description: Проверка наличия события
  *     tags:
  *       - API Doors
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

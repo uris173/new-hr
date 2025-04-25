@@ -48,6 +48,9 @@ export default router;
  *         ip:
  *           type: string
  *           description: IP-адрес двери
+ *         port:
+ *           type: string
+ *           description: Порт двери
  *         status:
  *           type: string
  *           enum: [active, inactive, deleted]
@@ -62,6 +65,9 @@ export default router;
  *         password:
  *           type: string
  *           description: Пароль для доступа к двери
+ *         isOpen:
+ *           type: boolean
+ *           description: Флаг на доступ двери извне
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -78,6 +84,7 @@ export default router;
  *         - type
  *         - login
  *         - password
+ *         - isOpen
  *         - createdAt
  *         - updatedAt
  * 
@@ -90,6 +97,9 @@ export default router;
  *         ip:
  *           type: string
  *           description: IP-адрес двери
+ *         port:
+ *           type: string
+ *           description: Порт двери
  *         type:
  *           type: string
  *           description: Тип двери
@@ -99,12 +109,16 @@ export default router;
  *         password:
  *           type: string
  *           description: Пароль для доступа к двери
+ *         isOpen:
+ *           type: boolean
+ *           description: Флаг на доступ двери извне
  *       required:
  *         - title
  *         - ip
  *         - type
  *         - login
  *         - password
+ *         - isOpen
  * 
  *     DoorUpdateRequest:
  *       type: object
@@ -118,6 +132,9 @@ export default router;
  *         ip:
  *           type: string
  *           description: IP-адрес двери
+ *         port:
+ *           type: string
+ *           description: Порт двери
  *         type:
  *           type: string
  *           description: Тип двери
@@ -127,6 +144,9 @@ export default router;
  *         password:
  *           type: string
  *           description: Пароль для доступа к двери
+ *         isOpen:
+ *           type: boolean
+ *           description: Флаг на доступ двери извне
  *       required:
  *         - _id
  *         - title
@@ -134,6 +154,7 @@ export default router;
  *         - type
  *         - login
  *         - password
+ *         - isOpen
  * 
  *   securitySchemes:
  *     bearerAuth:

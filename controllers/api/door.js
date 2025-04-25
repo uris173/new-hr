@@ -12,7 +12,17 @@ export const getDoors = async (req, res, next) => {
       ...(user.doors && user.doors.length > 0 && { _id: { $in: user.doors } })
     }
 
-    let doors = await DoorModel.find(filter, "ip login password");
+    let doors = await DoorModel.find(filter, "ip port login password");
+    res.status(200).json(doors);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const getOpenDoors = async (req, res, next) => {
+  try {
+    let doors = await DoorModel.find({ isOpen: true, status: "active" }, "ip port login password");
     res.status(200).json(doors);
   } catch (error) {
     console.error(error);
@@ -27,7 +37,7 @@ export const getLastDoorEvent = async (req, res, next) => {
       ...(user.doors && user.doors.length > 0 && { _id: { $in: user.doors } })
     }
 
-    let doors = await DoorModel.find(filter, "ip login password").lean();
+    let doors = await DoorModel.find(filter, "ip port login password").lean();
     doors = await Promise.all(doors.map(async door => {
       let lastEvent = await EventModel.findOne({ door: door._id }, "-_id time employeeNoString serialNo")
       .sort({ time: -1 })
@@ -74,30 +84,57 @@ export const postDoorEvents = async (req, res, next) => {
   }
 };
 
+const getUsersNotSynced = async (doorIds) => {
+  let doors = []
+  let users = await Promise.all(doorIds.map(async door => {
+    let obj = { };
+    let findDoor = await DoorModel.findById(door, "_id ip port login password").lean();
+    if (!obj[door]) {
+      obj[door] = [];
+    }
+
+    let users = await UserModel.findById({
+      "sync.ip": { $ne: findDoor.ip },
+      "sync.port": { $ne: findDoor.port },
+      status: "active",
+      role: { $ne: "admin" }
+    }, "fullName faceUrl employeeNo gender").lean();
+
+    obj[door] = users;
+    doors.push(findDoor);
+
+    return obj;
+  }));
+
+  return { doors, users }
+};
+
 export const getNotSyncedUsers = async (req, res, next) => {
   try {
     let { _id } = req.user;
     let findSecurity = await UserModel.findById(_id, "-_id doors");
 
-    let doors = [];
-    let users = await Promise.all(findSecurity.doors.map(async door => {
-      let obj = {};
-      let findDoor = await DoorModel.findById(door, "_id ip login password").lean();
-      if (!obj[door]) {
-        obj[door] = [];
-      }
+    let { users, dooors } = await getUsersNotSynced(findSecurity.doors);
 
-      let users = await UserModel.find({
-        "sync.ip": { $ne: findDoor.ip },
-        status: "active",
-        role: { $ne: "admin" }
-      }, "fullName faceUrl employeeNo gender").lean();
-
-      obj[door] = users;
-      doors.push(findDoor);
-
-      return obj;
-    }));
+    // let doors = [];
+    // let users = await Promise.all(findSecurity.doors.map(async door => {
+    //   let obj = {};
+    //   let findDoor = await DoorModel.findById(door, "_id ip login password").lean();
+    //   if (!obj[door]) {
+    //     obj[door] = [];
+    //   }
+    //
+    //   let users = await UserModel.find({
+    //     "sync.ip": { $ne: findDoor.ip },
+    //     status: "active",
+    //     role: { $ne: "admin" }
+    //   }, "fullName faceUrl employeeNo gender").lean();
+    //
+    //   obj[door] = users;
+    //   doors.push(findDoor);
+    //
+    //   return obj;
+    // }));
 
     res.status(200).json({ users, doors });
   } catch (error) {
@@ -106,15 +143,22 @@ export const getNotSyncedUsers = async (req, res, next) => {
   }
 };
 
+export const openDoorsNotSyncedUsers = async (req, res, next) => {
+  let doorIds = req.body;
+  let { users, dooors} = await getUsersNotSynced(doorIds);
+
+  res.status(200).json({ users, doors });
+}
+
 export const syncDoors = async (req, res, next) => {
   try {
     let { userId, doorId } = req.body;
 
-    let findDoor = await DoorModel.findById(doorId, "-_id ip type").lean();
+    let findDoor = await DoorModel.findById(doorId, "-_id ip port type").lean();
     if (!findDoor) throw { status: 400, message: "doorNotFound" };
 
     let user = await UserModel.findByIdAndUpdate(userId, { 
-      $addToSet: { sync: { ip: findDoor.ip, type: findDoor.type } }
+      $addToSet: { sync: { ip: findDoor.ip, port: findDoor.port, type: findDoor.type } }
     }, { new: true, select: "_id" });
     if (!user) throw { status: 400, message: "userNotFound" };
 

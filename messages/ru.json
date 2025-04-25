@@ -175,6 +175,10 @@
   "doorIpIp": "IP-адрес должен соответствовать формату: '192.168.1.1'",
   "doorIpIpv4": "IP-адрес должен соответствовать формату IPv4.",
 
+  "doorPortRequired": "Поле 'port' должно быть строкой.",
+  "doorPortBase": "Поле 'port' не может быть пустым.",
+  "doorPortEmpty": "Поле 'port' обязателен для заполнения.",
+
   "doorTypeRequired": "Поле 'type' обязательно для заполнения.",
   "doorTypeBase": "Поле 'type' должно быть строкой.",
   "doorTypeOnly": "Поле 'type' должен содержать лишь 'exit' или 'enter'",
@@ -189,6 +193,8 @@
   "doorPasswordBase": "Поле 'password' должно быть строкой.",
   "doorPasswordMin": "Поле 'password' должно содержать минимум 5 символов.",
   "doorPasswordMax": "Поле 'password' не должно превышать 50 символов.",
-  "doorPasswordPattern": "Поле 'password' должно содержать только латинские буквы и цифры."
+  "doorPasswordPattern": "Поле 'password' должно содержать только латинские буквы и цифры.",
+
+  "doorIsOpenBase": "'isOpen' должен быть булевым значением (true или false)"
 
 }

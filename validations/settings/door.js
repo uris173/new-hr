@@ -42,7 +42,7 @@ export const CreateDoor = (data) => Joi.object({
     }),
     
   ip: Joi.string()
-    .ip({ version: ["ipv4"] })
+    .pattern(/^(\d{1,3}\.){3}\d{1,3}:\d{1,5}$/)
     .required()
     .messages({
       "any.required": "doorIpRequired",
@@ -51,6 +51,14 @@ export const CreateDoor = (data) => Joi.object({
       "string.ip": "doorIpIp",
       "string.ipv4": "doorIpIpv4",
       "string.ipVersion": "doorIpIpv4",
+    }),
+
+  port: Joi.string()
+    .required()
+    .messages({
+      "any.required": "doorPortRequired",
+      "string.base": "doorPortBase",
+      "string.empty": "doorPortEmpty",
     }),
 
   type: Joi.string()
@@ -86,6 +94,12 @@ export const CreateDoor = (data) => Joi.object({
       "string.base": "doorPasswordBase",
       "string.min": "doorPasswordMin",
       "string.max": "doorPasswordMax",
+    }),
+
+  isOpen: Joi.boolean()
+    .optional()
+    .messages({
+      "boolean.base": "doorIsOpenBase"
     })
 }).validate(data);
 
@@ -116,7 +130,7 @@ export const UpdateDoor = (data) => Joi.object({
     }),
     
   ip: Joi.string()
-    .ip({ version: ["ipv4"] })
+    .pattern(/^(\d{1,3}\.){3}\d{1,3}:\d{1,5}$/)
     .required()
     .messages({
       "any.required": "doorIpRequired",
@@ -125,6 +139,14 @@ export const UpdateDoor = (data) => Joi.object({
       "string.ip": "doorIpIp",
       "string.ipv4": "doorIpIpv4",
       "string.ipVersion": "doorIpIpv4",
+    }),
+
+  port: Joi.string()
+    .required()
+    .messages({
+      "any.required": "doorPortRequired",
+      "string.base": "doorPortBase",
+      "string.empty": "doorPortEmpty",
     }),
 
   type: Joi.string()
@@ -160,5 +182,11 @@ export const UpdateDoor = (data) => Joi.object({
       "string.base": "doorPasswordBase",
       "string.min": "doorPasswordMin",
       "string.max": "doorPasswordMax",
+    }),
+
+  isOpen: Joi.boolean()
+    .optional()
+    .messages({
+      "boolean.base": "doorIsOpenBase"
     })
 }).validate(data);
