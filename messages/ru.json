@@ -93,7 +93,6 @@
   "userFaceUrlBase": "Ссылка на фото должен быть строкой.",
   "userFaceUrlRequired": "Ссылка на фото обязательна для заполнения.",
 
-  "userGenderBase": "'gender' должен быть строкой.",
   "userGenderBase": "Поле 'gender' должно быть одним из значений: male, female, custom.",
   "userGenderRequired": "Поле 'gender' обязательно для заполнения.",
 
@@ -195,6 +194,18 @@
   "doorPasswordMax": "Поле 'password' не должно превышать 50 символов.",
   "doorPasswordPattern": "Поле 'password' должно содержать только латинские буквы и цифры.",
 
-  "doorIsOpenBase": "'isOpen' должен быть булевым значением (true или false)"
+  "doorIsOpenBase": "'isOpen' должен быть булевым значением (true или false)",
 
+
+  "eventTypeBase": "Поле 'type' должно быть строкой.",
+  "eventTypeOnly": "Поле 'type' должно содержать только 'enter' или 'exit'",
+
+  "eventUserCustom": "Неверный формат идентификатора пользователя.",
+  "eventUserBase": "Пользователь должен быть строкой.",
+
+  "eventDoorCustom": "Неверный формат идентификатора двери.",
+  "eventDoorBase": "Дверь должна быть строкой.",
+
+  "eventDepartmentCustom": "Неверный формат идентификатора отдела.",
+  "eventDepartmentBase": "Отдел должен быть строкой."
 }

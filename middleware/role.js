@@ -42,6 +42,17 @@ export const top = async (req, res, next) => {
   throw { status: 403, message: "authError" };
 };
 
+export const manage = async (req, res, next) => {
+  if (req.user) {
+    let { role } = req.user;
+    if (["admin", "boss", "chief"].includes(role)) return next();
+
+    throw { status: 403, message: "accessDenied" };
+  }
+
+  throw { status: 403, message: "authError" };
+}
+
 export const all = async (req, res, next) => {
   if (req.user) {
     let { role } = req.user;
