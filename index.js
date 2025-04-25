@@ -13,8 +13,8 @@ import { swaggerApiSpec, options } from "./swagger-doc.js";
 import { serve, setup } from "swagger-ui-express";
 import { initializeRedis } from "./utils/redis.js";
 import { initSocket } from "./utils/socket.io.js"
-import { elasticsearchConnection } from "./utils/elasticsearch/elasticsearch.js";
-import { createUserIndex } from "./utils/elasticsearch/index/user.index.js";
+// import { elasticsearchConnection } from "./utils/elasticsearch/elasticsearch.js";
+// import { createUserIndex } from "./utils/elasticsearch/index/user.index.js";
 
 
 const app = express();
@@ -36,12 +36,12 @@ app.use(ErrorMiddleware);
   try {
     initSocket(server);
     await initializeRedis();
-    await elasticsearchConnection();
+    // await elasticsearchConnection();
+    // await createUserIndex()
     await connect(process.env.MONGO_URI);
     console.log('MongoDB connected!');
 
-    await createUserIndex()
-    
+
     server.listen(process.env.PORT, () => {
       console.log(`Server is running on PORT: ${process.env.PORT}`);
     });
