@@ -42,7 +42,6 @@ export const CreateDoor = (data) => Joi.object({
     }),
     
   ip: Joi.string()
-    .pattern(/^(\d{1,3}\.){3}\d{1,3}:\d{1,5}$/)
     .required()
     .messages({
       "any.required": "doorIpRequired",
@@ -130,7 +129,6 @@ export const UpdateDoor = (data) => Joi.object({
     }),
     
   ip: Joi.string()
-    .pattern(/^(\d{1,3}\.){3}\d{1,3}:\d{1,5}$/)
     .required()
     .messages({
       "any.required": "doorIpRequired",
