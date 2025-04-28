@@ -20,6 +20,7 @@
   "incorectPassword": "Неверный пароль!",
   "profileInactive": "Ваш профиль был деактивирован!",
   "invalidId": "Не валидный ID!",
+  "userRequired": "Пользователь обязателен для указания!",
 
   "deleted": "Удалено!",
   "serverError": "Ошибка сервера!",
@@ -57,21 +58,6 @@
   "departmentTypeOnly": "Тип может быть только 1 (Department) или 2 (Group).",
   "departmentTypesRequired": "Тип обязательно для заполнения.",
 
-  "departmentWorkTimeBase": "Рабочее время должно быть массивом.",
-
-  "departmentWorkTimeDayBase": "День должен быть числом.",
-  "departmentWorkTimeDayInteger": "День должен быть целым числом.",
-  "departmentWorkTimeDayMin": "День не может быть меньше 0 (воскресенье).",
-  "departmentWorkTimeDayMax": "День не может быть больше 6 (суббота).",
-  "departmentWorkTimeDayRequired": "День недели обязателен.",
-
-  "departmentWorkTimeStartTimeBase": "Время начала должно быть датой.",
-  "departmentWorkTimeStartTimeRequired": "Время начала обязательно.",
-
-  "departmentWorkTimeEndTimeBase": "Время окончания должно быть датой.",
-  "departmentWorkTimeEndTimeGreater": "Время окончания должно быть позже времени начала.",
-  "departmentWorkTimeEndTimeRequired": "Время окончания обязательно.",
-
   "departmentParentCustom": "Неверный формат родительского отдела.",
   "departmentParentBase": "Родительский отдел должен быть строкой.",
 
@@ -99,18 +85,6 @@
   "userDepartmentCustom": "Неверный формат идентификатора отдела.",
   "userDepartmentBase": "Отдел должен быть строкой.",
 
-  "userWorkTimeDayBase": "День должен быть числом.",
-  "userWorkTimeDayMin": "День недели должен быть от 0 (воскресенье) до 6 (суббота)",
-  "userWorkTimeDayMax": "День недели должен быть от 0 (воскресенье) до 6 (суббота)",
-  "userWorkTimeDayRequired": "День недели обязателен.",
-
-  "userWorkTimeStartTimeStartTimeBase": "Поле 'Время начала' должно быть датой.",
-  "userWorkTimeStartTimeRequired": "Поле 'Время начала' обязательно.",
-
-  "userWorkTimeEndTimeBase": "Поле 'Время окончания' должно быть датой.",
-  "userWorkTimeEndTimeGreater": "Поле 'Время окончания' должно быть позже 'Времени начала'.",
-  "userWorkTimeEndTimeRequired": "Поле 'Время окончания' обязательно.",
-
   "userDoorsCustom": "Неверный формат идентификатора двери.",
   "userDoorsBase": "Дверь должна быть строкой.",
 
@@ -122,6 +96,20 @@
   "userSyncTypeRequired": "Поле 'Тип' обязательно для заполнения",
 
   "userSyncStatusBase": "Поле 'Статус' должно быть булевым значением",
+
+  "calendarUserCustom": "Неверный формат идентификатора пользователя.",
+  "calendarUserBase": "Пользователь должен быть строкой.",
+  "calendarUserRequired": "Пользователь обязателен для заполнения.",
+
+  "calendarDateBase": "Поле 'date' должно быть датой.",
+  "calendarDateRequired": "Поле 'date' обязательно для заполнения.",
+
+  "calendarShiftBase": "Поле 'shift' должно быть строкой.",
+  "calendarShiftOnly": "Поле 'shift' должно содержать только (morning, afternoon, night, full_day или off)",
+  "calendarShiftRequired": "Поле 'shift' обязательно для заполнения.",
+
+  "calendarNotesBase": "Поле 'notes' должно быть строкой.",
+  "calendarNotesMax": "Поле 'notes' не должно превышать 255 символов.",
 
 
   "workerUserCustom": "Неверный формат идентификатора пользователя.",

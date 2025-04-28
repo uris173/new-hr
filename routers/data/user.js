@@ -8,6 +8,10 @@ import {
   all,
   create,
   getOne,
+  getUserCalendars,
+  addUserCalendar,
+  getUserCalendar,
+  updateUserCalendar,
   changeStatus,
   update,
   remove
@@ -18,6 +22,16 @@ router.route('/')
 .get(all)
 .post(create)
 .put(update);
+
+router.route('/calendar')
+.all(passport.authenticate('jwt', { session: false }), top)
+.get(getUserCalendars)
+.post(addUserCalendar)
+.put(updateUserCalendar);
+
+router.route('/calendar/:id')
+.all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
+.get(getUserCalendar)
 
 router.get('/status/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top, changeStatus);
 
@@ -59,23 +73,6 @@ export default router;
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
- *         workTime:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               day:
- *                 type: integer
- *                 description: День недели (0 - воскресенье, 6 - суббота)
- *               startTime:
- *                 type: string
- *                 format: date-time
- *                 description: Время начала работы
- *               endTime:
- *                 type: string
- *                 format: date-time
- *                 description: Время окончания работы
- *           description: Рабочее время пользователя
  *         doors:
  *           type: array
  *           items:
@@ -146,23 +143,6 @@ export default router;
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
- *         workTime:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               day:
- *                 type: integer
- *                 description: День недели (0 - воскресенье, 6 - суббота)
- *               startTime:
- *                 type: string
- *                 format: date-time
- *                 description: Время начала работы
- *               endTime:
- *                 type: string
- *                 format: date-time
- *                 description: Время окончания работы
- *           description: Рабочее время пользователя
  *         doors:
  *           type: array
  *           items:
@@ -210,23 +190,6 @@ export default router;
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
- *         workTime:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               day:
- *                 type: integer
- *                 description: День недели (0 - воскресенье, 6 - суббота)
- *               startTime:
- *                 type: string
- *                 format: date-time
- *                 description: Время начала работы
- *               endTime:
- *                 type: string
- *                 format: date-time
- *                 description: Время окончания работы
- *           description: Рабочее время пользователя
  *         doors:
  *           type: array
  *           items:
@@ -240,6 +203,94 @@ export default router;
  *         - password
  *         - role
  *         - faceUrl
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Calendar:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Уникальный идентификатор записи календаря
+ *         user:
+ *           type: string
+ *           description: ID пользователя, к которому относится запись (ссылка на модель User)
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Дата записи в календаре
+ *         shift:
+ *           type: string
+ *           enum: ['morning', 'afternoon', 'night', 'full_day', 'off']
+ *           description: Тип смены
+ *         status:
+ *           type: string
+ *           enum: ['planned', 'active', 'completed', 'cancelled']
+ *           description: Статус записи в календаре
+ *         notes:
+ *           type: string
+ *           description: Дополнительные заметки к записи
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CalendarCreateRequest:
+ *       type: object
+ *       properties:
+ *         user:
+ *           type: string
+ *           description: ID пользователя
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Дата записи
+ *         shift:
+ *           type: string
+ *           enum: ['morning', 'afternoon', 'night', 'full_day', 'off']
+ *           description: Тип смены
+ *         notes:
+ *           type: string
+ *           description: Дополнительные заметки (необязательно)
+ *       required:
+ *         - user
+ *         - date
+ *         - shift
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CalendarUpdateRequest:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID записи календаря
+ *         user:
+ *           type: string
+ *           description: ID пользователя
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Дата записи
+ *         shift:
+ *           type: string
+ *           enum: ['morning', 'afternoon', 'night', 'full_day', 'off']
+ *           description: Тип смены
+ *         notes:
+ *           type: string
+ *           description: Дополнительные заметки (необязательно)
+ *       required:
+ *         - _id
+ *         - user
+ *         - date
+ *         - shift
  */
 
 /**
@@ -354,6 +405,131 @@ export default router;
  *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Ошибка валидации данных или недостаточно прав
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/calendar:
+ *   get:
+ *     summary: Получение календаря пользователя за указанный месяц
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: user
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID пользователя
+ *       - in: query
+ *         name: month
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *           maximum: 11
+ *         description: Месяц (0-11, где 0 - январь), по умолчанию текущий месяц
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: integer
+ *           minimum: 2020
+ *         description: Год, по умолчанию текущий год
+ *     responses:
+ *       200:
+ *         description: Успешный ответ со списком записей календаря
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Calendar'
+ *       400:
+ *         description: Ошибка валидации параметров запроса
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/calendar:
+ *   post:
+ *     summary: Создание новой записи в календаре пользователя
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CalendarCreateRequest'
+ *     responses:
+ *       201:
+ *         description: Запись успешно создана
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calendar'
+ *       400:
+ *         description: Ошибка валидации данных или запись на эту дату уже существует
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/calendar:
+ *   put:
+ *     summary: Обновление существующей записи в календаре пользователя
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CalendarUpdateRequest'
+ *     responses:
+ *       200:
+ *         description: Запись успешно обновлена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calendar'
+ *       400:
+ *         description: Ошибка валидации данных или запись не найдена
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/calendar/{id}:
+ *   get:
+ *     summary: Получение записи календаря по ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID записи календаря
+ *     responses:
+ *       200:
+ *         description: Успешный ответ с данными записи календаря
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calendar'
+ *       404:
+ *         description: Запись не найдена
  *       401:
  *         description: Неавторизованный доступ
  */

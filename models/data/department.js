@@ -6,11 +6,6 @@ const departmentSchema = new Schema({
     type: Number,
     enum: [1, 2] // 1 - Department | 2 - Group
   },
-  workTime: [{
-    day: Number,
-    startTime: Date,
-    endTime: Date
-  }],
   parent: {
     type: Types.ObjectId,
     ref: "department",

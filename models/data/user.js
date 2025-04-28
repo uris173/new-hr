@@ -18,11 +18,6 @@ const userSchema = new Schema({
     ref: 'department',
     default: null
   },
-  workTime: [{
-    day: Number,
-    startTime: Date,
-    endTime: Date
-  }],
   employeeNo: String,
   doors: [{
     type: Types.ObjectId,

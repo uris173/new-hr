@@ -113,27 +113,6 @@ export const UserCreate = (data) => Joi.object({
     .messages({
       "string.base": "userDepartmentBase",
     }),
-  
-  workTime: Joi.array().items(
-    Joi.object({
-      day: Joi.number().integer().min(0).max(6).required()
-        .messages({
-          'number.base': 'userWorkTimeDayBase',
-          'number.min': 'userWorkTimeDayMin',
-          'number.max': 'userWorkTimeDayMax',
-          'any.required': 'userWorkTimeDayRequired'
-        }),
-      startTime: Joi.date().required().messages({
-        'date.base': 'userWorkTimeStartTimeStartTimeBase',
-        'any.required': 'userWorkTimeStartTimeRequired'
-      }),
-      endTime: Joi.date().greater(Joi.ref('startTime')).required().messages({
-        'date.base': 'userWorkTimeEndTimeBase',
-        'date.greater': 'userWorkTimeEndTimeGreater',
-        'any.required': 'userWorkTimeEndTimeRequired'
-      })
-    })
-  ),
 
   doors: Joi.array().items(
     Joi.string().custom((value, helpers) => {
@@ -248,38 +227,6 @@ export const UserUpdate = (data) => Joi.object({
     .messages({
       "string.base": "userDepartmentBase",
     }),
-  
-  workTime: Joi.array().items(
-    Joi.object({
-      _id: Joi.string()
-        .custom((value, helpers) => {
-          if (!Types.ObjectId.isValid(value)) {
-            return helpers.message("_idCustom");
-          }
-          return value;
-        })
-        .allow(null, "")
-        .messages({
-          "string.base": "_idBase"
-        }),
-      day: Joi.number().integer().min(0).max(6).required()
-        .messages({
-          'number.base': 'userWorkTimeDayBase',
-          'number.min': 'userWorkTimeDayMin',
-          'number.max': 'userWorkTimeDayMax',
-          'any.required': 'userWorkTimeDayRequired'
-        }),
-      startTime: Joi.date().required().messages({
-        'date.base': 'userWorkTimeStartTimeStartTimeBase',
-        'any.required': 'userWorkTimeStartTimeRequired'
-      }),
-      endTime: Joi.date().greater(Joi.ref('startTime')).required().messages({
-        'date.base': 'userWorkTimeEndTimeBase',
-        'date.greater': 'userWorkTimeEndTimeGreater"',
-        'any.required': 'userWorkTimeEndTimeRequired'
-      })
-    })
-  ),
 
   doors: Joi.array().items(
     Joi.string().custom((value, helpers) => {
@@ -314,3 +261,94 @@ export const UserUpdate = (data) => Joi.object({
   //   })
   // )
 }).validate(data);
+
+export const AddUserCalendar = (data) => Joi.object({
+  user: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("calendarUserCustom");
+      }
+      return value;
+    })
+    .allow(null, "")
+    .required()
+    .messages({
+      "string.base": "calendarUserBase",
+      "any.required": "calendarUserRequired"
+    }),
+
+  date: Joi.date()
+    .required()
+    .messages({
+      "date.base": "calendarDateBase",
+      "any.required": "calendarDateRequired"
+    }),
+
+  shift: Joi.string()
+    .valid('morning', 'afternoon', 'night', 'full_day', 'off')
+    .required()
+    .messages({
+      "string.base": "calendarShiftBase",
+      "any.only": "calendarShiftOnly",
+      "any.required": "calendarShiftRequired"
+    }),
+
+  notes: Joi.string()
+    .max(255)
+    .messages({
+      "string.base": "calendarNotesBase",
+      "string.max": "calendarNotesMax"
+    })
+}).validate(data);
+
+export const UpdateUserCalendar = (data) => Joi.object({
+  _id: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("_idCustom");
+      }
+      return value;
+    })
+    .required()
+    .messages({
+      "string.base": "_idBase",
+      "any.required": "_idRequired"
+    }),
+
+  user: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("calendarUserCustom");
+      }
+      return value;
+    })
+    .allow(null, "")
+    .required()
+    .messages({
+      "string.base": "calendarUserBase",
+      "any.required": "calendarUserRequired"
+    }),
+
+  date: Joi.date()
+    .required()
+    .messages({
+      "date.base": "calendarDateBase",
+      "any.required": "calendarDateRequired"
+    }),
+
+  shift: Joi.string()
+    .valid('morning', 'afternoon', 'night', 'full_day', 'off')
+    .required()
+    .messages({
+      "string.base": "calendarShiftBase",
+      "any.only": "calendarShiftOnly",
+      "any.required": "calendarShiftRequired"
+    }),
+
+  notes: Joi.string()
+    .max(255)
+    .messages({
+      "string.base": "calendarNotesBase",
+      "string.max": "calendarNotesMax"
+    })
+}).validate(data); 
