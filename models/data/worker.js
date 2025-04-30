@@ -25,6 +25,10 @@ const workerSchema = new Schema({
   },
 }, { timestamps: true });
 
+workerSchema.index({ department: 1 });
+workerSchema.index({ groups: 1 });
+workerSchema.index({ status: 1 });
+
 const workerHistorySchema = new Schema({
   worker: {
     type: Types.ObjectId,
@@ -36,6 +40,8 @@ const workerHistorySchema = new Schema({
   leaveDate: Date,
   comment: String,
 }, { timestamps: true });
+
+workerHistorySchema.index({ worker: 1 });
 
 
 export const WorkerModel = model("worker", workerSchema);

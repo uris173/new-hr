@@ -21,5 +21,9 @@ const doorSchema = new Schema({
   }
 }, { timestamps: true });
 
+doorSchema.index({ type: 1 });
+doorSchema.index({ isOpen: 1 });
+doorSchema.index({ status: 1 });
+
 
 export const DoorModel = model('door', doorSchema);

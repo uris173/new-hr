@@ -5,5 +5,7 @@ const holidaySchema = new Schema({
   date: Date
 }, { timestamps: true });
 
+holidaySchema.index({ date: 1 });
+
 
 export const HolidayModel = model('holiday', holidaySchema);

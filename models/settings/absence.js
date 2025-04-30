@@ -16,5 +16,9 @@ const absenceSchema = new Schema({
   end: Date
 }, { timestamps: true });
 
+absenceSchema.index({ user: 1 });
+absenceSchema.index({ start: 1 });
+absenceSchema.index({ end: 1 });
+
 
 export const AbsenceModel = model("absence", absenceSchema);

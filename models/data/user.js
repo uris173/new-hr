@@ -42,5 +42,9 @@ const userSchema = new Schema({
   }
 }, { timestamps: true })
 
+userSchema.index({ role: 1 });
+userSchema.index({ department: 1 });
+userSchema.index({ status: 1 });
+
 
 export const UserModel = model('user', userSchema)

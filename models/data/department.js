@@ -23,6 +23,9 @@ const departmentSchema = new Schema({
   }
 }, { timestamps: true });
 
+departmentSchema.index({ type: 1 });
+departmentSchema.index({ status: 1 });
+
 
 export const DepartmentModel = model('department', departmentSchema);
 

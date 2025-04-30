@@ -5,5 +5,7 @@ const workDaySchema = new Schema({
   date: Date
 }, { timestamps: true });
 
+workDaySchema.index({ date: 1 });
+
 
 export const WorkDayModel = model('work_day', workDaySchema);

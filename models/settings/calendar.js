@@ -22,6 +22,7 @@ const calendarSchema = new Schema({
 calendarSchema.index({ user: 1, date: 1 }, { unique: true });
 calendarSchema.index({ user: 1 });
 calendarSchema.index({ date: 1 });
+calendarSchema.index({ shift: 1 });
 calendarSchema.index({ status: 1 });
 
 
