@@ -3,9 +3,10 @@ import passport from "../../middleware/auth.js"
 import { all } from "../../middleware/role.js";
 
 const router = Router();
-import { uploadPhoto, uploadSinglePhoto } from "../../controllers/data/upload.js";
+import { uploadPhoto, uploadSinglePhoto, uploadScript, uploadScriptPhoto } from "../../controllers/data/upload.js";
 
 router.post('/photo/:path', passport.authenticate('jwt', { session: false }), all, uploadPhoto.single('file'), uploadSinglePhoto);
+router.post('/script-photo/:path', uploadScript.single('file'), uploadScriptPhoto);
 
 
 export default router;
