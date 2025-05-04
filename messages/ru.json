@@ -56,7 +56,22 @@
 
   "departmentTypeBase": "Тип должен быть числом.",
   "departmentTypeOnly": "Тип может быть только 1 (Department) или 2 (Group).",
-  "departmentTypesRequired": "Тип обязательно для заполнения.",
+  "departmentTypeRequired": "Тип обязательно для заполнения.",
+
+  "departmentWorkTimeBase": "Рабочее время должно быть массивом.",
+
+  "departmentWorkTimeDayBase": "День должен быть числом.",
+  "departmentWorkTimeDayInteger": "День должен быть целым числом.",
+  "departmentWorkTimeDayMin": "День не может быть меньше 0 (воскресенье).",
+  "departmentWorkTimeDayMax": "День не может быть больше 6 (суббота).",
+  "departmentWorkTimeDayRequired": "День недели обязателен.",
+
+  "departmentWorkTimeStartTimeBase": "Время начала должно быть датой.",
+  "departmentWorkTimeStartTimeRequired": "Время начала обязательно.",
+
+  "departmentWorkTimeEndTimeBase": "Время окончания должно быть датой.",
+  "departmentWorkTimeEndTimeGreater": "Время окончания должно быть позже времени начала.",
+  "departmentWorkTimeEndTimeRequired": "Время окончания обязательно.",
 
   "departmentParentCustom": "Неверный формат родительского отдела.",
   "departmentParentBase": "Родительский отдел должен быть строкой.",

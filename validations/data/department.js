@@ -87,7 +87,42 @@ export const CreateDepartment = (data) => Joi.object({
     .messages({
       "number.base": "departmentTypeBase",
       "any.only": "departmentTypeOnly",
-      "any.required": "departmentTypesRequired"
+      "any.required": "departmentTypeRequired"
+    }),
+
+  workTime: Joi.array()
+    .items(
+      Joi.object({
+        day: Joi.number()
+          .integer()
+          .min(0)
+          .max(6)
+          .required()
+          .messages({
+            "number.base": "departmentWorkTimeDayBase",
+            "number.integer": "departmentWorkTimeDayInteger",
+            "number.min": "departmentWorkTimeDayMin",
+            "number.max": "departmentWorkTimeDayMax",
+            "any.required": "departmentWorkTimeDayRequired"
+          }),
+        startTime: Joi.date()
+          .required()
+          .messages({
+            "date.base": "departmentWorkTimeStartTimeBase",
+            "any.required": "departmentWorkTimeStartTimeRequired"
+          }),
+        endTime: Joi.date()
+          .greater(Joi.ref("startTime"))
+          .required()
+          .messages({
+            "date.base": "departmentWorkTimeEndTimeBase",
+            "date.greater": "departmentWorkTimeEndTimeGreater",
+            "any.required": "departmentWorkTimeEndTimeRequired"
+          })
+      })
+    )
+    .messages({
+      "array.base": "departmentWorkTimeBase"
     }),
 
   parent: Joi.string()
@@ -147,7 +182,55 @@ export const UpdateDepartment = (data) => Joi.object({
     .messages({
       "number.base": "departmentTypeBase",
       "any.only": "departmentTypeOnly",
-      "any.required": "departmentTypesRequired"
+      "any.required": "departmentTypeRequired"
+    }),
+
+  workTime: Joi.array()
+    .items(
+      Joi.object({
+        _id: Joi.string()
+          .custom((value, helpers) => {
+            if (!Types.ObjectId.isValid(value)) {
+              return helpers.message("_idCustom");
+            }
+            return value;
+          })
+          .required()
+          .messages({
+            "string.base": "_idBase",
+            "any.required": "_idRequired"
+          }),
+
+        day: Joi.number()
+          .integer()
+          .min(0)
+          .max(6)
+          .required()
+          .messages({
+            "number.base": "departmentWorkTimeDayBase",
+            "number.integer": "departmentWorkTimeDayInteger",
+            "number.min": "departmentWorkTimeDayMin",
+            "number.max": "departmentWorkTimeDayMax",
+            "any.required": "departmentWorkTimeDayRequired"
+          }),
+        startTime: Joi.date()
+          .required()
+          .messages({
+            "date.base": "departmentWorkTimeStartTimeBase",
+            "any.required": "departmentWorkTimeStartTimeRequired"
+          }),
+        endTime: Joi.date()
+          .greater(Joi.ref("startTime"))
+          .required()
+          .messages({
+            "date.base": "departmentWorkTimeEndTimeBase",
+            "date.greater": "departmentWorkTimeEndTimeGreater",
+            "any.required": "departmentWorkTimeEndTimeRequired"
+          })
+      })
+    )
+    .messages({
+      "array.base": "departmentWorkTimeBase"
     }),
 
   parent: Joi.string()

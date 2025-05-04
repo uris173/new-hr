@@ -3,12 +3,14 @@ import passport from "../../middleware/auth.js";
 const router = Router();
 import {
   addAdmin,
+  getToken,
   login,
   regenerateAccessToken,
   userVerify
 } from "../../controllers/data/auth.js";
 
 router.post('/add-admin', addAdmin);
+router.get('/get-token', getToken);
 router.post('/login', login);
 router.post('/refresh-access-token', regenerateAccessToken);
 router.get('/verify', passport.authenticate("jwt", { session: false }), userVerify);

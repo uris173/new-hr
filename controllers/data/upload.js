@@ -42,6 +42,9 @@ export const uploadPhoto = multer({
 
 export const uploadSinglePhoto = async (req, res, next) => {
   try {
+    if (!req.file) {
+      throw { status: 400, message: "fileNotFound" };
+    }
     res.status(200).json(`${req.file.destination}/${req.file.filename}`);
   } catch (error) {
     console.error(error);
@@ -50,13 +53,18 @@ export const uploadSinglePhoto = async (req, res, next) => {
 };
 
 const scriptStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    let dir = `files/${req.params.path}`;
+  destination: async (req, file, cb) => {
+    try {
+      let dir = `files/${req.params.path}`;
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      cb(null, dir);
+    } catch (error) {
+      console.error('Destination error:', error);
+      cb(error);
     }
-    cb(null, dir);
   },
   filename: async (req, file, cb) => {
     try {
@@ -66,27 +74,30 @@ const scriptStorage = multer.diskStorage({
       const filePath = `files/${req.params.path}/${newName}`;
 
       cb(null, newName, filePath);
-    } catch (err) {
-      cb(err);
+    } catch (error) {
+      console.error('Filename error:', error);
+      cb(error);
     }
   },
 });
 
 export const uploadScript = multer({
-  scriptStorage,
+  storage: scriptStorage,
   limits: { fileSize: 200 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (!file) return cb(new Error("fileNotFound"), false);
-
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-    if (!allowedTypes.includes(file.mimetype)) return cb(new Error("invalidFileType"), false);
-
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(new Error("invalidFileType"), false);
+    }
     cb(null, true);
   },
 });
 
 export const uploadScriptPhoto = async (req, res, next) => {
   try {
+    if (!req.file) {
+      throw { status: 400, message: "fileNotFound" };
+    }
     res.status(200).json(`${req.file.destination}/${req.file.filename}`);
   } catch (error) {
     console.error(error);

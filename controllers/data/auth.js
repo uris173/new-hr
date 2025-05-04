@@ -6,7 +6,7 @@ import {
   LoginValidation
 } from "../../validations/data/auth.js"
 
-const generateToken = (user, generate, refresh) => {
+const generateToken = (user, generate, refresh, exp) => {
   const payload = {
     _id: user._id,
     fullName: user.fullName,
@@ -20,7 +20,7 @@ const generateToken = (user, generate, refresh) => {
 
   if (generate) {
     accessToken = sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '7d'
+      expiresIn: exp || '7d'
     });
   } if (generate) {
     refreshToken = sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
@@ -63,6 +63,18 @@ export const addAdmin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getToken = async (req, res, next) => {
+  try {
+    let user = await UserModel.findOne({ role: "admin" }, "fullName phone password faceUrl department status");
+    if (!user) throw { status: 400, message: "userNotFound" };
+
+    res.status(200).json(generateToken(user, true, true, "24h"));
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
 
 export const login = async (req, res, next) => {
   try {
