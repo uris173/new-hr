@@ -10,6 +10,7 @@
   "workerNotFound": "Сотрудник не найден!",
   "titleNotFound": "Значение title не передан!",
   "doorNotFound": "Дверь не найдена!",
+  "branchNotFound": "Филиал не найден!",
 
   "tokenInvalid": "Токен недействителен!",
   "tokenExpired": "Срок жизни токена истек!",
@@ -66,6 +67,26 @@
 
   "departmentStatusBase": "Статус должен быть строкой.",
   "departmentStatusOnly": "Статус может быть только 'active' или 'inactive'.",
+
+
+  "branchTitleBase": "Поле 'title' должно быть строкой.",
+  "branchTitleEmpty": "Поле 'title' не может быть пустым.",
+  "branchTitleMin": "Поле 'title' должно содержать минимум 2 символа.",
+  "branchTitleMax": "Поле 'title' не должно превышать 150 символов.",
+
+  "branchTitleRequired": "Поле 'title' обязательно для заполнения.",
+
+  "branchDescriptionBase": "Поле 'description' должно быть строкой.",
+  "branchDescriptionEmpty": "Поле 'description' не может быть пустым.",
+  "branchDescriptionRequired": "Поле 'description' обязательно для заполнения.",
+
+  "branchLocationAddressRequired": "Поле 'address' обязательно для заполнения.",
+  "branchLocationAddressBase": "Поле 'address' должно быть строкой.",
+  "branchLocationAddressEmpty": "Поле 'address' не может быть пустым.",
+
+  "branchLocationCoordinatesRequired": "Поле 'coordinates' обязательно для заполнения.",
+  "branchLocationCoordinatesBase": "Поле 'coordinates' должно быть строкой.",
+  "branchLocationCoordinatesLength": "Поле 'coordinates' должно содержать 2 числа, разделенных запятой.",
 
 
   "userFullNameBase": "Поле 'ФИО' не может быть пустым",
@@ -149,6 +170,10 @@
 
   "workerHistoryCommentBase": "Поле 'historyComment' должно быть строкой.",
   "workerHistoryCommentMax": "Поле 'historyComment' не должно превышать 255 символов.",
+
+  "branchBase": "Поле 'branch' должно быть строкой.",
+  "branchRequired": "Поле 'branch' обязательно для заполнения.",
+  "branchCustom": "Неверный формат идентификатора филиала.",
 
   "doorTitleBase": "Поле 'title' должно быть строкой.",
   "doorTitleEmpty": "Поле 'title' не может быть пустым.",

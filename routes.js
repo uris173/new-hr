@@ -10,6 +10,7 @@ import Worker from "./routers/data/worker.js";
 import Event from "./routers/data/event.js";
 
 // settings
+import Branch from "./routers/settings/branch.js";
 import Door from "./routers/settings/door.js";
 
 // api
@@ -24,6 +25,7 @@ router.use('/user', User);
 router.use('/worker', Worker);
 router.use('/event', Event);
 
+router.use('/branch', Branch);
 router.use('/door', Door);
 
 

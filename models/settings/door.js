@@ -1,6 +1,10 @@
 import { Schema, model } from "mongoose";
 
 const doorSchema = new Schema({
+  branch: {
+    type: Schema.Types.ObjectId,
+    ref: "branch"
+  },
   title: String,
   ip: String,
   port: String,

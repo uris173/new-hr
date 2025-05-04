@@ -2,6 +2,18 @@ import Joi from "joi";
 import { Types } from "mongoose";
 
 export const DoorQueryFilter = (data) => Joi.object({
+  branch: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("branchCustom");
+      }
+      return value;
+    })
+    .optional()
+    .messages({
+      "string.base": "branchBase"
+    }),
+
   title: Joi.string()
     .min(2)
     .max(150)
@@ -29,6 +41,19 @@ export const DoorQueryFilter = (data) => Joi.object({
 }).validate(data);
 
 export const CreateDoor = (data) => Joi.object({
+  branch: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("branchCustom");
+      }
+      return value;
+    })
+    .required()
+    .messages({
+      "string.base": "branchBase",
+      "any.required": "branchRequired"
+    }),
+
   title: Joi.string()
     .min(3)
     .max(150)
@@ -114,6 +139,19 @@ export const UpdateDoor = (data) => Joi.object({
     .messages({
       "string.base": "_idBase",
       "any.required": "_idRequired"
+    }),
+
+  branch: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message("branchCustom");
+      }
+      return value;
+    })
+    .required()
+    .messages({
+      "string.base": "branchBase",
+      "any.required": "branchRequired"
     }),
 
   title: Joi.string()

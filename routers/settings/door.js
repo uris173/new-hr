@@ -42,6 +42,16 @@ export default router;
  *         _id:
  *           type: string
  *           description: Уникальный идентификатор двери
+ *         branch:
+ *           type: object
+ *           properties:
+ *             _id:
+ *               type: string
+ *               description: Уникальный идентификатор филиала
+ *             title:
+ *               type: string
+ *               description: Название филиала
+ *           description: Филиал, к которому принадлежит дверь
  *         title:
  *           type: string
  *           description: Название двери
@@ -78,6 +88,7 @@ export default router;
  *           description: Время последнего обновления двери
  *       required:
  *         - _id
+ *         - branch
  *         - title
  *         - ip
  *         - status
@@ -91,6 +102,9 @@ export default router;
  *     DoorCreateRequest:
  *       type: object
  *       properties:
+ *         branch:
+ *           type: string
+ *           description: Уникальный идентификатор филиала
  *         title:
  *           type: string
  *           description: Название двери
@@ -126,6 +140,9 @@ export default router;
  *         _id:
  *           type: string
  *           description: Уникальный идентификатор двери
+ *         branch:
+ *           type: string
+ *           description: Уникальный идентификатор филиала
  *         title:
  *           type: string
  *           description: Название двери
