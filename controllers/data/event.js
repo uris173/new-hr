@@ -29,7 +29,7 @@ export const all = async (req, res, next) => {
       .populate([
         {
           path: "user",
-          select: "fullName role department",
+          select: "fullName role department faceUrl",
           populate: {
             path: "department",
             select: "name type"
@@ -37,7 +37,7 @@ export const all = async (req, res, next) => {
         },
         {
           path: "door",
-          select: "title"
+          select: "title type"
         }
       ])
       .sort({ time: -1 })

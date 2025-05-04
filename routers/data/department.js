@@ -46,6 +46,23 @@ export default router;
  *           type: integer
  *           enum: [0, 1]
  *           description: Тип отдела (1 - Отдел, 2 - Группа)
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время отдела
  *         parent:
  *           type: string
  *           description: ID родительского отдела (ссылка на модель Department) или null
@@ -74,6 +91,23 @@ export default router;
  *           type: integer
  *           enum: [0, 1]
  *           description: Тип отдела (1 - Отдел, 2 - Группа)
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время отдела
  *         parent:
  *           type: string
  *           description: ID родительского отдела (ссылка на модель Department) или null
@@ -97,6 +131,23 @@ export default router;
  *           type: integer
  *           enum: [0, 1]
  *           description: Тип отдела (1 - Отдел, 2 - Группа)
+ *         workTime:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: integer
+ *                 description: День недели (0 - воскресенье, 6 - суббота)
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время начала работы
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Время окончания работы
+ *           description: Рабочее время отдела
  *         parent:
  *           type: string
  *           description: ID родительского отдела (ссылка на модель Department) или null
