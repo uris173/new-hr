@@ -30,6 +30,19 @@ router.route('/:id')
 export default router;
 
 
+//  *         location:
+//  *           type: object
+//  *           properties:
+//  *             address:
+//  *               type: string
+//  *               description: Адрес филиала
+//  *             coordinates:
+//  *               type: array
+//  *               items:
+//  *                 type: number
+//  *               description: Координаты филиала (долгота и широта)
+//  *               example: [37.6173, 55.7558]
+
 /**
  * @swagger
  * components:
@@ -46,18 +59,6 @@ export default router;
  *         description:
  *           type: string
  *           description: Описание филиала
- *         location:
- *           type: object
- *           properties:
- *             address:
- *               type: string
- *               description: Адрес филиала
- *             coordinates:
- *               type: array
- *               items:
- *                 type: number
- *               description: Координаты филиала (долгота и широта)
- *               example: [37.6173, 55.7558]
  *         status:
  *           type: string
  *           enum: [active, inactive, deleted]
@@ -70,7 +71,6 @@ export default router;
  *         - _id
  *         - title
  *         - description
- *         - location
  *         - status
  *         - createdAt
  * 
@@ -83,22 +83,9 @@ export default router;
  *         description:
  *           type: string
  *           description: Описание филиала
- *         location:
- *           type: object
- *           properties:
- *             address:
- *               type: string
- *               description: Адрес филиала
- *             coordinates:
- *               type: array
- *               items:
- *                 type: number
- *               description: Координаты филиала (долгота и широта)
- *               example: [37.6173, 55.7558]
  *       required:
  *         - title
  *         - description
- *         - location
  * 
  *     BranchUpdate:
  *       type: object
@@ -112,23 +99,10 @@ export default router;
  *         description:
  *           type: string
  *           description: Описание филиала
- *         location:
- *           type: object
- *           properties:
- *             address:
- *               type: string
- *               description: Адрес филиала
- *             coordinates:
- *               type: array
- *               items:
- *                 type: number
- *               description: Координаты филиала (долгота и широта)
- *               example: [37.6173, 55.7558]
  *       required:
  *         - _id
  *         - title
  *         - description
- *         - location
  * 
  *   securitySchemes:
  *     bearerAuth:
@@ -185,17 +159,11 @@ export default router;
  *                   - _id: "branch_id_1"
  *                     title: "Центральный офис"
  *                     description: "Главный филиал компании"
- *                     location:
- *                       address: "Москва, ул. Тверская, 1"
- *                       coordinates: [37.6173, 55.7558]
  *                     status: "active"
  *                     createdAt: "2025-04-25T10:00:00Z"
  *                   - _id: "branch_id_2"
  *                     title: "Региональный офис"
  *                     description: "Филиал в Санкт-Петербурге"
- *                     location:
- *                       address: "Санкт-Петербург, Невский пр., 10"
- *                       coordinates: [30.3156, 59.9343]
  *                     status: "inactive"
  *                     createdAt: "2025-04-25T10:01:00Z"
  *       400:
@@ -221,9 +189,6 @@ export default router;
  *           example:
  *             title: "Новый филиал"
  *             description: "Филиал в Новосибирске"
- *             location:
- *               address: "Новосибирск, ул. Ленина, 5"
- *               coordinates: [82.9165, 55.0084]
  *     responses:
  *       201:
  *         description: Филиал успешно создан
@@ -235,9 +200,6 @@ export default router;
  *               _id: "branch_id_3"
  *               title: "Новый филиал"
  *               description: "Филиал в Новосибирске"
- *               location:
- *                 address: "Новосибирск, ул. Ленина, 5"
- *                 coordinates: [82.9165, 55.0084]
  *               status: "active"
  *               createdAt: "2025-04-25T10:02:00Z"
  *       400:
@@ -264,9 +226,6 @@ export default router;
  *             _id: "branch_id_1"
  *             title: "Обновленный офис"
  *             description: "Обновленный главный филиал"
- *             location:
- *               address: "Москва, ул. Тверская, 2"
- *               coordinates: [37.6173, 55.7558]
  *     responses:
  *       200:
  *         description: Филиал успешно обновлен
@@ -278,9 +237,6 @@ export default router;
  *               _id: "branch_id_1"
  *               title: "Обновленный офис"
  *               description: "Обновленный главный филиал"
- *               location:
- *                 address: "Москва, ул. Тверская, 2"
- *                 coordinates: [37.6173, 55.7558]
  *               status: "active"
  *               createdAt: "2025-04-25T10:00:00Z"
  *       400:
@@ -319,9 +275,6 @@ export default router;
  *               _id: "branch_id_1"
  *               title: "Центральный офис"
  *               description: "Главный филиал компании"
- *               location:
- *                 address: "Москва, ул. Тверская, 1"
- *                 coordinates: [37.6173, 55.7558]
  *               status: "inactive"
  *               createdAt: "2025-04-25T10:00:00Z"
  *       400:
@@ -360,9 +313,6 @@ export default router;
  *               _id: "branch_id_1"
  *               title: "Центральный офис"
  *               description: "Главный филиал компании"
- *               location:
- *                 address: "Москва, ул. Тверская, 1"
- *                 coordinates: [37.6173, 55.7558]
  *       400:
  *         description: Филиал не найден
  *       401:

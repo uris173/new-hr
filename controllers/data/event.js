@@ -1,6 +1,7 @@
 import { EventModel } from "../../models/data/event.js";
 import { UserModel } from "../../models/data/user.js";
 import { EventQueryFilter } from "../../validations/data/event.js";
+import { getIo } from "../../utils/socket.io.js";
 let select = "-createdAt -updatedAt -__v";
 
 export const all = async (req, res, next) => {
@@ -51,3 +52,16 @@ export const all = async (req, res, next) => {
     next(error);
   }
 };
+
+export const eventSync = async (req, res, next) => {
+  try {
+    let { start, end } = req.body;
+    let io = await getIo();
+    io.to("hr-script69").emit("event-sync", { start, end });
+
+    res.status(200).json({ message: "syncStarted" });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}

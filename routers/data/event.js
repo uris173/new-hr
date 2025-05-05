@@ -3,9 +3,10 @@ import passport from "../../middleware/auth.js";
 import { manage } from "../../middleware/role.js";
 const router = Router();
 
-import { all } from "../../controllers/data/event.js";
+import { all, eventSync } from "../../controllers/data/event.js";
 
 router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
+router.get("/sync", eventSync); //  passport.authenticate("jwt", { session: false }), manage, 
 
 
 export default router;
@@ -166,6 +167,51 @@ export default router;
  *                     door:
  *                       _id: "door_id_1"
  *                       title: "Главный вход"
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован
+ *       403:
+ *         description: Доступ запрещен
+ */
+/**
+ * @swagger
+ * /event/sync:
+ *   post:
+ *     summary: Запустить синхронизацию событий
+ *     description: Запускает процесс синхронизации событий между устройствами и базой данных. Синхронизация инициируется через WebSocket.
+ *     tags:
+ *       - Events
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               start:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Дата и время начала синхронизации
+ *               end:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Дата и время окончания синхронизации
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Сообщение о статусе синхронизации
+ *               example:
+ *                 message: "Синхронизация событий начата!"
  *       400:
  *         description: Неверные параметры запроса
  *       401:

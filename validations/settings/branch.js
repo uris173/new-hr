@@ -50,25 +50,25 @@ export const CreateBranch = (data) => Joi.object({
       "any.required": "branchDescriptionRequired",
     }),
 
-  location: Joi.object({
-    address: Joi.string()
-      .required()
-      .messages({
-        "any.required": "branchLocationAddressRequired",
-        "string.base": "branchLocationAddressBase",
-        "string.empty": "branchLocationAddressEmpty",
-      }),
+  // location: Joi.object({
+  //   address: Joi.string()
+  //     .required()
+  //     .messages({
+  //       "any.required": "branchLocationAddressRequired",
+  //       "string.base": "branchLocationAddressBase",
+  //       "string.empty": "branchLocationAddressEmpty",
+  //     }),
 
-    coordinates: Joi.array()
-      .items(Joi.number())
-      .length(2)
-      .required()
-      .messages({
-        "any.required": "branchLocationCoordinatesRequired",
-        "array.base": "branchLocationCoordinatesBase",
-        "array.length": "branchLocationCoordinatesLength"
-      }),
-  }).required(),
+  //   coordinates: Joi.array()
+  //     .items(Joi.number())
+  //     .length(2)
+  //     .required()
+  //     .messages({
+  //       "any.required": "branchLocationCoordinatesRequired",
+  //       "array.base": "branchLocationCoordinatesBase",
+  //       "array.length": "branchLocationCoordinatesLength"
+  //     }),
+  // }).required(),
 }).validate(data);
 
 export const UpdateBranch = (data) => Joi.object({
@@ -102,21 +102,21 @@ export const UpdateBranch = (data) => Joi.object({
       "string.empty": "branchDescriptionEmpty",
     }),
 
-  location: Joi.object({
-    address: Joi.string()
-      .messages({
-        "string.base": "branchLocationAddressBase",
-        "string.empty": "branchLocationAddressEmpty",
-      }),
+  // location: Joi.object({
+  //   address: Joi.string()
+  //     .messages({
+  //       "string.base": "branchLocationAddressBase",
+  //       "string.empty": "branchLocationAddressEmpty",
+  //     }),
 
-    coordinates: Joi.array()
-      .items(Joi.number())
-      .length(2)
-      .required()
-      .messages({
-        "any.required": "branchLocationCoordinatesRequired",
-        "array.base": "branchLocationCoordinatesBase",
-        "array.length": "branchLocationCoordinatesLength"
-      }),
-  }).optional(),
+  //   coordinates: Joi.array()
+  //     .items(Joi.number())
+  //     .length(2)
+  //     .required()
+  //     .messages({
+  //       "any.required": "branchLocationCoordinatesRequired",
+  //       "array.base": "branchLocationCoordinatesBase",
+  //       "array.length": "branchLocationCoordinatesLength"
+  //     }),
+  // }).optional(),
 }).validate(data);
