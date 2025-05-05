@@ -31,7 +31,13 @@ export const all = async (req, res, next) => {
     .skip(skip)
     .lean();
 
-    res.status(200).json({ count, data });
+    res.status(200).json({
+      count,
+      page,
+      limit,
+      totalPage: Math.ceil(count / limit),
+      data
+    });
   } catch (error) {
     console.error(error);
     next(error);
