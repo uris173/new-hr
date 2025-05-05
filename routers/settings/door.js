@@ -127,6 +127,7 @@ export default router;
  *           type: boolean
  *           description: Флаг на доступ двери извне
  *       required:
+ *         - branch
  *         - title
  *         - ip
  *         - type
@@ -165,6 +166,7 @@ export default router;
  *           type: boolean
  *           description: Флаг на доступ двери извне
  *       required:
+ *         - branch
  *         - _id
  *         - title
  *         - ip
@@ -191,6 +193,11 @@ export default router;
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: query
+ *         name: branch
+ *         schema:
+ *           type: string
+ *         description: Фильтр по уникальному идентификатору филиала
  *       - in: query
  *         name: title
  *         schema:

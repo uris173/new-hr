@@ -37,7 +37,11 @@ export const all = async (req, res, next) => {
         },
         {
           path: "door",
-          select: "title type"
+          select: "branch title type",
+          populate: {
+            path: "branch",
+            select: "title"
+          }
         }
       ])
       .sort({ time: -1 })
