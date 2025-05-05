@@ -1,8 +1,8 @@
-import { Schema, model } from "mongoose";
+import { Types, Schema, model } from "mongoose";
 
 const doorSchema = new Schema({
   branch: {
-    type: Schema.Types.ObjectId,
+    type: Types.ObjectId,
     ref: "branch"
   },
   title: String,

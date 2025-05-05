@@ -37,6 +37,15 @@ export default router;
  *             _id:
  *               type: string
  *               description: ID двери
+ *             branch:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: ID филиал
+ *                 title:
+ *                   type: string
+ *                   description: Название филиала
  *             title:
  *               type: string
  *               description: Название двери
@@ -166,6 +175,9 @@ export default router;
  *                         type: "technical"
  *                     door:
  *                       _id: "door_id_1"
+ *                       branch:
+ *                         _id: "branch_id_1"
+ *                         title: "Ташкентский филиал"
  *                       title: "Главный вход"
  *       400:
  *         description: Неверные параметры запроса

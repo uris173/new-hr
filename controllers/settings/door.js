@@ -81,7 +81,6 @@ export const changeStatus = async (req, res, next) => {
 export const update = async (req, res, next) => {
   try {
     let { error } = UpdateDoor(req.body);
-    console.log(error);
     if (error) throw { status: 400, message: error.details[0].message };
 
     let door = await DoorModel.findByIdAndUpdate(req.body._id, req.body, { new: true, select: `${select} -password` })

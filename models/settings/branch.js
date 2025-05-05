@@ -24,4 +24,4 @@ const branchSchema = new Schema({
 }, { timestamps: true });
 
 
-export const BranchModel = model("Branch", branchSchema);
+export const BranchModel = model("branch", branchSchema);
