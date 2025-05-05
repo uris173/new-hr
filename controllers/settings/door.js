@@ -8,8 +8,8 @@ export const all = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { branch, title, page, limit } = req.query;
-    page = page || 1;
-    limit = limit || 30;
+    limit = parseInt(limit) || 30;
+    page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
       status: { $ne: "deleted" },

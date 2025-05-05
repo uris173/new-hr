@@ -25,8 +25,8 @@ export const all = async (req, res, next) => {
 
     let { fullName, department, limit, page } = req.query;
 
-    page = page || 1;
-    limit = limit || 30;
+    limit = parseInt(limit) || 30;
+    page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
       status: { $ne: "deleted" },

@@ -9,8 +9,8 @@ export const all = async (req, res, next) => {
 
     let { limit, page, name, type, parent, chief } = req.query
 
-    limit = limit || 30;
-    page = page || 1;
+    limit = parseInt(limit) || 30;
+    page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
       status: { $ne: "deleted" },
