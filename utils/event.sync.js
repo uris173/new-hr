@@ -10,7 +10,11 @@ export const syncing = async (data) => {
       let events = await Promise.all(data.map(async (event) => {
         let findUser = await UserModel.findOne({ employeeNo: event.employeeNoString }, "_id");
         if (!findUser) return null;
-        let findExists = await EventModel.findOne({ time: event.time, door: event.door, serialNo: event.serialNo, user: findUser._id });
+        let findExists = await EventModel.findOne({
+          time: { $gte: new Date(new Date(event.time).getTime() - 60000), $lte: new Date(new Date(event.time).getTime() + 60000) },
+          door: event.door,
+          user: findUser._id
+        });
         if (findExists) return null;
 
         event.user = findUser._id;

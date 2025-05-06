@@ -6,7 +6,7 @@ const router = Router();
 import { all, eventSync } from "../../controllers/data/event.js";
 
 router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
-router.get("/sync", eventSync); //  passport.authenticate("jwt", { session: false }), manage, 
+router.post("/sync", passport.authenticate("jwt", { session: false }), manage, eventSync);
 
 
 export default router;

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { Types } from "mongoose";
 
 export const EventQueryFilter = (data) => Joi.object({
   type: Joi.string()
