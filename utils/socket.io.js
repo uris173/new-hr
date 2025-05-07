@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../models/data/user.js";
-import { getRedisData, setRedisData, deleteRedisData } from "./redis.js";
+import { getRedisData, setRedisData, deleteRedisData, getRedisAllData } from "./redis.js";
 import { syncing } from "./event.sync.js";
 
 /*
@@ -107,3 +107,16 @@ export const getIo = async () => {
     }
   });
 };
+
+export const emitToAdmin = async (event, data) => {
+  try {
+    let io = await getIo();
+    let admins = await getRedisAllData(`session:*:admin`);
+
+    for (let admin of admins) {
+      io.to(admin._id).emit(event, data);
+    }
+  } catch (error) {
+    console.error("Error emitting to admin:", error);
+  }
+}

@@ -4,7 +4,7 @@ import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
 import { UserQueryFilter, UserCreate, UserUpdate, AddUserCalendar, UpdateUserCalendar } from "../../validations/data/user.js";
-import { getIo } from "../../utils/socket.io.js"
+import { getIo, emitToAdmin } from "../../utils/socket.io.js"
 import { getRedisAllData } from "../../utils/redis.js"
 let select = 'fullName role faceUrl department gender status employeeNo';
 
@@ -85,6 +85,7 @@ export const create = async (req, res, next) => {
       io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
     })
     io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
+    await emitToAdmin("worker", { _id: user._id });
 
     res.status(201).json(user);
   } catch (error) {
@@ -178,7 +179,9 @@ export const changeStatus = async (req, res, next) => {
       [{ $set: { status: { $cond: { if: { $eq: ["$status", "active"] }, then: "inactive", else: "active" } } } }],
       { new: true, select }
     ).populate({ path: "department", select: "-_id name" });
+
     if (!user) throw { status: 400, message: "userNotFound" };
+    await emitToAdmin("worker", { _id: user._id });
 
     // let findSecuritySessions = await getRedisAllData(`session:*:security`);
     // let io = await getIo();
@@ -211,6 +214,8 @@ export const update = async (req, res, next) => {
 
     let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, doors }, { new: true, select })
       .populate({ path: "department", select: "-_id name" });
+
+    await emitToAdmin("worker", { _id: user._id });
 
     res.status(200).json(user);
   } catch (error) {

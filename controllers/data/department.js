@@ -1,5 +1,6 @@
 import { DepartmentModel } from "../../models/data/department.js";
 import { DepartmentQueryFilter, CreateDepartment, UpdateDepartment } from "../../validations/data/department.js";
+import { emitToAdmin } from "../../utils/socket.io.js";
 let select = '-__v -updatedAt';
 
 export const all = async (req, res, next) => {
@@ -60,6 +61,8 @@ export const create = async (req, res, next) => {
     ])
     .lean();
 
+    await emitToAdmin("department", { _id: data._id });
+
     res.status(201).json(data);
   } catch (error) {
     console.error(error);
@@ -83,6 +86,7 @@ export const changeStatus = async (req, res, next) => {
     .lean();
 
     if (!department) throw { status: 400, message: "departmentNotFound" };
+    await emitToAdmin("department", { _id: department._id });
 
     res.status(200).json(department);
   } catch (error) {
@@ -119,6 +123,7 @@ export const update = async (req, res, next) => {
       { path: 'chief', select: 'fullName' }
     ])
     .lean();
+    await emitToAdmin("department", { _id: department._id });
 
     res.status(200).json(department);
   } catch (error) {
