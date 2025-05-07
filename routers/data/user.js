@@ -139,7 +139,7 @@ export default router;
  *         gender:
  *           type: string
  *           enum: ["male", "female", "custom"]
- *           description: Пол сотрудника
+ *           description: Пол пользователя
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
@@ -334,6 +334,12 @@ export default router;
  *         schema:
  *           type: integer
  *         description: Номер страницы (по умолчанию 1)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: ["active", "inactive", "deleted"]
+ *         description: Фильтр по статусу (по умолчанию вывод "active", "inactive")
  *     responses:
  *       200:
  *         description: Успешный ответ со списком пользователей
@@ -345,6 +351,15 @@ export default router;
  *                 count:
  *                   type: integer
  *                   description: Общее количество пользователей
+ *                 page:
+ *                   type: integer
+ *                   description: Текущая страница
+ *                 limit:
+ *                   type: integer
+ *                   description: Количество выводимых пользователей
+ *                 totalPage:
+ *                   type: integer
+ *                   description: Общее количество страниц
  *                 data:
  *                   type: array
  *                   items:

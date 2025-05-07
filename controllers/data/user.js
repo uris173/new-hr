@@ -25,7 +25,8 @@ export const all = async (req, res, next) => {
     let { error } = UserQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { page, limit, fullName, role, department, employeeNo } = req.query;
+    let { page, limit, fullName, role, department, employeeNo, status, pick } = req.query;
+    pick = pick ? JSON.parse(pick) : select;
 
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
@@ -35,18 +36,25 @@ export const all = async (req, res, next) => {
       ...(fullName && { fullName: new RegExp(fullName, 'i') }),
       ...(department && { department }),
       ...(role ? { role } : canView(req.user)),
-      ...(employeeNo && { employeeNo })
+      ...(employeeNo && { employeeNo }),
+      ...(status && { status }),
     };
 
     let count = await UserModel.countDocuments(filter);
-    let data = await UserModel.find(filter, select)
+    let data = await UserModel.find(filter, pick)
     .populate({ path: "department", select: "-_id name" })
     .sort({ _id: -1 })
     .limit(limit)
     .skip(skip)
     .lean();
 
-    res.status(200).json({ count, data });
+    res.status(200).json({
+      count,
+      page,
+      limit,
+      totalPage: Math.ceil(count / limit),
+      data
+    });
   } catch (error) {
     console.error(error);
     next(error);
@@ -88,8 +96,10 @@ export const create = async (req, res, next) => {
 export const getOne = async (req, res, next) => {
   try {
     let { id } = req.params;
+    let { pick } = req.query;
 
-    let user = await UserModel.findById(id, `${select} phone doors`);
+    pick = pick ? JSON.parse(pick) : `${select} phone doors`;
+    let user = await UserModel.findById(id, pick);
     if (!user) throw { status: 404, message: "userNotFound" };
 
     res.status(200).json(user);

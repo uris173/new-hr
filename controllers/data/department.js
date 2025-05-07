@@ -7,7 +7,8 @@ export const all = async (req, res, next) => {
     let { error } = DepartmentQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { limit, page, name, type, parent, chief } = req.query
+    let { limit, page, name, type, parent, chief, pick } = req.query
+    pick = pick ? JSON.parse(pick) : select;
 
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
@@ -21,7 +22,7 @@ export const all = async (req, res, next) => {
     };
 
     let count = await DepartmentModel.countDocuments(filter);
-    let data = await DepartmentModel.find(filter, select)
+    let data = await DepartmentModel.find(filter, pick)
     .populate([
       { path: 'parent', select: '-_id name' },
       { path: 'chief', select: '-_id fullName' }
@@ -93,8 +94,10 @@ export const changeStatus = async (req, res, next) => {
 export const getOne = async (req, res, next) => {
   try {
     const { id } = req.params;
+    let { pick } = req.query;
+    pick = pick ? JSON.parse(pick) : `${select} -createdAt -status`;
 
-    let department = await DepartmentModel.findById(id, `${select} -createdAt -status`);
+    let department = await DepartmentModel.findById(id, pick);
     if (!department) throw { status: 400, message: "departmentNotFound" };
 
     res.status(200).json(department);

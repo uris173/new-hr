@@ -218,6 +218,15 @@ export default router;
  *                 count:
  *                   type: integer
  *                   description: Общее количество отделов
+ *                 page:
+ *                   type: integer
+ *                   description: Текущая страница
+ *                 limit:
+ *                   type: integer
+ *                   description: Количество выводимых пользователей
+ *                 totalPage:
+ *                   type: integer
+ *                   description: Общее количество страниц
  *                 data:
  *                   type: array
  *                   items:

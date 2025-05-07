@@ -13,7 +13,7 @@ export const BranchQueryFilter = (data) => Joi.object({
     }),
 
   limit: Joi.number()
-    .valid(1, 30, 50, 100)
+    .valid(0, 1, 30, 50, 100)
     .optional()
     .messages({
       "number.base": "limitBase",
@@ -43,11 +43,9 @@ export const CreateBranch = (data) => Joi.object({
 
   description: Joi.string()
     .optional()
-    .required()
+    .allow("", null)
     .messages({
       "string.base": "branchDescriptionBase",
-      "string.empty": "branchDescriptionEmpty",
-      "any.required": "branchDescriptionRequired",
     }),
 
   // location: Joi.object({
@@ -99,7 +97,6 @@ export const UpdateBranch = (data) => Joi.object({
     .optional()
     .messages({
       "string.base": "branchDescriptionBase",
-      "string.empty": "branchDescriptionEmpty",
     }),
 
   // location: Joi.object({

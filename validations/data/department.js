@@ -16,8 +16,8 @@ export const DepartmentQueryFilter = (data) => Joi.object({
   type: Joi.number()
     .valid(1, 2)
     .messages({
-      "number.base": "departmentTypeBase",
-      "any.only": "departmentTypeOnly",
+      "number.base": "statusBase",
+      "any.only": "statusOnly",
     }),
 
   parent: Joi.string()
@@ -52,8 +52,10 @@ export const DepartmentQueryFilter = (data) => Joi.object({
       "any.only": "departmentStatusOnly"
     }),
 
+  pick: Joi.string().optional(),
+
   limit: Joi.number()
-    .valid(1, 30, 50, 100)
+    .valid(0, 1, 30, 50, 100)
     .optional()
     .messages({
       "number.base": "limitBase",

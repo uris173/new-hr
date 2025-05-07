@@ -28,14 +28,12 @@ export const syncing = async (data) => {
 
     worker.on("error", (error) => {
       console.error("Worker error:", error);
-      next(error);
     });
 
     worker.on("exit", (code) => {
       if (code !== 0) {
         const exitError = new Error(`Worker stopped with exit code ${code}`);
         console.error(exitError);
-        next(exitError);
       }
     });
   } catch (error) {

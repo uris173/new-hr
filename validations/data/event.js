@@ -44,7 +44,7 @@ export const EventQueryFilter = (data) => Joi.object({
     }),
 
   limit: Joi.number()
-    .valid(1, 30, 50, 100)
+    .valid(0, 1, 30, 50, 100)
     .optional()
     .messages({
       "number.base": "limitBase",
