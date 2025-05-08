@@ -18,10 +18,10 @@ export const DoorQueryFilter = (data) => Joi.object({
     .min(2)
     .max(150)
     .message({
-      "string.base": "doorTitleBase",
-      "string.empty": "doorTitleEmpty",
-      "string.min": "doorTitleMin",
-      "string.max": "doorTitleMax",
+      "string.base": "titleBase",
+      "string.empty": "titleEmpty",
+      "string.min": "titleMin",
+      "string.max": "titleMax",
     }),
 
   limit: Joi.number()
@@ -59,11 +59,11 @@ export const CreateDoor = (data) => Joi.object({
     .max(150)
     .required()
     .messages({
-      "any.required": "doorTitleRequired",
-      "string.base": "doorTitleBase",
-      "string.empty": "doorTitleEmpty",
-      "string.min": "doorTitleMin",
-      "string.max": "doorTitleMax",
+      "any.required": "titleRequired",
+      "string.base": "titleBase",
+      "string.empty": "titleEmpty",
+      "string.min": "titleMin",
+      "string.max": "titleMax",
     }),
     
   ip: Joi.string()
@@ -159,11 +159,11 @@ export const UpdateDoor = (data) => Joi.object({
     .max(150)
     .required()
     .messages({
-      "any.required": "doorTitleRequired",
-      "string.base": "doorTitleBase",
-      "string.empty": "doorTitleEmpty",
-      "string.min": "doorTitleMin",
-      "string.max": "doorTitleMax",
+      "any.required": "titleRequired",
+      "string.base": "titleBase",
+      "string.empty": "titleEmpty",
+      "string.min": "titleMin",
+      "string.max": "titleMax",
     }),
     
   ip: Joi.string()

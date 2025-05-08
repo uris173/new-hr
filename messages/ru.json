@@ -11,6 +11,8 @@
   "titleNotFound": "Значение title не передан!",
   "doorNotFound": "Дверь не найдена!",
   "branchNotFound": "Филиал не найден!",
+  "holidayNotFound": "Праздник не найден!",
+  "reasonNotFound": "Причина не найдена!",
 
   "tokenInvalid": "Токен недействителен!",
   "tokenExpired": "Срок жизни токена истек!",
@@ -34,6 +36,12 @@
 
   "statusBase": "Статус должен быть строкой.",
   "statusOnly": "Статус может быть только 'active', 'inactive' или 'deleted'.",
+
+  "titleBase": "Поле 'title' должно быть строкой.",
+  "titleEmpty": "Поле 'title' не может быть пустым.",
+  "titleMin": "Поле 'title' должно содержать минимум 2 символа.",
+  "titleMax": "Поле 'title' не должно превышать 150 символов.",
+  "titleRequired": "Поле 'title' обязательно для заполнения.",
 
   "phoneEmpty": "Поле 'Телефон' не может быть пустым",
   "phonePattern": "Номер телефона должен соответствовать формату 998 (XX) XXX-XX-XX.",
@@ -84,13 +92,6 @@
   "departmentChiefBase": "Руководитель должен быть строкой.",
 
 
-  "branchTitleBase": "Поле 'title' должно быть строкой.",
-  "branchTitleEmpty": "Поле 'title' не может быть пустым.",
-  "branchTitleMin": "Поле 'title' должно содержать минимум 2 символа.",
-  "branchTitleMax": "Поле 'title' не должно превышать 150 символов.",
-
-  "branchTitleRequired": "Поле 'title' обязательно для заполнения.",
-
   "branchDescriptionBase": "Поле 'description' должно быть строкой.",
   "branchDescriptionEmpty": "Поле 'description' не может быть пустым.",
   "branchDescriptionRequired": "Поле 'description' обязательно для заполнения.",
@@ -104,13 +105,13 @@
   "branchLocationCoordinatesLength": "Поле 'coordinates' должно содержать 2 числа, разделенных запятой.",
 
 
-  "userFullNameBase": "Поле 'ФИО' не может быть пустым",
-  "userFullNameMin": "Поле 'ФИО' должно содержать минимум 3 символа.",
-  "userFullNameMax": "Поле 'ФИО' не должно превышать 100 символов.",
-  "userFullNameRequired": "Поле 'ФИО' обязательно для заполнения",
+  "userFullNameBase": "Поле 'fullName' не может быть пустым",
+  "userFullNameMin": "Поле 'fullName' должно содержать минимум 3 символа.",
+  "userFullNameMax": "Поле 'fullName' не должно превышать 100 символов.",
+  "userFullNameRequired": "Поле 'fullName' обязательно для заполнения",
 
-  "userRoleOnly": "Поле 'Роль' должно быть одним из: boss, chief, worker, security, guest",
-  "userRoleRequired": "Поле 'Роль' обязательно для заполнения",
+  "userRoleOnly": "Поле 'role' должно быть одним из: boss, chief, worker, security, guest",
+  "userRoleRequired": "Поле 'role' обязательно для заполнения",
 
   "userFaceUrlBase": "Ссылка на фото должен быть строкой.",
   "userFaceUrlRequired": "Ссылка на фото обязательна для заполнения.",
@@ -190,11 +191,6 @@
   "branchRequired": "Поле 'branch' обязательно для заполнения.",
   "branchCustom": "Неверный формат идентификатора филиала.",
 
-  "doorTitleBase": "Поле 'title' должно быть строкой.",
-  "doorTitleEmpty": "Поле 'title' не может быть пустым.",
-  "doorTitleMin": "Поле 'title' должно содержать минимум 2 символа.",
-  "doorTitleMax": "Поле 'title' не должно превышать 150 символов.",
-  "doorTitleRequired": "Поле 'title' обязательно для заполнения.",
 
   "doorIpBase": "Поле 'ip' должно быть строкой.",
   "doorIpEmpty": "Поле 'ip' не может быть пустым.",
@@ -235,5 +231,16 @@
   "eventDoorBase": "Дверь должна быть строкой.",
 
   "eventDepartmentCustom": "Неверный формат идентификатора отдела.",
-  "eventDepartmentBase": "Отдел должен быть строкой."
+  "eventDepartmentBase": "Отдел должен быть строкой.",
+
+
+  "monthBase": "Поле 'month' должно быть числом.",
+  "monthOnly": "Поле 'month' может быть только от 0 до 11.",
+
+  "yearBase": "Поле 'year' должно быть числом.",
+  "yearMin": "Поле 'year' должно быть больше или равно 2020.",
+  "yearMax": "Поле 'year' должно быть меньше или равно 2050.",
+
+  "holidayDateBase": "Поле 'date' должно быть датой.",
+  "holidayDateRequired": "Поле 'date' обязательно для заполнения."
 }

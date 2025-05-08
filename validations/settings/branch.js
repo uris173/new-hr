@@ -6,10 +6,10 @@ export const BranchQueryFilter = (data) => Joi.object({
     .min(2)
     .max(150)
     .message({
-      "string.base": "branchTitleBase",
-      "string.empty": "branchTitleEmpty",
-      "string.min": "branchTitleMin",
-      "string.max": "branchTitleMax",
+      "string.base": "titleBase",
+      "string.empty": "titleEmpty",
+      "string.min": "titleMin",
+      "string.max": "titleMax",
     }),
 
   limit: Joi.number()
@@ -34,11 +34,11 @@ export const CreateBranch = (data) => Joi.object({
     .max(150)
     .required()
     .messages({
-      "any.required": "branchTitleRequired",
-      "string.base": "branchTitleBase",
-      "string.empty": "branchTitleEmpty",
-      "string.min": "branchTitleMin",
-      "string.max": "branchTitleMax",
+      "any.required": "titleRequired",
+      "string.base": "titleBase",
+      "string.empty": "titleEmpty",
+      "string.min": "titleMin",
+      "string.max": "titleMax",
     }),
 
   description: Joi.string()
@@ -87,10 +87,10 @@ export const UpdateBranch = (data) => Joi.object({
     .min(3)
     .max(150)
     .messages({
-      "string.base": "branchTitleBase",
-      "string.empty": "branchTitleEmpty",
-      "string.min": "branchTitleMin",
-      "string.max": "branchTitleMax",
+      "string.base": "titleBase",
+      "string.empty": "titleEmpty",
+      "string.min": "titleMin",
+      "string.max": "titleMax",
     }),
 
   description: Joi.string()

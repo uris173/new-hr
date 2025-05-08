@@ -2,6 +2,11 @@ import { Schema, model } from "mongoose";
 
 const reasonSchema = new Schema({
   title: String,
+  status: {
+    type: String,
+    enum: ["active", "inactive", "deleted"],
+    default: "active",
+  }
 }, { timestamps: true });
 
 reasonSchema.index({ title: 1 });

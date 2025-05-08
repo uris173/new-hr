@@ -12,6 +12,8 @@ import Event from "./routers/data/event.js";
 // settings
 import Branch from "./routers/settings/branch.js";
 import Door from "./routers/settings/door.js";
+import Holiday from "./routers/settings/holiday.js";
+import Reason from "./routers/settings/reason.js";
 
 // api
 import ApiDoor from "./routers/api/door.js";
@@ -27,6 +29,8 @@ router.use('/event', Event);
 
 router.use('/branch', Branch);
 router.use('/door', Door);
+router.use('/holiday', Holiday);
+router.use('/reason', Reason);
 
 
 export default router;
