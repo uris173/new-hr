@@ -1,4 +1,5 @@
 import { EventModel } from "../../models/data/event.js";
+import { DoorModel } from "../../models/settings/door.js";
 import { UserModel } from "../../models/data/user.js";
 import { EventQueryFilter } from "../../validations/data/event.js";
 import { getIo } from "../../utils/socket.io.js";
@@ -9,7 +10,7 @@ export const all = async (req, res, next) => {
     let { error } = EventQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
     
-    let { limit, page, type, user, door, department } = req.query;
+    let { limit, page, type, user, door, department, branch } = req.query;
 
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
@@ -23,6 +24,10 @@ export const all = async (req, res, next) => {
     if (department) {
       let users = await UserModel.find({ department }, "_id").lean();
       filter.user = { $in: users.map(u => u._id) };
+    }
+    if (branch) {
+      let doors = await DoorModel.find({ branch }, "_id").lean();
+      filter.door = { $in: doors.map(d => d._id) };
     }
 
     let count = await EventModel.countDocuments(filter);

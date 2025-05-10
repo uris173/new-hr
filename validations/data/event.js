@@ -5,10 +5,12 @@ export const EventQueryFilter = (data) => Joi.object({
   type: Joi.string()
     .valid('face', 'card')
     .optional()
+    .allow(null, "")
     .messages({
       'string.base': 'eventTypeBase',
       'any.only': 'eventTypeOnly',
     }),
+
   user: Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {
@@ -17,9 +19,24 @@ export const EventQueryFilter = (data) => Joi.object({
       return value;
     })
     .optional()
+    .allow(null, "")
     .messages({
       'string.base': 'eventUserBase',
     }),
+
+  branch: Joi.string()
+    .custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.message('eventBranchCustom');
+      }
+      return value;
+    })
+    .optional()
+    .allow(null, "")
+    .messages({
+      'string.base': 'eventBranchBase',
+    }),
+
   door: Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {
@@ -28,9 +45,11 @@ export const EventQueryFilter = (data) => Joi.object({
       return value;
     })
     .optional()
+    .allow(null, "")
     .messages({
       'string.base': 'eventDoorBase',
     }),
+  
   department: Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {
