@@ -10,13 +10,17 @@ import { syncing } from "./event.sync.js";
 
 let io = null;
 
+export const origins = [
+  "http://localhost:9090",
+  "http://192.168.25.137:9090",
+  "http://192.168.26.66",
+  "https://hr.pharmlux.uz"
+]
+
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: [
-        "http://localhost:9090",
-        "http://192.168.26.66"
-      ],
+      origin: origins,
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -85,7 +89,7 @@ export const initSocket = (server) => {
     });
 
     socket.on("sync-end", async (data) => {
-      console.log(data);
+      io.emit(data);
     });
 
     socket.on("disconnect", async () => {
