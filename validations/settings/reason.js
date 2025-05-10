@@ -39,6 +39,18 @@ export const ReasonCreate = (data) => Joi.object({
       "string.min": "titleMin",
       "string.max": "titleMax",
       "any.required": "titleRequired"
+    }),
+
+  shortName: Joi.string()
+    .min(1)
+    .max(15)
+    .required()
+    .messages({
+      "string.base": "shortNameBase",
+      "string.empty": "shortNameEmpty",
+      "string.min": "shortNameMin",
+      "string.max": "shortNameMax",
+      "any.required": "shortNameRequired"
     })
 }).validate(data);
 
@@ -66,5 +78,17 @@ export const ReasonUpdate = (data) => Joi.object({
       "string.min": "titleMin",
       "string.max": "titleMax",
       "any.required": "titleRequired"
+    }),
+
+  shortName: Joi.string()
+    .min(1)
+    .max(15)
+    .required()
+    .messages({
+      "string.base": "shortNameBase",
+      "string.empty": "shortNameEmpty",
+      "string.min": "shortNameMin",
+      "string.max": "shortNameMax",
+      "any.required": "shortNameRequired"
     })
 }).validate(data);

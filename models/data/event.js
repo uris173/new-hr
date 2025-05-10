@@ -20,6 +20,7 @@ const eventSchema = new Schema({
   pictureURL: String,
 }, { timestamps: true });
 
+eventSchema.index({ user: 1 });
 eventSchema.index({ type: 1 });
 eventSchema.index({ time: 1 });
 eventSchema.index({ door: 1 });

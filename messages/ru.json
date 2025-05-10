@@ -105,6 +105,11 @@
   "branchLocationCoordinatesLength": "Поле 'coordinates' должно содержать 2 числа, разделенных запятой.",
 
 
+  "userIdCustom": "Неверный формат идентификатора пользователя.",
+  "userIdBase": "Пользователь должен быть строкой.",
+  "userIdArrayBase": "Пользователь должен быть массивом.",
+  "userIdArrayIncludes": "Пользователь должен содержать только строки.",
+
   "userFullNameBase": "Поле 'fullName' не может быть пустым",
   "userFullNameMin": "Поле 'fullName' должно содержать минимум 3 символа.",
   "userFullNameMax": "Поле 'fullName' не должно превышать 100 символов.",
@@ -242,5 +247,12 @@
   "yearMax": "Поле 'year' должно быть меньше или равно 2050.",
 
   "holidayDateBase": "Поле 'date' должно быть датой.",
-  "holidayDateRequired": "Поле 'date' обязательно для заполнения."
+  "holidayDateRequired": "Поле 'date' обязательно для заполнения.",
+
+
+  "shortNameBase": "Поле 'shortName' должно быть строкой.",
+  "shortNameEmpty": "Поле 'shortName' не может быть пустым.",
+  "shortNameMin": "Поле 'shortName' должно содержать минимум 1 символ.",
+  "shortNameMax": "Поле 'shortName' не должно превышать 15 символов.",
+  "shortNameRequired": "Поле 'shortName' обязательно для заполнения."
 }

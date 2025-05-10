@@ -33,6 +33,9 @@ export default router;
  *         title:
  *           type: string
  *           description: Название причины
+ *         shortName:
+ *           type: string
+ *           description: Краткое название причины
  *         status:
  *           type: string
  *           enum: [active, inactive, deleted]
@@ -44,6 +47,7 @@ export default router;
  *       required:
  *         - _id
  *         - title
+ *         - shortName
  *         - status
  *         - createdAt
  * 
@@ -53,6 +57,9 @@ export default router;
  *         title:
  *           type: string
  *           description: Название причины
+ *         shortName:
+ *           type: string
+ *           description: Краткое название причины
  *       required:
  *         - title
  * 
@@ -65,6 +72,9 @@ export default router;
  *         title:
  *           type: string
  *           description: Название причины
+ *         shortName:
+ *           type: string
+ *           description: Краткое название причины
  *       required:
  *         - _id
  *         - title

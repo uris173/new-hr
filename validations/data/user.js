@@ -40,6 +40,24 @@ export const UserQueryFilter = (data) => Joi.object({
 
   pick: Joi.string().optional(),
 
+  users: Joi.array()
+    .items(
+      Joi.string().custom((value, helpers) => {
+        if (!Types.ObjectId.isValid(value)) {
+          return helpers.message("userIdCustom");
+        }
+        return value;
+      })
+        .allow(null, "")
+        .messages({
+          "string.base": "userIdBase",
+        })
+    )
+    .messages({
+      "array.base": "userIdArrayBase",
+      "array.includes": "userIdArrayIncludes",
+    }),
+
   limit: Joi.number()
     .valid(0, 1, 30, 50, 100)
     .optional()
