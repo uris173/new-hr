@@ -84,6 +84,10 @@ export const initSocket = (server) => {
       await syncing(data);
     });
 
+    socket.on("sync-end", async (data) => {
+      console.log(data);
+    });
+
     socket.on("disconnect", async () => {
       try {
         if (socket.user) {

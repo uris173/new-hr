@@ -55,6 +55,10 @@
 import { parentPort, workerData } from "worker_threads";
 
 const processData = async (data) => {
+  if (!data || typeof data !== 'object') {
+    return [];
+  }
+
   return Object.entries(data).flatMap(([doorId, events]) =>
     events.map((event) => ({
       type: event.type,
