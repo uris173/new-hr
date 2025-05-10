@@ -139,6 +139,11 @@ export default router;
  *           type: string
  *         description: ID двери, связанной с событием
  *       - in: query
+ *         name: branch
+ *         schema:
+ *           type: string
+ *         description: ID филиала
+ *       - in: query
  *         name: department
  *         schema:
  *           type: string

@@ -41,7 +41,6 @@ app.use(ErrorMiddleware);
     await connect(process.env.MONGO_URI);
     console.log('MongoDB connected!');
 
-
     server.listen(process.env.PORT, () => {
       console.log(`Server is running on PORT: ${process.env.PORT}`);
     });
