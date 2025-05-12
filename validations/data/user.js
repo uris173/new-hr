@@ -59,7 +59,9 @@ export const UserQueryFilter = (data) => Joi.object({
     }),
 
   limit: Joi.number()
-    .valid(0, 1, 30, 50, 100)
+    // .valid(0, 1, 30, 50, 100)
+    .min(0)
+    .max(100)
     .optional()
     .messages({
       "number.base": "limitBase",

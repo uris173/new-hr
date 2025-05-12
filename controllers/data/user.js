@@ -25,7 +25,7 @@ export const all = async (req, res, next) => {
     let { error } = UserQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { page, limit, fullName, role, department, employeeNo, status, pick } = req.query;
+    let { page, limit, fullName, role, department, employeeNo, status, pick, users } = req.query;
     pick = pick ? JSON.parse(pick) : select;
 
     limit = parseInt(limit) || 30;
@@ -38,6 +38,7 @@ export const all = async (req, res, next) => {
       ...(role ? { role } : canView(req.user)),
       ...(employeeNo && { employeeNo }),
       ...(status && { status }),
+      ...(users && { _id: { $in: users } }),
     };
 
     let count = await UserModel.countDocuments(filter);
