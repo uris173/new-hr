@@ -15,6 +15,10 @@ import Door from "./routers/settings/door.js";
 import Holiday from "./routers/settings/holiday.js";
 import Reason from "./routers/settings/reason.js";
 
+// statistic
+import UserStatistic from "./routers/statistic/user.js";
+import HomeStatistic from "./routers/statistic/home.js";
+
 // api
 import ApiDoor from "./routers/api/door.js";
 
@@ -31,6 +35,9 @@ router.use('/branch', Branch);
 router.use('/door', Door);
 router.use('/holiday', Holiday);
 router.use('/reason', Reason);
+
+router.use('/statistic/user', UserStatistic);
+router.use('/statistic/home', HomeStatistic);
 
 
 export default router;

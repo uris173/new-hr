@@ -23,6 +23,27 @@ export const getUserCalendar = async (req, res, next) => {
 
     let department = await DepartmentModel.findById(user.department, "workTime").lean();
     let calendar = await CalendarModel.find({ user: _id, date: { $gte: startDate, $lte: endDate } }, 'date shift status').lean();
+
+    let absences = await AbsenceModel.find(
+      { user: _id, date: { $gte: startDate, $lte: endDate } }, 
+      'date reason type status'
+    ).populate('reason', 'title shortName').lean();
+    
+    let workDays = await WorkDayModel.find(
+      { date: { $gte: startDate, $lte: endDate } }, 
+      'date title'
+    ).lean();
+    
+    let holidays = await HolidayModel.find(
+      { date: { $gte: startDate, $lte: endDate } }, 
+      'date title'
+    ).lean();
+    
+    let events = await EventModel.find(
+      { user: _id, date: { $gte: startDate, $lte: endDate } }, 
+      'date time status'
+    ).sort({ date: 1, time: 1 }).lean();
+
     
   } catch (error) {
     console.error(error);
