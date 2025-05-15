@@ -25,7 +25,7 @@ export const all = async (req, res, next) => {
     let { error } = UserQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { page, limit, fullName, role, department, employeeNo, status, pick, users } = req.query;
+    let { page, limit, fullName, role, department, employeeNo, status, pick, users, ninUsers } = req.query;
     pick = pick ? JSON.parse(pick) : select;
 
     limit = parseInt(limit) || 30;
@@ -39,6 +39,7 @@ export const all = async (req, res, next) => {
       ...(employeeNo && { employeeNo }),
       ...(status && { status }),
       ...(users && { _id: { $in: users } }),
+      ...(ninUsers && { _id: { $nin: ninUsers } }),
     };
 
     let count = await UserModel.countDocuments(filter);
@@ -94,6 +95,27 @@ export const create = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserInfo = async (req, res, next) => {
+  try {
+    let { id } = req.params;
+
+    let user = await UserModel.findById(id, "-password -__v");
+      .populate([
+        {
+          path: "department",
+          select: "-_id name",
+        }
+      ]);
+
+    if (!user) throw { status: 400, message: "userNotFound" };
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
 
 export const getOne = async (req, res, next) => {
   try {

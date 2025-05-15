@@ -7,6 +7,7 @@ const router = Router();
 import {
   all,
   create,
+  getUserInfo,
   getOne,
   getUserCalendars,
   addUserCalendar,
@@ -33,6 +34,7 @@ router.route('/calendar/:id')
 .all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
 .get(getUserCalendar)
 
+router.get("/info/:id", passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), top, getUserInfo)
 router.get('/status/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top, changeStatus);
 
 router.route('/:id')
@@ -588,11 +590,13 @@ export default router;
  *         description: Неавторизованный доступ
  */
 
+
+
 /**
  * @swagger
- * /user/{id}:
+ * /user/info/{id}:
  *   get:
- *     summary: Получение данных пользователя по ID
+ *     summary: Получение всех данных пользователя по ID
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
