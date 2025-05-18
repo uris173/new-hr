@@ -68,7 +68,7 @@ export const getLastEvents = async (req, res, next) => {
     let populateOptions = [
       {
         path: "user",
-        select: "fullName department",
+        select: "fullName department faceUrl",
         populate: {
           path: "department",
           select: "-_id name"
@@ -84,20 +84,20 @@ export const getLastEvents = async (req, res, next) => {
       }
     ];
 
-    let lastEnter = await EventModel.findOne({ time: { $gte: todayStart }, door: { $in: enterDoors.map(d => d._id) } }, "type time user door pictureURL")
+    let lastEnter = await EventModel.findOne({ }, "type time user door pictureURL") // , door: { $in: enterDoors.map(d => d._id) }
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastExit = await EventModel.findOne({ time: { $gte: todayStart }, door: { $in: exitDoors.map(d => d._id) } }, "type time user door pictureURL")
+    let lastExit = await EventModel.findOne({ }, "type time user door pictureURL") // , door: { $in: exitDoors.map(d => d._id) }
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastEvents = await EventModel.find({ time: { $gte: todayStart }, _id: { $nin: [lastEnter._id, lastExit._id] } }, "type time user door pictureURL")
+    let lastEvents = await EventModel.find({ time: { $gte: todayStart }, _id: { $nin: [lastEnter?._id, lastExit?._id] } }, "type time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 })
       .limit(10);
 
-      res.status(200).json({
+    res.status(200).json({
       count: users.length,
       came: arrivedToday.length,
       notCame: notArrivedToday.length,

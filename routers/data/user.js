@@ -590,13 +590,50 @@ export default router;
  *         description: Неавторизованный доступ
  */
 
-
-
 /**
  * @swagger
  * /user/info/{id}:
  *   get:
  *     summary: Получение всех данных пользователя по ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID пользователя
+ *     responses:
+ *       200:
+ *         description: Успешный ответ с данными пользователя
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Пользователь не найден
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "userNotFound"
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/{id}:
+ *   get:
+ *     summary: Получение данных пользователя по ID
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []

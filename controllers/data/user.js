@@ -44,7 +44,7 @@ export const all = async (req, res, next) => {
 
     let count = await UserModel.countDocuments(filter);
     let data = await UserModel.find(filter, pick)
-    .populate({ path: "department", select: "-_id name" })
+    .populate({ path: "department", select: "name" })
     .sort({ _id: -1 })
     .limit(limit)
     .skip(skip)
@@ -78,7 +78,7 @@ export const create = async (req, res, next) => {
     let employeeNo = parseInt(latestEmployeeNo.employeeNo) + 1 || 1
     let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, gender, department, employeeNo, doors });
     let user = await UserModel.findById(newUser._id, select)
-    .populate({ path: "department", select: "-_id name" })
+    .populate({ path: "department", select: "name" })
     .lean();
 
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
@@ -100,11 +100,11 @@ export const getUserInfo = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let user = await UserModel.findById(id, "-password -__v");
+    let user = await UserModel.findById(id, "-password -__v")
       .populate([
         {
           path: "department",
-          select: "-_id name",
+          select: "name",
         }
       ]);
 
@@ -201,7 +201,7 @@ export const changeStatus = async (req, res, next) => {
       { _id: id, status: { $in: ["active", "inactive"] } },
       [{ $set: { status: { $cond: { if: { $eq: ["$status", "active"] }, then: "inactive", else: "active" } } } }],
       { new: true, select }
-    ).populate({ path: "department", select: "-_id name" });
+    ).populate({ path: "department", select: "name" });
 
     if (!user) throw { status: 400, message: "userNotFound" };
     await emitToAdmin("worker", { _id: user._id });
@@ -236,7 +236,7 @@ export const update = async (req, res, next) => {
     password = password ? await hash(password) : findUser.password;
 
     let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, doors }, { new: true, select })
-      .populate({ path: "department", select: "-_id name" });
+      .populate({ path: "department", select: "name" });
 
     await emitToAdmin("worker", { _id: user._id });
 

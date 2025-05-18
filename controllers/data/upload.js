@@ -98,6 +98,7 @@ export const uploadScriptPhoto = async (req, res, next) => {
     if (!req.file) {
       throw { status: 400, message: "fileNotFound" };
     }
+
     res.status(200).json(`${req.file.destination}/${req.file.filename}`);
   } catch (error) {
     console.error(error);
