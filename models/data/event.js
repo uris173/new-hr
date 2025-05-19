@@ -5,6 +5,10 @@ const eventSchema = new Schema({
     type: String,
     enum: ["face", "card"]
   },
+  action: {
+    type: String,
+    enum: ["enter", "exit"]
+  },
   time: Date,
   user: {
     type: Types.ObjectId,

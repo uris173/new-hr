@@ -1,3 +1,4 @@
+import { DoorModel } from "../models/settings/door.js";
 import { UserModel } from "../models/data/user.js";
 import { EventModel } from "../models/data/event.js";
 import { Worker } from "worker_threads";
@@ -17,7 +18,9 @@ export const syncing = async (data) => {
         });
         if (findExists) return null;
 
+        let findDoor = await DoorModel.findById(event.door, "-_id type").lean();
         event.user = findUser._id;
+        event.action = findDoor.type;
 
         return event
       }));
