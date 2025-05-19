@@ -13,6 +13,7 @@ import {
   addUserCalendar,
   getUserCalendar,
   updateUserCalendar,
+  createCalendarToUser,
   changeStatus,
   update,
   remove
@@ -29,6 +30,8 @@ router.route('/calendar')
 .get(getUserCalendars)
 .post(addUserCalendar)
 .put(updateUserCalendar);
+
+router.get("/create-user-calendar/:id", passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), top, createCalendarToUser);
 
 router.route('/calendar/:id')
 .all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
@@ -538,6 +541,34 @@ export default router;
  *         schema:
  *           type: string
  *         description: ID записи календаря
+ *     responses:
+ *       200:
+ *         description: Успешный ответ с данными записи календаря
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calendar'
+ *       404:
+ *         description: Запись не найдена
+ *       401:
+ *         description: Неавторизованный доступ
+ */
+
+/**
+ * @swagger
+ * /user/create-user-calendar/{id}:
+ *   get:
+ *     summary: Создание календаря по ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID пользователя
  *     responses:
  *       200:
  *         description: Успешный ответ с данными записи календаря

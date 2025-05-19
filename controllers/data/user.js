@@ -1,4 +1,5 @@
 import { UserModel } from "../../models/data/user.js";
+import { DepartmentModel } from "../../models/data/department.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
 import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
@@ -89,6 +90,31 @@ export const create = async (req, res, next) => {
     io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
     await emitToAdmin("worker", { _id: user._id });
 
+    let findDepartment = await DepartmentModel.findById(department, "-_id workTime.day").lean();
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    
+    let daysInMonth = new Date(year, month + 1, 0).getDate();
+    let calendar = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      let currentDate = new Date(year, month, day);
+      let dayOfWeek = currentDate.getDay();
+
+      let isWorkingDay = findDepartment.workTime.some(workDay => workDay.day === dayOfWeek);
+      if (isWorkingDay) {
+        calendar.push({
+          user: user._id,
+          date: currentDate,
+          shift: "off",
+          status: "active"
+        });
+      }
+    }
+
+    await CalendarModel.insertMany(calendar);
+
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
@@ -115,7 +141,7 @@ export const getUserInfo = async (req, res, next) => {
     console.error(error);
     next(error);
   }
-}
+};
 
 export const getOne = async (req, res, next) => {
   try {
@@ -187,6 +213,45 @@ export const updateUserCalendar = async (req, res, next) => {
     if (!calendar) throw { status: 400, message: "calendarNotFound" };
 
     res.status(200).json(calendar);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const createCalendarToUser = async (req, res, next) => {
+  try {
+    let { id } = req.params;
+
+    let user = await UserModel.findById(id, "_id department");
+    if (!user) throw { status: 400, message: "userNotFound" };
+
+    let department = await DepartmentModel.findById(user.department, "-_id workTime.day").lean();
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    
+    let daysInMonth = new Date(year, month + 1, 0).getDate();
+    let calendar = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      let currentDate = new Date(year, month, day);
+      let dayOfWeek = currentDate.getDay();
+
+      let isWorkingDay = department.workTime.some(workDay => workDay.day === dayOfWeek);
+      if (isWorkingDay) {
+        calendar.push({
+          user: user._id,
+          date: currentDate,
+          shift: "off",
+          status: "active"
+        });
+      }
+    }
+
+    await CalendarModel.insertMany(calendar);
+
+    res.status(200).json({ message: "ok" });
   } catch (error) {
     console.error(error);
     next(error);

@@ -84,11 +84,11 @@ export const getLastEvents = async (req, res, next) => {
       }
     ];
 
-    let lastEnter = await EventModel.findOne({ }, "type time user door pictureURL") // , door: { $in: enterDoors.map(d => d._id) }
+    let lastEnter = await EventModel.findOne({ door: { $in: enterDoors.map(d => d._id) } }, "type time user door pictureURL") // , door: { $in: enterDoors.map(d => d._id) }
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastExit = await EventModel.findOne({ }, "type time user door pictureURL") // , door: { $in: exitDoors.map(d => d._id) }
+    let lastExit = await EventModel.findOne({ door: { $in: exitDoors.map(d => d._id) } }, "type time user door pictureURL") // , door: { $in: exitDoors.map(d => d._id) }
       .populate(populateOptions)
       .sort({ time: -1 });
 
