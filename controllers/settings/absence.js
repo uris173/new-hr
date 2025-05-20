@@ -22,7 +22,7 @@ export const all = async (req, res, next) => {
       ...(user && { user }),
       ...(reason && { reason }),
       $or: [
-        { start: { $lte: endOfMonth }, to: { $gte: startOfMonth } }
+        { start: { $lte: endOfMonth }, end: { $gte: startOfMonth } }
       ]
     };
 
