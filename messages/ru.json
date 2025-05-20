@@ -13,6 +13,7 @@
   "branchNotFound": "Филиал не найден!",
   "holidayNotFound": "Праздник не найден!",
   "reasonNotFound": "Причина не найдена!",
+  "absenceNotFound": "Отсутствие не найдено!",
 
   "tokenInvalid": "Токен недействителен!",
   "tokenExpired": "Срок жизни токена истек!",
@@ -257,5 +258,30 @@
   "shortNameEmpty": "Поле 'shortName' не может быть пустым.",
   "shortNameMin": "Поле 'shortName' должно содержать минимум 1 символ.",
   "shortNameMax": "Поле 'shortName' не должно превышать 15 символов.",
-  "shortNameRequired": "Поле 'shortName' обязательно для заполнения."
+  "shortNameRequired": "Поле 'shortName' обязательно для заполнения.",
+
+
+  "absenceUserBase": "Поле 'user' должно быть строкой.",
+  "absenceUserRequired": "Поле 'user' обязательно для заполнения.",
+
+  "absenceYearBase": "Поле 'year' должно быть числом.",
+  "absenceYearMin": "Поле 'year' должно быть больше или равно 2024.",
+  "absenceYearMax": "Поле 'year' должно быть меньше или равно 2200.",
+
+  "absenceMonthBase": "Поле 'month' должно быть числом.",
+  "absenceMonthMin": "Поле 'month' должно быть больше или равно 0.",
+  "absenceMonthMax": "Поле 'month' должно быть меньше или равно 11.",
+
+  "absenceReasonBase": "Поле 'reason' должно быть строкой.",
+  "absenceReasonRequired": "Поле 'reason' обязательно для заполнения.",
+
+  "absenceDescriptionBase": "Поле 'description' должно быть строкой.",
+
+  "absenceDocBase": "Поле 'doc' должно быть строкой.",
+
+  "absenceStartRequired": "Поле 'start' обязательно для заполнения.",
+  "absenceStartBase": "Поле 'start' должно быть датой.",
+
+  "absenceEndRequired": "Поле 'end' обязательно для заполнения.",
+  "absenceEndBase": "Поле 'end' должно быть датой."
 }

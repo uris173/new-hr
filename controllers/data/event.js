@@ -43,7 +43,7 @@ export const all = async (req, res, next) => {
         },
         {
           path: "door",
-          select: "branch title type",
+          select: "branch title",
           populate: {
             path: "branch",
             select: "title"

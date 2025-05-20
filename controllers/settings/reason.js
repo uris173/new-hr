@@ -32,7 +32,7 @@ export const all = async (req, res, next) => {
 export const create = async (req, res, next) => {
   try {
     let { error } = ReasonCreate(req.body);
-    if (error) throw { status: 400, message: error.details[0].message };
+    if (error) throw { status: 400, message: error.details[0].message }; 
 
     let newReason = await ReasonModel.create(req.body);
     let reason = await ReasonModel.findById(newReason._id, select).lean();
@@ -81,7 +81,7 @@ export const remove = async (req, res, next) => {
     let reason = await ReasonModel.findByIdAndUpdate(req.params._id, { status: "deleted" });
     if (!reason) throw { status: 400, message: "reasonNotFound" };
 
-    res.status(200).json(reason);
+    res.status(200).json({ message: "deleted" });
   } catch (error) {
     console.error(error);    
     next(error);

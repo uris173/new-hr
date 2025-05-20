@@ -86,7 +86,7 @@ export const remove = async (req, res, next) => {
     let workDay = await WorkDayModel.findByIdAndDelete(id);
     if (!workDay) throw { status: 400, message: "workDayNotFound" };
 
-    res.status(200).json(workDay);
+    res.status(200).json({ message: "deleted" });
   } catch (error) {
     console.error(error);    
     next(error);

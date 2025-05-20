@@ -94,7 +94,7 @@ export const remove = async (req, res, next) => {
     let branch = await BranchModel.findByIdAndUpdate(req.params.id, { status: "deleted" }, { new: true, select });
     if (!branch) throw { status: 400, message: "branchNotFound" };
 
-    res.status(200).json(branch);
+    res.status(200).json({ message: "deleted" });
   } catch (error) {
     console.error(error);
     next(error);

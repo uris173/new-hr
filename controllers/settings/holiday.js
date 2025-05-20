@@ -86,7 +86,7 @@ export const remove = async (req, res, next) => {
     let holiday = await HolidayModel.findByIdAndDelete(id);
     if (!holiday) throw { status: 400, message: "holidayNotFound" };
 
-    res.status(200).json(holiday);
+    res.status(200).json({ message: "deleted" });
   } catch (error) {
     console.error(error);    
     next(error);

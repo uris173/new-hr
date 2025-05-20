@@ -14,6 +14,7 @@ import Branch from "./routers/settings/branch.js";
 import Door from "./routers/settings/door.js";
 import Holiday from "./routers/settings/holiday.js";
 import Reason from "./routers/settings/reason.js";
+import Absence from "./routers/settings/absence.js"
 
 // statistic
 import UserStatistic from "./routers/statistic/user.js";
@@ -35,6 +36,7 @@ router.use('/branch', Branch);
 router.use('/door', Door);
 router.use('/holiday', Holiday);
 router.use('/reason', Reason);
+router.use('/absence', Absence);
 
 router.use('/statistic/user', UserStatistic);
 router.use('/statistic/home', HomeStatistic);

@@ -11,7 +11,7 @@ const absenceSchema = new Schema({
   },
   title: String,
   description: String,
-  doc: [],
+  doc: String,
   start: Date,
   end: Date
 }, { timestamps: true });

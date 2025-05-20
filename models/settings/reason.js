@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const reasonSchema = new Schema({
   title: String,
-  shornName: String,
+  shortName: String,
   status: {
     type: String,
     enum: ["active", "inactive", "deleted"],

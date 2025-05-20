@@ -76,7 +76,7 @@ export const getLastEvents = async (req, res, next) => {
       },
       {
         path: "door",
-        select: "branch title type",
+        select: "branch title",
         populate: {
           path: "branch",
           select: "-_id title"
@@ -84,15 +84,15 @@ export const getLastEvents = async (req, res, next) => {
       }
     ];
 
-    let lastEnter = await EventModel.findOne({ door: { $in: enterDoors.map(d => d._id) } }, "type time user door pictureURL")
+    let lastEnter = await EventModel.findOne({ door: { $in: enterDoors.map(d => d._id) } }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastExit = await EventModel.findOne({ door: { $in: exitDoors.map(d => d._id) } }, "type time user door pictureURL")
+    let lastExit = await EventModel.findOne({ door: { $in: exitDoors.map(d => d._id) } }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastEvents = await EventModel.find({ time: { $gte: todayStart }, _id: { $nin: [lastEnter?._id, lastExit?._id] } }, "type time user door pictureURL")
+    let lastEvents = await EventModel.find({ time: { $gte: todayStart }, _id: { $nin: [lastEnter?._id, lastExit?._id] } }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 })
       .limit(10);
@@ -124,12 +124,12 @@ export const getDoorEvents = async (req, res, next) => {
       },
     ];
 
-    let doors = await DoorModel.find({ status: "active" }, "_id title type branch")
+    let doors = await DoorModel.find({ status: "active" }, "_id title branch")
       .populate({ path: 'branch', select: "-_id title" })
       .lean();
 
     doors = await Promise.all(doors.map(async (door) => {
-      let doorEvents = await EventModel.find({ door: door._id }, "branch type time user pictureURL")
+      let doorEvents = await EventModel.find({ door: door._id }, "branch time user pictureURL")
         .populate(populateOptions)
         .sort({ time: -1 })
         .limit(10);
