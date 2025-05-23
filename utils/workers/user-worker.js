@@ -165,7 +165,7 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.reason = holiday.title;
           dayData.dayStatus = "holiday";
           dayData.events = [];
-          dateDay.isWorkingDay = false;
+          dayData.isWorkingDay = false;
         }
       } else {
         if (calendarMap.has(dateDay)) {
@@ -189,7 +189,7 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.status = calendarItem.status;
         } else {
           dayData.isWorkingDay = true;
-          dateDay.attended = false;
+          dayData.attended = false;
           dayData.dayStatus = "workday";
         }
       }

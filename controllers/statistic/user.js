@@ -45,7 +45,7 @@ export const getUserCalendar = async (req, res, next) => {
     const worker = new Worker('./utils/workers/user-worker.js', { workerData: { year, month, calendar, absences, holidays, events } });
     
     worker.on("message", (data) => {
-      res.status(200).json(data);
+      res.status(200).json({ year, month, data });
     });
 
     worker.on("error", (error) => {
