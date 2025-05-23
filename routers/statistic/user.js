@@ -53,25 +53,30 @@ export default router;
  *               items:
  *                 type: object
  *                 properties:
- *                   date:
- *                     type: string
- *                     format: date-time
- *                     description: Дата
- *                   dayOfWeek:
- *                     type: integer
- *                     description: День недели (0 - воскресенье, 1 - понедельник и т.д.)
  *                   day:
  *                     type: integer
  *                     description: День месяца
- *                   month:
- *                     type: integer
- *                     description: Месяц (0-11)
- *                   year:
- *                     type: integer
- *                     description: Год
+ *                   reason:
+ *                     type: string
+ *                     description: Причина отсутствия (если есть)
+ *                   dayStatus:
+ *                     type: string
+ *                     enum: [workday, absence, holiday, weekend]
+ *                     description: Статус дня
  *                   isWorkingDay:
  *                     type: boolean
  *                     description: Является ли день рабочим
+ *                   workDuration:
+ *                     type: number
+ *                     description: Продолжительность рабочего дня в часах
+ *                   arrival:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Время прихода
+ *                   departure:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Время ухода
  *                   shift:
  *                     type: string
  *                     enum: [morning, afternoon, night, full_day, off]
@@ -79,32 +84,6 @@ export default router;
  *                   status:
  *                     type: string
  *                     description: Статус дня в календаре
- *                   notes:
- *                     type: string
- *                     description: Заметки к дню (если есть)
- *                   workDay:
- *                     type: string
- *                     description: Название рабочего дня (если это особый рабочий день)
- *                   holiday:
- *                     type: string
- *                     description: Название праздника (если это праздник)
- *                   absence:
- *                     type: object
- *                     description: Информация об отсутствии (если пользователь отсутствовал)
- *                     properties:
- *                       reason:
- *                         type: object
- *                         properties:
- *                           _id:
- *                             type: string
- *                           title:
- *                             type: string
- *                           shortName:
- *                             type: string
- *                       type:
- *                         type: string
- *                       status:
- *                         type: string
  *                   events:
  *                     type: array
  *                     description: События посещений за день
@@ -112,7 +91,7 @@ export default router;
  *                       type: object
  *                       properties:
  *                         _id:
- *                           type: string
+ *                           type: stringS
  *                         date:
  *                           type: string
  *                           format: date-time
