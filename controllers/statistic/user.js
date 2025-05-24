@@ -21,6 +21,12 @@ export const getUserCalendar = async (req, res, next) => {
     if (!user) throw { status: 404, message: "userNotFound" };
 
     let calendar = await CalendarModel.find({ user: _id, date: { $gte: startDate, $lte: endDate } }, 'date shift status').lean();
+    calendar = calendar.map(item => {
+      return {
+        id: item._id.toString(),
+        ...item,
+      }
+    });
 
     let absences = await AbsenceModel.find(
       { user: _id, start: { $lte: endDate }, end: { $gte: startDate } }, 

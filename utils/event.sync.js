@@ -5,7 +5,8 @@ import { Worker } from "worker_threads";
 
 export const syncing = async (data) => {
   try {
-    const worker = new Worker('./utils/workers/door-worker.js', { workerData: data });
+    console.log(__dirname, '../utils/workers/door-worker.js')
+    const worker = new Worker(__dirname, '../utils/workers/door-worker.js', { workerData: data });
 
     worker.on("message", async (data) => {
       let events = await Promise.all(data.map(async (event) => {

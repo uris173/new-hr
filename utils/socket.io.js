@@ -12,7 +12,7 @@ let io = null;
 
 export const origins = [
   "http://localhost:9090",
-  "http://192.168.25.137:9090",
+  "http://192.168.24.188:9090",
   "http://192.168.26.66",
   "https://hr.pharmlux.uz"
 ]

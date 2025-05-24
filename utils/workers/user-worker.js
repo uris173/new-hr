@@ -135,8 +135,10 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(year, month, day);
       const dateDay = currentDate.getDate();
+      let calendarId = calendarMap.get(dateDay)?.id || null;
   
       let dayData = {
+        calendarId,
         day,
         reason: null,
         dayStatus: "weekend",
@@ -187,11 +189,12 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.dayStatus = "workday"
           dayData.shift = calendarItem.shift;
           dayData.status = calendarItem.status;
-        } else {
-          dayData.isWorkingDay = true;
-          dayData.attended = false;
-          dayData.dayStatus = "workday";
         }
+        // else {
+        //   dayData.isWorkingDay = true;
+        //   dayData.attended = false;
+        //   dayData.dayStatus = "workday";
+        // }
       }
 
       result.push(dayData);
