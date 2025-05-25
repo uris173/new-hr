@@ -152,6 +152,7 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
         workDuration: { hours: 0, minutes: 0, seconds: 0 },
       };
   
+      const attendance = attendanceMap.get(dateDay);
       // Проверяем есть ли день в личном календаре пользователя
       if (absenceMap.has(dateDay) || holidayMap.has(dateDay)) {
         
@@ -170,7 +171,6 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.isWorkingDay = false;
         }
       } else {
-        const attendance = attendanceMap.get(dateDay);
         if (calendarMap.has(dateDay)) {
 
           // ВЫКЛЮЧЕНО ИЗ-ЗА АДАПТАЦИИ ФУНКЦИИ ЧТОБЫ ВО ВСЕХ ДНЯХ ВЫХОДИЛИ ПОСЕЩЕНИЯ
@@ -194,23 +194,23 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           // dayData.shift = calendarItem.shift;
           // dayData.status = calendarItem.status;
         }
-
-        // Добавляем информацию о времени прихода и ухода
-        dayData.arrival = attendance?.arrival || null;
-        dayData.departure = attendance?.departure || null;
-
-        // Вычисляем продолжительность рабочего дня (в часах)
-        if (dayData.arrival && dayData.departure) {
-          dayData.workDuration = calculateWorkDuration(eventsMap.get(dateDay) || []);
-        }
-
-        dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);;
         // else {
         //   dayData.isWorkingDay = true;
         //   dayData.attended = false;
         //   dayData.dayStatus = "workday";
         // }
+
       }
+      // Добавляем информацию о времени прихода и ухода
+      dayData.arrival = attendance?.arrival || null;
+      dayData.departure = attendance?.departure || null;
+
+      // Вычисляем продолжительность рабочего дня (в часах)
+      if (dayData.arrival && dayData.departure) {
+        dayData.workDuration = calculateWorkDuration(eventsMap.get(dateDay) || []);
+      }
+
+      dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);
 
       result.push(dayData);
     }
