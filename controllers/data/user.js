@@ -70,14 +70,25 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, gender, department, doors } = req.body;
+    let { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
 
-    let latestEmployeeNo = await UserModel.findOne({}, 'employeeNo').sort({ employeeNo: -1 });
-    let employeeNo = parseInt(latestEmployeeNo.employeeNo) + 1 || 1
-    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, gender, department, employeeNo, doors });
+    let latestEmployeeNo = await UserModel.aggregate([
+      { $match: { employeeNo: { $exists: true } } }, // Фильтруем документы, где employeeNo существует
+      {
+        $addFields: {
+          employeeNoNumber: { $toInt: "$employeeNo" } // Преобразуем employeeNo в число
+        }
+      },
+      { $sort: { employeeNoNumber: -1 } }, // Сортируем по числовому значению
+      { $limit: 1 }, // Берем только один документ
+      { $project: { employeeNo: 1 } } // Проецируем только поле employeeNo
+    ]);
+    let employeeNo = latestEmployeeNo.length > 0 ? parseInt(latestEmployeeNo[0].employeeNo) + 1 : 1;
+
+    let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, gender, department, employeeNo, doors, birthDay, address });
     let user = await UserModel.findById(newUser._id, select)
     .populate({ path: "department", select: "name" })
     .lean();
@@ -94,7 +105,7 @@ export const create = async (req, res, next) => {
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
-    
+
     let daysInMonth = new Date(year, month + 1, 0).getDate();
     let calendar = [];
 
@@ -148,7 +159,7 @@ export const getOne = async (req, res, next) => {
     let { id } = req.params;
     let { pick } = req.query;
 
-    pick = pick ? JSON.parse(pick) : `${select} phone doors`;
+    pick = pick ? JSON.parse(pick) : `${select} phone doors birthDay address`;
     let user = await UserModel.findById(id, pick);
     if (!user) throw { status: 404, message: "userNotFound" };
 
@@ -291,7 +302,7 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { _id, fullName, phone, password, role, faceUrl, gender, department, doors } = req.body;
+    let { _id, fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
@@ -300,7 +311,7 @@ export const update = async (req, res, next) => {
     if (!findUser) throw { status: 400, message: "userNotFound" };
     password = password ? await hash(password) : findUser.password;
 
-    let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, doors }, { new: true, select })
+    let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address }, { new: true, select })
       .populate({ path: "department", select: "name" });
 
     await emitToAdmin("worker", { _id: user._id });
