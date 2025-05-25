@@ -1,10 +1,15 @@
 import { UserModel } from "../../models/data/user.js";
 import { DepartmentModel } from "../../models/data/department.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
+import { AbsenceModel } from "../../models/settings/absence.js";
+import { HolidayModel } from "../../models/settings/holiday.js";
+import { EventModel } from "../../models/data/event.js";
 // import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
+
 import { UserQueryFilter, UserCreate, UserUpdate, AddUserCalendar, UpdateUserCalendar } from "../../validations/data/user.js";
+import { calculateWorkDuration, reorderEventsWithFirstAndLast } from "../../utils/helper.js";
 import { getIo, emitToAdmin } from "../../utils/socket.io.js"
 import { getRedisAllData } from "../../utils/redis.js"
 let select = 'fullName role faceUrl department gender status employeeNo';
@@ -207,8 +212,47 @@ export const addUserCalendar = async (req, res, next) => {
 export const getUserCalendar = async (req, res, next) => {
   try {
     let { id } = req.params;
-    let calendar = await CalendarModel.findById(id, "-user -createdAt -updatedAt -__v");
-    res.status(200).json(calendar);
+
+    let calendar = await CalendarModel.findById(id, "-createdAt -updatedAt -__v");
+    if (!calendar) throw { status: 404, message: "calendarNotFound" };
+
+    let startDate = new Date(calendar.date).setHours(0, 0, 0, 0);
+    let endDate = new Date(calendar.date).setHours(23, 59, 59, 999);
+
+    let holiday = await HolidayModel.findOne({ date: { $gte: startDate, $lte: endDate  } }, "title").lean();
+    let absence = await AbsenceModel.findOne({
+      user: calendar.user,
+      start: { $lte: endDate }, end: { $gte: startDate }
+    }, "reason")
+      .populate({ path: 'reason', select: 'title' });
+
+    let reason = holiday?.title || absence?.reason?.title || null
+    let dayStatus = holiday ? "holiday" : absence ? "absence" : calendar.shift === "off" ? "weekend" : "workday";
+    let isWorkingDay = holiday ? false : absence ? false : calendar.shift === "off" ? false : true;
+
+    let calendarEvents = await EventModel.find({
+      user: calendar.user,
+      time: { $gte: startDate, $lte: endDate },
+    }, "-_id date action time pictureURL").sort({ time: 1 }).lean();
+
+    let events = reorderEventsWithFirstAndLast(calendarEvents);
+    let enterEvent = events.find(event => event.action === "enter");
+    let exitEvent = events.find(event => event.action === "exit");
+
+    let dayDaya = {
+      calendarId: id,
+      day: calendar.date.getDate(),
+      reason,
+      dayStatus,
+      isWorkingDay,
+      attended: events.length > 0 ? true : false,
+      arrival: enterEvent ? enterEvent?.time : null,
+      departure: exitEvent ? exitEvent?.time : null,
+      events,
+      workDuration: calculateWorkDuration(calendarEvents)
+    };
+
+    res.status(200).json(dayDaya);
   } catch (error) {
     console.error(error);
     next(error);

@@ -9,7 +9,7 @@ const calendarSchema = new Schema({
   shift: {
     type: String,
     enum: ['morning', 'afternoon', 'night', 'full_day', 'off'],
-    default: 'off'
+    default: 'full_day'
   },
   status: {
     type: String,

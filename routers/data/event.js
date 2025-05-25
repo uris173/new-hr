@@ -3,9 +3,10 @@ import passport from "../../middleware/auth.js";
 import { manage } from "../../middleware/role.js";
 const router = Router();
 
-import { all, eventSync } from "../../controllers/data/event.js";
+import { all, eventSync, create } from "../../controllers/data/event.js";
 
 router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
+router.post("/", passport.authenticate("jwt", { session: false }), manage, create);
 router.post("/sync", passport.authenticate("jwt", { session: false }), manage, eventSync);
 
 
@@ -191,6 +192,69 @@ export default router;
  *       403:
  *         description: Доступ запрещен
  */
+
+/**
+ * @swagger
+ * /event:
+ *   post:
+ *     summary: Создать новое событие
+ *     description: Создает новое событие с данными о типе, времени, пользователе и двери. Событие может быть инициировано через WebSocket.
+ *     tags:
+ *       - Events
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 enum: ["face", "card"]
+ *                 description: Тип события (например, face, card)
+ *               action:
+ *                 type: string
+ *                 enum: ["enter", "exit"]
+ *                 description: Действие, связанное с событием (вход или выход)
+ *               time:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Дата и время события
+ *               user:
+ *                 type: string
+ *                 description: ID пользователя, связанного с событием
+ *               door:
+ *                 type: string
+ *                 description: ID двери, связанной с событием
+ *             required:
+ *               - type
+ *               - action
+ *               - time
+ *               - user
+ *               - door
+ *     responses:
+ *       201:
+ *         description: Событие успешно создано
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Сообщение об успешном создании события
+ *               example:
+ *                 message: "Событие успешно создано"
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован
+ *       403:
+ *         description: Доступ запрещен
+ */
+
 /**
  * @swagger
  * /event/sync:

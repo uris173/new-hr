@@ -71,7 +71,9 @@ export const create = async (req, res, next) => {
     let findDoor = await DoorModel.findById(door, "_id");
     if (!findDoor) throw { status: 404, message: "doorNotFound" };
 
-    
+    await EventModel.create({ type, action, time, user, door });
+
+    res.status(201).json({ message: "ok" });
   } catch (error) {
     console.error(error);
     next(error);
@@ -89,4 +91,4 @@ export const eventSync = async (req, res, next) => {
     console.error(error);
     next(error);
   }
-}
+};

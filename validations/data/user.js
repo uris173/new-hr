@@ -379,6 +379,8 @@ export const AddUserCalendar = (data) => Joi.object({
 
   notes: Joi.string()
     .max(255)
+    .optional()
+    .allow(null, "")
     .messages({
       "string.base": "calendarNotesBase",
       "string.max": "calendarNotesMax"
@@ -431,6 +433,8 @@ export const UpdateUserCalendar = (data) => Joi.object({
 
   notes: Joi.string()
     .max(255)
+    .optional()
+    .allow(null, "")
     .messages({
       "string.base": "calendarNotesBase",
       "string.max": "calendarNotesMax"

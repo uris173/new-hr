@@ -1,6 +1,6 @@
 import { parentPort, workerData } from "worker_threads";
 
-const calculateWorkDuration = (data) => {
+export const calculateWorkDuration = (data) => {
   const events = data.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
   let totalMinutes = 0;
   let firstEnterTime = null;
@@ -144,12 +144,12 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
         dayStatus: "weekend",
         isWorkingDay: false,
         attended: false,
-        shift: 'off',
-        status: 'planned',
+        // shift: 'off',
+        // status: 'planned',
         arrival: null,
         departure: null,
         events: [],
-        workDuration: 0,
+        workDuration: { hours: 0, minutes: 0, seconds: 0 },
       };
   
       // Проверяем есть ли день в личном календаре пользователя
@@ -171,7 +171,7 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
         }
       } else {
         if (calendarMap.has(dateDay)) {
-          const calendarItem = calendarMap.get(dateDay);
+          // const calendarItem = calendarMap.get(dateDay);
           const attendance = attendanceMap.get(dateDay);
   
           // Добавляем информацию о времени прихода и ухода
@@ -187,8 +187,8 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.isWorkingDay = true;
           dayData.attended = true;
           dayData.dayStatus = "workday"
-          dayData.shift = calendarItem.shift;
-          dayData.status = calendarItem.status;
+          // dayData.shift = calendarItem.shift;
+          // dayData.status = calendarItem.status;
         }
         // else {
         //   dayData.isWorkingDay = true;
