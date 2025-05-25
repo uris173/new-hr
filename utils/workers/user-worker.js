@@ -170,26 +170,41 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.isWorkingDay = false;
         }
       } else {
+        const attendance = attendanceMap.get(dateDay);
         if (calendarMap.has(dateDay)) {
+
+          // ВЫКЛЮЧЕНО ИЗ-ЗА АДАПТАЦИИ ФУНКЦИИ ЧТОБЫ ВО ВСЕХ ДНЯХ ВЫХОДИЛИ ПОСЕЩЕНИЯ
+
           // const calendarItem = calendarMap.get(dateDay);
-          const attendance = attendanceMap.get(dateDay);
-  
-          // Добавляем информацию о времени прихода и ухода
-          dayData.arrival = attendance?.arrival || null;
-          dayData.departure = attendance?.departure || null;
-    
-          // Вычисляем продолжительность рабочего дня (в часах)
-          if (dayData.arrival && dayData.departure) {
-            dayData.workDuration = calculateWorkDuration(eventsMap.get(dateDay) || []);
-          }
-    
-          dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);;
+
+          // // Добавляем информацию о времени прихода и ухода
+          // dayData.arrival = attendance?.arrival || null;
+          // dayData.departure = attendance?.departure || null;
+          //
+          // // Вычисляем продолжительность рабочего дня (в часах)
+          // if (dayData.arrival && dayData.departure) {
+          //   dayData.workDuration = calculateWorkDuration(eventsMap.get(dateDay) || []);
+          // }
+          //
+          // dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);;
+
           dayData.isWorkingDay = true;
           dayData.attended = true;
           dayData.dayStatus = "workday"
           // dayData.shift = calendarItem.shift;
           // dayData.status = calendarItem.status;
         }
+
+        // Добавляем информацию о времени прихода и ухода
+        dayData.arrival = attendance?.arrival || null;
+        dayData.departure = attendance?.departure || null;
+
+        // Вычисляем продолжительность рабочего дня (в часах)
+        if (dayData.arrival && dayData.departure) {
+          dayData.workDuration = calculateWorkDuration(eventsMap.get(dateDay) || []);
+        }
+
+        dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);;
         // else {
         //   dayData.isWorkingDay = true;
         //   dayData.attended = false;
