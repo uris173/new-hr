@@ -1,7 +1,7 @@
 import { UserModel } from "../../models/data/user.js";
 import { DepartmentModel } from "../../models/data/department.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
-import { WorkerModel } from "../../models/data/worker.js";
+// import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
 import { UserQueryFilter, UserCreate, UserUpdate, AddUserCalendar, UpdateUserCalendar } from "../../validations/data/user.js";
@@ -318,7 +318,7 @@ export const remove = async (req, res, next) => {
 
     let user = await UserModel.findByIdAndUpdate(id, { status: "deleted", sync: [] }, { new: true, select: "_id employeeNo" });
     if (!user) throw { status: 400, message: "userNotFound" };
-    await WorkerModel.updateMany({ user: id }, { status: "deleted" });
+    // await WorkerModel.updateMany({ user: id }, { status: "deleted" });
 
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();

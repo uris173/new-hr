@@ -149,6 +149,24 @@ export const UserCreate = (data) => Joi.object({
       "any.only": "userGenderBase",
       "any.required": "userGenderRequired",
     }),
+
+  birthDay: Joi.date()
+    .less("now")
+    .required()
+    .messages({
+      "date.base": "workerBirthDateBase",
+      "date.less": "workerBirthDayLess",
+      "any.required": "workerBirthDateRequired",
+    }),
+  
+  address: Joi.string()
+    .max(255)
+    .required()
+    .messages({
+      "string.base": "workerAddressBase",
+      "string.max": "workerAddressMax",
+      "any.required": "workerAddressRequired",
+    }),
   
   department: Joi.string()
     .custom((value, helpers) => {
@@ -262,6 +280,24 @@ export const UserUpdate = (data) => Joi.object({
       "string.base": "userGenderBase",
       "any.only": "userGenderBase",
       "any.required": "userGenderRequired",
+    }),
+
+  birthDay: Joi.date()
+    .less("now")
+    .required()
+    .messages({
+      "date.base": "userBirthDateBase",
+      "date.less": "userBirthDayLess",
+      "any.required": "userBirthDateRequired",
+    }),
+  
+  address: Joi.string()
+    .max(255)
+    .required()
+    .messages({
+      "string.base": "userAddressBase",
+      "string.max": "userAddressRequired",
+      "any.required": "userAddressMax",
     }),
   
   department: Joi.string()

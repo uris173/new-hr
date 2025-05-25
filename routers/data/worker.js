@@ -6,85 +6,44 @@ const router = Router();
 
 import {
   getStaffPosition,
-  all,
-  create,
-  getInfo,
+  allWorkerHistory,
+  createHistory,
   getOne,
   update,
-  remove,
+  remove
 } from "../../controllers/data/worker.js";
 
 router.post('/staff-positions', passport.authenticate('jwt', { session: false }), top, getStaffPosition);
 
-router.route('/')
+router.route("/history")
 .all(passport.authenticate('jwt', { session: false }), top)
-.get(all)
-.post(create)
+.get(allWorkerHistory)
+.post(createHistory)
 .put(update);
 
-router.get('/worker-info/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top, getInfo);
-
-router.route('/:id')
-.all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
+router.route("/history/:id")
+.all(passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), top)
 .get(getOne)
 .delete(remove);
 
-
 export default router;
-
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     Worker:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: Уникальный идентификатор сотрудника
- *         user:
- *           type: string
- *           description: ID пользователя (ссылка на модель User)
- *         department:
- *           type: array
- *           items:
- *             type: string
- *           description: ID отдела (ссылка на модель Department)
- *         groups:
- *           type: array
- *           items:
- *             type: string
- *           description: Список ID групп (ссылки на модель Group)
- *         birthDay:
- *           type: string
- *           format: date
- *           description: Дата рождения сотрудника
- *         address:
- *           type: string
- *           description: Адрес сотрудника
- *         status:
- *           type: string
- *           enum: ["active", "inactive", "deleted"]
- *           description: Статус сотрудника
- *         createdAt:
- *           type: string
- *           format: date-time
- *           description: Дата создания записи
- *       required:
- *         - department
- *         - birthDay
- *         - address
- * 
  *     WorkerHistory:
  *       type: object
  *       properties:
  *         _id:
  *           type: string
- *           description: Уникальный идентификатор записи истории
+ *           description: Уникальный идентификатор записи истории работы
+ *         user:
+ *           type: string
+ *           description: ID пользователя, к которому относится запись (ссылка на модель User)
  *         company:
  *           type: string
- *           description: Название компании
+ *           description: Название компании, в которой работал сотрудник
  *         staffPosition:
  *           type: string
  *           description: Должность сотрудника
@@ -98,110 +57,85 @@ export default router;
  *           description: Дата окончания работы
  *         comment:
  *           type: string
- *           description: Комментарий
+ *           description: Комментарий к записи
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Дата создания записи
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     WorkerHistoryCreateRequest:
+ *       type: object
+ *       properties:
+ *         user:
+ *           type: string
+ *           description: ID пользователя
+ *         company:
+ *           type: string
+ *           description: Название компании, в которой работал сотрудник
+ *         staffPosition:
+ *           type: string
+ *           description: Должность сотрудника
+ *         enterDate:
+ *           type: string
+ *           format: date
+ *           description: Дата начала работы
+ *         leaveDate:
+ *           type: string
+ *           format: date
+ *           description: Дата окончания работы
+ *         comment:
+ *           type: string
+ *           description: Комментарий к записи (необязательно)
  *       required:
+ *         - user
  *         - company
  *         - staffPosition
  *         - enterDate
  *         - leaveDate
- * 
- *     WorkerCreateRequest:
- *       type: object
- *       properties:
- *         user:
- *           type: string
- *           description: ID пользователя (ссылка на модель User)
- *         department:
- *           type: array
- *           items:
- *             type: string
- *           description: ID отдела (ссылка на модель Department)
- *         groups:
- *           type: array
- *           items:
- *             type: string
- *           description: Список ID групп (ссылки на модель Group)
- *         gender:
- *           type: string
- *           enum: ["male", "female", "custom"]
- *           description: Пол сотрудника
- *         birthDay:
- *           type: string
- *           format: date
- *           description: Дата рождения сотрудника
- *         address:
- *           type: string
- *           description: Адрес сотрудника
- *         history:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               company:
- *                 type: string
- *                 description: Название компании
- *               staffPosition:
- *                 type: string
- *                 description: Должность сотрудника
- *               enterDate:
- *                 type: string
- *                 format: date
- *                 description: Дата начала работы
- *               leaveDate:
- *                 type: string
- *                 format: date
- *                 description: Дата окончания работы
- *               comment:
- *                 type: string
- *                 description: Комментарий
- *           description: История работы сотрудника
- *       required:
- *         - department
- *         - gender
- *         - birthDay
- *         - address
- * 
- *     WorkerUpdateRequest:
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     WorkerHistoryUpdateRequest:
  *       type: object
  *       properties:
  *         _id:
  *           type: string
- *           description: Уникальный идентификатор сотрудника
+ *           description: ID записи истории работы
  *         user:
  *           type: string
- *           description: ID пользователя (ссылка на модель User)
- *         department:
- *           type: array
- *           items:
- *             type: string
- *           description: ID отдела (ссылка на модель Department)
- *         groups:
- *           type: array
- *           items:
- *             type: string
- *           description: Список ID групп (ссылки на модель Group)
- *         gender:
+ *           description: ID пользователя
+ *         company:
  *           type: string
- *           enum: ["male", "female", "custom"]
- *           description: Пол сотрудника
- *         birthDay:
+ *           description: Название компании, в которой работал сотрудник
+ *         staffPosition:
+ *           type: string
+ *           description: Должность сотрудника
+ *         enterDate:
  *           type: string
  *           format: date
- *           description: Дата рождения сотрудника
- *         address:
+ *           description: Дата начала работы
+ *         leaveDate:
  *           type: string
- *           description: Адрес сотрудника
- *         history:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/WorkerHistory'
- *           description: История работы сотрудника
+ *           format: date
+ *           description: Дата окончания работы
+ *         comment:
+ *           type: string
+ *           description: Комментарий к записи (необязательно)
  *       required:
  *         - _id
- *         - department
- *         - gender
- *         - birthDay
- *         - address
+ *         - user
+ *         - company
+ *         - staffPosition
+ *         - enterDate
+ *         - leaveDate
  */
 
 /**
@@ -209,7 +143,7 @@ export default router;
  * /worker/staff-positions:
  *   post:
  *     summary: Поиск должностей по названию
- *     tags: [Workers]
+ *     tags: [Worker history]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -221,7 +155,7 @@ export default router;
  *             properties:
  *               title:
  *                 type: string
- *                 description: Название должности для поиска (регистронезависимый)
+ *                 description: Строка для поиска должностей
  *             required:
  *               - title
  *     responses:
@@ -232,43 +166,31 @@ export default router;
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/StaffPosition'
+ *                 type: object
+ *                 properties:
+ *                   title:
+ *                     type: string
+ *                     description: Название должности
  *       400:
- *         description: Ошибка - название должности не указано
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: integer
- *                   example: 400
- *                 message:
- *                   type: string
- *                   example: "titleNotFound"
+ *         description: Ошибка поиска или отсутствие параметра title
  *       401:
  *         description: Неавторизованный доступ
  */
 
 /**
  * @swagger
- * /worker:
+ * /worker/history:
  *   get:
- *     summary: Получение списка сотрудников
- *     tags: [Workers]
+ *     summary: Получение истории работы сотрудника
+ *     tags: [Worker history]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: fullName
+ *         name: user
  *         schema:
  *           type: string
- *         description: Фильтр по полному имени сотрудника
- *       - in: query
- *         name: department
- *         schema:
- *           type: string
- *         description: Фильтр по ID отдела
+ *         description: ID пользователя для фильтрации записей
  *       - in: query
  *         name: limit
  *         schema:
@@ -282,7 +204,7 @@ export default router;
  *         description: Номер страницы (по умолчанию 1)
  *     responses:
  *       200:
- *         description: Успешный ответ со списком сотрудников
+ *         description: Успешный ответ со списком записей истории работы
  *         content:
  *           application/json:
  *             schema:
@@ -290,11 +212,11 @@ export default router;
  *               properties:
  *                 count:
  *                   type: integer
- *                   description: Общее количество сотрудников
- *                 data:
+ *                   description: Общее количество записей
+ *                 workerHistory:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Worker'
+ *                     $ref: '#/components/schemas/WorkerHistory'
  *       400:
  *         description: Ошибка валидации параметров запроса
  *       401:
@@ -303,10 +225,10 @@ export default router;
 
 /**
  * @swagger
- * /worker:
+ * /worker/history:
  *   post:
- *     summary: Создание нового сотрудника
- *     tags: [Workers]
+ *     summary: Создание новой записи истории работы
+ *     tags: [Worker history]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -314,14 +236,14 @@ export default router;
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/WorkerCreateRequest'
+ *             $ref: '#/components/schemas/WorkerHistoryCreateRequest'
  *     responses:
  *       201:
- *         description: Сотрудник успешно создан
+ *         description: Запись успешно создана
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Worker'
+ *               $ref: '#/components/schemas/WorkerHistory'
  *       400:
  *         description: Ошибка валидации данных
  *       401:
@@ -330,10 +252,10 @@ export default router;
 
 /**
  * @swagger
- * /worker:
+ * /worker/history:
  *   put:
- *     summary: Обновление данных сотрудника
- *     tags: [Workers]
+ *     summary: Обновление существующей записи истории работы
+ *     tags: [Worker history]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -341,28 +263,26 @@ export default router;
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/WorkerUpdateRequest'
+ *             $ref: '#/components/schemas/WorkerHistoryUpdateRequest'
  *     responses:
  *       200:
- *         description: Данные сотрудника успешно обновлены
+ *         description: Запись успешно обновлена
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Worker'
+ *               $ref: '#/components/schemas/WorkerHistory'
  *       400:
- *         description: Ошибка валидации данных
- *       404:
- *         description: Сотрудник не найден
+ *         description: Ошибка валидации данных или запись не найдена
  *       401:
  *         description: Неавторизованный доступ
  */
 
 /**
  * @swagger
- * /worker/worker-info/{id}:
+ * /worker/history/{id}:
  *   get:
- *     summary: Получение информации о сотруднике по ID пользователя
- *     tags: [Workers]
+ *     summary: Получение записи истории работы по ID
+ *     tags: [Worker history]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -371,66 +291,26 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: ID пользователя
+ *         description: ID записи истории работы
  *     responses:
  *       200:
- *         description: Успешный ответ с данными сотрудника и историей
+ *         description: Успешный ответ с данными записи
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 worker:
- *                   $ref: '#/components/schemas/Worker'
- *                 history:
- *                   $ref: '#/components/schemas/WorkerHistory'
- *       404:
- *         description: Сотрудник не найден
+ *               $ref: '#/components/schemas/WorkerHistory'
+ *       400:
+ *         description: Запись не найдена
  *       401:
  *         description: Неавторизованный доступ
  */
 
 /**
  * @swagger
- * /worker/{id}:
- *   get:
- *     summary: Получение данных сотрудника по ID
- *     tags: [Workers]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID сотрудника
- *     responses:
- *       200:
- *         description: Успешный ответ с данными сотрудника и историей
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 worker:
- *                   $ref: '#/components/schemas/Worker'
- *                 history:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/WorkerHistory'
- *       404:
- *         description: Сотрудник не найден
- *       401:
- *         description: Неавторизованный доступ
- */
-
-/**
- * @swagger
- * /worker/{id}:
+ * /worker/history/{id}:
  *   delete:
- *     summary: Удаление сотрудника (пометка как deleted)
- *     tags: [Workers]
+ *     summary: Удаление записи истории работы
+ *     tags: [Worker history]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -439,10 +319,10 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: ID сотрудника
+ *         description: ID записи истории работы
  *     responses:
  *       200:
- *         description: Сотрудник успешно помечен как удалённый
+ *         description: Запись успешно удалена
  *         content:
  *           application/json:
  *             schema:
@@ -450,18 +330,11 @@ export default router;
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "deleted"
+ *                   example: "workerHistoryDeleted"
  *       400:
- *         description: Сотрудник не найден
+ *         description: Запись не найдена
  *       401:
  *         description: Неавторизованный доступ
  */
 
-/**
- * @swagger
- * securitySchemes:
- *   bearerAuth:
- *     type: http
- *     scheme: bearer
- *     bearerFormat: JWT
- */
+

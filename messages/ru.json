@@ -7,7 +7,7 @@
   "fileNotImage": "Файл не является изображением!",
   "LIMIT_FILE_SIZE": "Размер файла не должен превышать 200 kb!",
   "invalidFileType": "Неверный тип файла!",
-  "workerNotFound": "Сотрудник не найден!",
+  "workerHistoryNotFound": "История сотрудника не найден!",
   "titleNotFound": "Значение title не передан!",
   "doorNotFound": "Дверь не найдена!",
   "branchNotFound": "Филиал не найден!",
@@ -125,6 +125,14 @@
   "userGenderBase": "Поле 'gender' должно быть одним из значений: male, female, custom.",
   "userGenderRequired": "Поле 'gender' обязательно для заполнения.",
 
+  "userBirthDateBase": "Поле 'birthDay' должно быть датой.",
+  "userBirthDayLess": "Дата рождения должна быть меньше текущей даты.",
+  "userBirthDateRequired": "Поле 'birthDay' обязательно для заполнения.",
+
+  "userAddressBase": "Поле 'address' должно быть строкой.",
+  "userAddressRequired": "Поле 'address' обязательно для заполнения.",
+  "userAddressMax": "Поле 'address' не должно превышать 255 символов.",
+
   "userDepartmentCustom": "Неверный формат идентификатора отдела.",
   "userDepartmentBase": "Отдел должен быть строкой.",
 
@@ -165,14 +173,6 @@
 
   "workerGroupCustom": "Неверный формат идентификатора группы.",
   "workerGroupBase": "Группа должна быть строкой.",
-
-  "workerBirthDateBase": "Поле 'birthDay' должно быть датой.",
-  "workerBirthDayLess": "Дата рождения должна быть меньше текущей даты.",
-  "workerBirthDateRequired": "Поле 'birthDay' обязательно для заполнения.",
-
-  "workerAddressBase": "Поле 'address' должно быть строкой.",
-  "workerAddressRequired": "Поле 'address' обязательно для заполнения.",
-  "workerAddressMax": "Поле 'address' не должно превышать 255 символов.",
 
   "workerHistoryCompanyBase": "Поле 'historyCompany' должно быть строкой.",
   "workerHistoryCompanyRequired": "Поле 'historyCompany' обязательно для заполнения.",

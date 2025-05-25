@@ -71,6 +71,13 @@ export default router;
  *         faceUrl:
  *           type: string
  *           description: URL изображения лица пользователя
+ *         birthDay:
+ *           type: string
+ *           format: date
+ *           description: Дата рождения сотрудника
+ *         address:
+ *           type: string
+ *           description: Адрес сотрудника
  *         gender:
  *           type: string
  *           enum: ["male", "female", "custom"]
@@ -145,6 +152,13 @@ export default router;
  *           type: string
  *           enum: ["male", "female", "custom"]
  *           description: Пол пользователя
+ *         birthDay:
+ *           type: string
+ *           format: date
+ *           description: Дата рождения сотрудника
+ *         address:
+ *           type: string
+ *           description: Адрес сотрудника
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null
@@ -192,6 +206,13 @@ export default router;
  *           type: string
  *           enum: ["male", "female", "custom"]
  *           description: Пол сотрудника
+ *         birthDay:
+ *           type: string
+ *           format: date
+ *           description: Дата рождения сотрудника
+ *         address:
+ *           type: string
+ *           description: Адрес сотрудника
  *         department:
  *           type: string
  *           description: ID отдела (ссылка на модель Department) или null

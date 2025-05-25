@@ -2,25 +2,17 @@ import Joi from "joi";
 import { Types } from "mongoose";
 
 export const WorkerQueryFilter = (data) => Joi.object({
-  fullName: Joi.string()
-    .min(2)
-    .max(100)
-    .messages({
-      'string.empty': 'userFullNameBase',
-      'string.min': 'userFullNameMin',
-      'string.max': 'userFullNameMax',
-    }),
-
-  department: Joi.string()
+  user: Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("userDepartmentCustom");
+        return helpers.message("workerUserCustom");
       }
       return value;
     })
     .allow(null, "")
     .messages({
-      "string.base": "userDepartmentBase",
+      "string.base": "workerUserBase",
+      "any.required": "workerUserRequired",
     }),
 
   limit: Joi.number()
@@ -54,108 +46,53 @@ export const WorkerCreate = (data) => Joi.object({
       "any.required": "workerUserRequired",
     }),
 
-  department: Joi.array().items(
-    Joi.string()
-    .custom((value, helpers) => {
-      if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("workerDepartmentCustom");
-      }
-      return value;
-    })
+  company: Joi.string()
+    .max(100)
     .required()
+    .allow(null, "")
     .messages({
-      "string.base": "workerDepartmentBase",
-      "any.required": "workerDepartmentRequired",
-    })
-  ),
-
-  groups: Joi.array()
-    .items(
-      Joi.string()
-      .custom((value, helpers) => {
-          if (!Types.ObjectId.isValid(value)) {
-            return helpers.message("workerGroupCustom");
-          }
-          return value;
-        })
-        .allow(null, "")
-        .messages({
-          "string.base": "workerGroupBase",
-        })
-    ),
-
-  birthDay: Joi.date()
-    .less("now")
-    .required()
-    .messages({
-      "date.base": "workerBirthDateBase",
-      "date.less": "workerBirthDayLess",
-      "any.required": "workerBirthDateRequired",
+      "string.base": "workerHistoryCompanyBase",
+      "string.max": "workerHistoryCompanyMax",
+      "any.required": "workerHistoryCompanyRequired",
     }),
 
-  address: Joi.string()
-  .max(255)
-  .required()
-  .messages({
-    "string.base": "workerAddressBase",
-    "string.max": "workerAddressMax",
-    "any.required": "workerAddressRequired",
-  }),
+  staffPosition: Joi.string()
+    .max(100)
+    .required()
+    .allow(null, "")
+    .messages({
+      "string.base": "workerHistoryPositionBase",
+      "string.max": "workerHistoryPositionMax",
+      "any.required": "workerHistoryPositionRequired",
+    }),
 
-  history: Joi.array().items(
-    Joi.object({
-      company: Joi.string()
-        .max(100)
-        .required()
-        .allow(null, "")
-        .messages({
-          "string.base": "workerHistoryCompanyBase",
-          "string.max": "workerHistoryCompanyMax",
-          "any.required": "workerHistoryCompanyRequired",
-        }),
+  enterDate: Joi.date()
+    .less("now")
+    .required()
+    .allow(null, "")
+    .messages({
+      "date.base": "workerHistoryEnterDateBase",
+      "date.less": "workerHistoryEnterDateLess",
+      "any.required": "workerHistoryEnterDateRequired",
+    }),
 
-      staffPosition: Joi.string()
-        .max(100)
-        .required()
-        .allow(null, "")
-        .messages({
-          "string.base": "workerHistoryPositionBase",
-          "string.max": "workerHistoryPositionMax",
-          "any.required": "workerHistoryPositionRequired",
-        }),
+  leaveDate: Joi.date()
+    .less("now")
+    .required()
+    .allow(null, "")
+    .messages({
+      "date.base": "workerHistoryLeaveDateBase",
+      "date.less": "workerHistoryLeaveDateLess",
+      "any.required": "workerHistoryLeaveDateRequired",
+    }),
 
-      enterDate: Joi.date()
-        .less("now")
-        .required()
-        .allow(null, "")
-        .messages({
-          "date.base": "workerHistoryEnterDateBase",
-          "date.less": "workerHistoryEnterDateLess",
-          "any.required": "workerHistoryEnterDateRequired",
-        }),
-
-      leaveDate: Joi.date()
-        .less("now")
-        .required()
-        .allow(null, "")
-        .messages({
-          "date.base": "workerHistoryLeaveDateBase",
-          "date.less": "workerHistoryLeaveDateLess",
-          "any.required": "workerHistoryLeaveDateRequired",
-        }),
-
-      comment: Joi.string()
-        .max(255)
-        .allow(null, "")
-        .messages({
-          "string.base": "workerHistoryCommentBase",
-          "string.max": "workerHistoryCommentMax",
-        })
+  comment: Joi.string()
+    .max(255)
+    .allow(null, "")
+    .messages({
+      "string.base": "workerHistoryCommentBase",
+      "string.max": "workerHistoryCommentMax",
     })
-  )
-    .optional()
-    .default([])
-    .allow(null)
 }).validate(data);
 
 export const WorkerUpdate = (data) => Joi.object({
@@ -185,112 +122,51 @@ export const WorkerUpdate = (data) => Joi.object({
       "any.required": "workerUserRequired",
     }),
 
-  department: Joi.array().items(
-    Joi.string()
-    .custom((value, helpers) => {
-      if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("workerDepartmentCustom");
-      }
-      return value;
-    })
+  company: Joi.string()
+    .max(100)
     .required()
+    .allow(null, "")
     .messages({
-      "string.base": "workerDepartmentBase",
-      "any.required": "workerDepartmentRequired",
-    })
-  ),
-
-  groups: Joi.array()
-    .items(
-      Joi.string()
-      .custom((value, helpers) => {
-          if (!Types.ObjectId.isValid(value)) {
-            return helpers.message("workerGroupCustom");
-          }
-          return value;
-        })
-        .allow(null, "")
-        .messages({
-          "string.base": "workerGroupBase",
-        })
-    ),
-
-  birthDay: Joi.date()
-    .less("now")
-    .required()
-    .messages({
-      "date.base": "workerBirthDateBase",
-      "date.less": "workerBirthDayLess",
-      "any.required": "workerBirthDateRequired",
+      "string.base": "workerHistoryCompanyBase",
+      "string.max": "workerHistoryCompanyMax",
+      "any.required": "workerHistoryCompanyRequired",
     }),
 
-  address: Joi.string()
-  .max(255)
-  .required()
-  .messages({
-    "string.base": "workerAddressBase",
-    "string.max": "workerAddressMax",
-    "any.required": "workerAddressRequired",
-  }),
+  staffPosition: Joi.string()
+    .max(100)
+    .required()
+    .allow(null, "")
+    .messages({
+      "string.base": "workerHistoryPositionBase",
+      "string.max": "workerHistoryPositionMax",
+      "any.required": "workerHistoryPositionRequired",
+    }),
 
-  history: Joi.array().items(
-    Joi.object({
-      _id: Joi.string()
-        .custom((value, helpers) => {
-          if (!Types.ObjectId.isValid(value)) {
-            return helpers.message("_idCustom");
-          }
-          return value;
-        })
-        .allow(null, "")
-        .messages({
-          "string.base": "_idBase",
-          "any.required": "_idRequired"
-        }),
+  enterDate: Joi.date()
+    .less("now")
+    .required()
+    .allow(null, "")
+    .messages({
+      "date.base": "workerHistoryEnterDateBase",
+      "date.less": "workerHistoryEnterDateLess",
+      "any.required": "workerHistoryEnterDateRequired",
+    }),
 
-      company: Joi.string()
-        .max(100)
-        .required()
-        .messages({
-          "string.base": "workerHistoryCompanyBase",
-          "string.max": "workerHistoryCompanyMax",
-          "any.required": "workerHistoryCompanyRequired",
-        }),
+  leaveDate: Joi.date()
+    .less("now")
+    .required()
+    .allow(null, "")
+    .messages({
+      "date.base": "workerHistoryLeaveDateBase",
+      "date.less": "workerHistoryLeaveDateLess",
+      "any.required": "workerHistoryLeaveDateRequired",
+    }),
 
-      staffPosition: Joi.string()
-        .max(100)
-        .required()
-        .messages({
-          "string.base": "workerHistoryPositionBase",
-          "string.max": "workerHistoryPositionMax",
-          "any.required": "workerHistoryPositionRequired",
-        }),
-
-      enterDate: Joi.date()
-        .less("now")
-        .required()
-        .messages({
-          "date.base": "workerHistoryEnterDateBase",
-          "date.less": "workerHistoryEnterDateLess",
-          "any.required": "workerHistoryEnterDateRequired",
-        }),
-
-      leaveDate: Joi.date()
-        .less("now")
-        .required()
-        .messages({
-          "date.base": "workerHistoryLeaveDateBase",
-          "date.less": "workerHistoryLeaveDateLess",
-          "any.required": "workerHistoryLeaveDateRequired",
-        }),
-
-      comment: Joi.string()
-        .max(255)
-        .allow(null, "")
-        .messages({
-          "string.base": "workerHistoryCommentBase",
-          "string.max": "workerHistoryCommentMax",
-        })
+  comment: Joi.string()
+    .max(255)
+    .allow(null, "")
+    .messages({
+      "string.base": "workerHistoryCommentBase",
+      "string.max": "workerHistoryCommentMax",
     })
-  )
 }).validate(data);

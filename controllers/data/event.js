@@ -62,6 +62,22 @@ export const all = async (req, res, next) => {
   }
 };
 
+export const create = async (req, res, next) => {
+  try {
+    let { type, action, time, user, door } = req.body;
+
+    let findUser = await UserModel.findById(user, "_id");
+    if (!findUser) throw { status: 404, message: "userNotFound" };
+    let findDoor = await DoorModel.findById(door, "_id");
+    if (!findDoor) throw { status: 404, message: "doorNotFound" };
+
+    
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
+
 export const eventSync = async (req, res, next) => {
   try {
     let { start, end } = req.body;

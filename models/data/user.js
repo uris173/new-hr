@@ -19,6 +19,8 @@ const userSchema = new Schema({
     default: null
   },
   employeeNo: String,
+  birthDay: Date,
+  address: String,
   doors: [{
     type: Types.ObjectId,
     ref: 'door'
