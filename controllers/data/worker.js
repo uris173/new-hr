@@ -24,6 +24,7 @@ export const allWorkerHistory = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { user, limit, page } = req.query;
+    console.log(req.query);
 
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
@@ -51,7 +52,7 @@ export const createHistory = async (req, res, next) => {
 
     let { user, company, staffPosition, enterDate, leaveDate, comment } = req.body;
     let newHistory = await WorkerHistoryModel.create({ user, company, staffPosition, enterDate, leaveDate, comment });
-    let history = await UserModel.findById(newHistory._id, select).lean();
+    let history = await WorkerHistoryModel.findById(newHistory._id, select).lean();
 
     res.status(201).json(history);
   } catch (error) {

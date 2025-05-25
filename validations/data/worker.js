@@ -9,7 +9,7 @@ export const WorkerQueryFilter = (data) => Joi.object({
       }
       return value;
     })
-    .allow(null, "")
+    .required()
     .messages({
       "string.base": "workerUserBase",
       "any.required": "workerUserRequired",
@@ -78,7 +78,7 @@ export const WorkerCreate = (data) => Joi.object({
 
   leaveDate: Joi.date()
     .less("now")
-    .required()
+    .optional()
     .allow(null, "")
     .messages({
       "date.base": "workerHistoryLeaveDateBase",
@@ -154,7 +154,7 @@ export const WorkerUpdate = (data) => Joi.object({
 
   leaveDate: Joi.date()
     .less("now")
-    .required()
+    .optional()
     .allow(null, "")
     .messages({
       "date.base": "workerHistoryLeaveDateBase",
