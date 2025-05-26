@@ -24,7 +24,6 @@ export const allWorkerHistory = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { user, limit, page } = req.query;
-    console.log(req.query);
 
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
@@ -99,7 +98,7 @@ export const remove = async (req, res, next) => {
     let deletedHistory = await WorkerHistoryModel.findByIdAndDelete(id);
     if (!deletedHistory) throw { status: 400, message: "workerHistoryNotFound" };
 
-    res.status(200).json({ message: "workerHistoryDeleted" });
+    res.status(200).json({ message: "Deleted!" });
   } catch (error) {
     console.error(error);
     next(error);

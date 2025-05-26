@@ -198,9 +198,10 @@ export const getUserCalendars = async (req, res, next) => {
 
 export const addUserCalendar = async (req, res, next) => {
   try {
+    console.log(req.body)
     let { error } = AddUserCalendar(req.body);
     if (error) throw { status: 400, message: error.details[0].message };
-    let newCalnendar = (await CalendarModel.create(req.body));
+    let newCalnendar = await CalendarModel.create(req.body);
 
     res.status(201).json(newCalnendar);
   } catch (error) {

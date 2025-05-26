@@ -23,5 +23,5 @@ export const ErrorMiddleware = (err, req, res, next) => {
   let language = req.user?.language || 'ru';
   let errorMessage = getMessage(err.code || err.message || "serverError", language);
 
-  res.status(err.status || 500).json({ message: errorMessage });
+  res.status(err.status || 500).json({ message: errorMessage || err.message });
 };

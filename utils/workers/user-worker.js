@@ -171,7 +171,7 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
           dayData.isWorkingDay = false;
         }
       } else {
-        if (calendarMap.has(dateDay)) {
+        if (calendarMap.has(dateDay) && calendarMap.get(dateDay)?.shift !== "off") {
 
           // ВЫКЛЮЧЕНО ИЗ-ЗА АДАПТАЦИИ ФУНКЦИИ ЧТОБЫ ВО ВСЕХ ДНЯХ ВЫХОДИЛИ ПОСЕЩЕНИЯ
 
@@ -212,6 +212,9 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
 
       dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);
 
+      // if (dateDay === 11) {
+      //   console.log(dayData)
+      // }
       result.push(dayData);
     }
 
