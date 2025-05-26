@@ -288,6 +288,14 @@ export default router;
  *         - shift
  */
 
+
+// date:
+//   type: string
+// format: date-time
+// description: Дата записи
+// notes:
+//   type: string
+// description: Дополнительные заметки (необязательно)
 /**
  * @swagger
  * components:
@@ -301,21 +309,13 @@ export default router;
  *         user:
  *           type: string
  *           description: ID пользователя
- *         date:
- *           type: string
- *           format: date-time
- *           description: Дата записи
  *         shift:
  *           type: string
  *           enum: ['morning', 'afternoon', 'night', 'full_day', 'off']
  *           description: Тип смены
- *         notes:
- *           type: string
- *           description: Дополнительные заметки (необязательно)
  *       required:
  *         - _id
  *         - user
- *         - date
  *         - shift
  */
 

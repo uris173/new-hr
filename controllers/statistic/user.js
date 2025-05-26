@@ -11,7 +11,7 @@ export const getUserCalendar = async (req, res, next) => {
     let { _id, month, year } = req.query;
 
     let date = new Date();
-    month = parseInt(month) || date.getMonth();
+    month = month !== undefined ? parseInt(month) : date.getMonth();
     year = parseInt(year) || date.getFullYear();
 
     let startDate = new Date(year, month, 1, 0, 0, 0);

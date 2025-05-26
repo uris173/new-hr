@@ -415,12 +415,12 @@ export const UpdateUserCalendar = (data) => Joi.object({
       "any.required": "calendarUserRequired"
     }),
 
-  date: Joi.date()
-    .required()
-    .messages({
-      "date.base": "calendarDateBase",
-      "any.required": "calendarDateRequired"
-    }),
+  // date: Joi.date()
+  //   .required()
+  //   .messages({
+  //     "date.base": "calendarDateBase",
+  //     "any.required": "calendarDateRequired"
+  //   }),
 
   shift: Joi.string()
     .valid('morning', 'afternoon', 'night', 'full_day', 'off')
@@ -431,12 +431,12 @@ export const UpdateUserCalendar = (data) => Joi.object({
       "any.required": "calendarShiftRequired"
     }),
 
-  notes: Joi.string()
-    .max(255)
-    .optional()
-    .allow(null, "")
-    .messages({
-      "string.base": "calendarNotesBase",
-      "string.max": "calendarNotesMax"
-    })
+  // notes: Joi.string()
+  //   .max(255)
+  //   .optional()
+  //   .allow(null, "")
+  //   .messages({
+  //     "string.base": "calendarNotesBase",
+  //     "string.max": "calendarNotesMax"
+  //   })
 }).validate(data); 
