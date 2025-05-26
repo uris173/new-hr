@@ -4,7 +4,8 @@ const departmentSchema = new Schema({
   name: String,
   type: {
     type: Number,
-    enum: [1, 2] // 1 - Department | 2 - Group
+    enum: [1, 2], // 1 - Department | 2 - Group
+    default: 1
   },
   workTime: [{
     day: Number,

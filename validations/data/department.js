@@ -13,24 +13,24 @@ export const DepartmentQueryFilter = (data) => Joi.object({
       "string.max": "departmentNameMax",
     }),
 
-  type: Joi.number()
-    .valid(1, 2)
-    .messages({
-      "number.base": "statusBase",
-      "any.only": "statusOnly",
-    }),
+  // type: Joi.number()
+  //   .valid(1, 2)
+  //   .messages({
+  //     "number.base": "statusBase",
+  //     "any.only": "statusOnly",
+  //   }),
 
-  parent: Joi.string()
-    .custom((value, helpers) => {
-      if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("departmentParentCustom");
-      }
-      return value;
-    })
-    .allow(null, "")
-    .messages({
-      "string.base": "departmentParentBase",
-    }),
+  // parent: Joi.string()
+  //   .custom((value, helpers) => {
+  //     if (!Types.ObjectId.isValid(value)) {
+  //       return helpers.message("departmentParentCustom");
+  //     }
+  //     return value;
+  //   })
+  //   .allow(null, "")
+  //   .messages({
+  //     "string.base": "departmentParentBase",
+  //   }),
 
   chief: Joi.string()
     .custom((value, helpers) => {
@@ -83,14 +83,14 @@ export const CreateDepartment = (data) => Joi.object({
       "any.required": "departmentNameRequired"
     }),
 
-  type: Joi.number()
-    .valid(1, 2)
-    .required()
-    .messages({
-      "number.base": "departmentTypeBase",
-      "any.only": "departmentTypeOnly",
-      "any.required": "departmentTypeRequired"
-    }),
+  // type: Joi.number()
+  //   .valid(1, 2)
+  //   .required()
+  //   .messages({
+  //     "number.base": "departmentTypeBase",
+  //     "any.only": "departmentTypeOnly",
+  //     "any.required": "departmentTypeRequired"
+  //   }),
 
   workTime: Joi.array()
     .items(
@@ -127,17 +127,17 @@ export const CreateDepartment = (data) => Joi.object({
       "array.base": "departmentWorkTimeBase"
     }),
 
-  parent: Joi.string()
-    .custom((value, helpers) => {
-      if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("departmentParentCustom");
-      }
-      return value;
-    })
-    .allow(null, "")
-    .messages({
-      "string.base": "departmentParentBase",
-    }),
+  // parent: Joi.string()
+  //   .custom((value, helpers) => {
+  //     if (!Types.ObjectId.isValid(value)) {
+  //       return helpers.message("departmentParentCustom");
+  //     }
+  //     return value;
+  //   })
+  //   .allow(null, "")
+  //   .messages({
+  //     "string.base": "departmentParentBase",
+  //   }),
 
   chief: Joi.string()
     .custom((value, helpers) => {
@@ -178,14 +178,14 @@ export const UpdateDepartment = (data) => Joi.object({
       "any.required": "departmentNameRequired"
     }),
 
-  type: Joi.number()
-    .valid(1, 2)
-    .required()
-    .messages({
-      "number.base": "departmentTypeBase",
-      "any.only": "departmentTypeOnly",
-      "any.required": "departmentTypeRequired"
-    }),
+  // type: Joi.number()
+  //   .valid(1, 2)
+  //   .required()
+  //   .messages({
+  //     "number.base": "departmentTypeBase",
+  //     "any.only": "departmentTypeOnly",
+  //     "any.required": "departmentTypeRequired"
+  //   }),
 
   workTime: Joi.array()
     .items(
@@ -235,17 +235,17 @@ export const UpdateDepartment = (data) => Joi.object({
       "array.base": "departmentWorkTimeBase"
     }),
 
-  parent: Joi.string()
-    .custom((value, helpers) => {
-      if (!Types.ObjectId.isValid(value)) {
-        return helpers.message("departmentParentCustom");
-      }
-      return value;
-    })
-    .allow(null, "")
-    .messages({
-      "string.base": "departmentParentBase",
-    }),
+  // parent: Joi.string()
+  //   .custom((value, helpers) => {
+  //     if (!Types.ObjectId.isValid(value)) {
+  //       return helpers.message("departmentParentCustom");
+  //     }
+  //     return value;
+  //   })
+  //   .allow(null, "")
+  //   .messages({
+  //     "string.base": "departmentParentBase",
+  //   }),
 
   chief: Joi.string()
     .custom((value, helpers) => {

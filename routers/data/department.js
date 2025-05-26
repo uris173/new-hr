@@ -29,6 +29,14 @@ router.route('/:id')
 
 export default router;
 
+// *         type:
+// *           type: integer
+// *           enum: [0, 1]
+// *           description: Тип отдела (1 - Отдел, 2 - Группа)
+// *         parent:
+// *           type: string
+// *           description: ID родительского отдела (ссылка на модель Department) или null
+
 /**
  * @swagger
  * components:
@@ -42,10 +50,6 @@ export default router;
  *         name:
  *           type: string
  *           description: Название отдела
- *         type:
- *           type: integer
- *           enum: [0, 1]
- *           description: Тип отдела (1 - Отдел, 2 - Группа)
  *         workTime:
  *           type: array
  *           items:
@@ -63,9 +67,6 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время отдела
- *         parent:
- *           type: string
- *           description: ID родительского отдела (ссылка на модель Department) или null
  *         chief:
  *           type: string
  *           description: ID руководителя (ссылка на модель User) или null
@@ -87,10 +88,6 @@ export default router;
  *         name:
  *           type: string
  *           description: Название отдела
- *         type:
- *           type: integer
- *           enum: [0, 1]
- *           description: Тип отдела (1 - Отдел, 2 - Группа)
  *         workTime:
  *           type: array
  *           items:
@@ -108,9 +105,6 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время отдела
- *         parent:
- *           type: string
- *           description: ID родительского отдела (ссылка на модель Department) или null
  *         chief:
  *           type: string
  *           description: ID руководителя (ссылка на модель User) или null
@@ -127,10 +121,6 @@ export default router;
  *         name:
  *           type: string
  *           description: Название отдела
- *         type:
- *           type: integer
- *           enum: [0, 1]
- *           description: Тип отдела (1 - Отдел, 2 - Группа)
  *         workTime:
  *           type: array
  *           items:
@@ -148,9 +138,6 @@ export default router;
  *                 format: date-time
  *                 description: Время окончания работы
  *           description: Рабочее время отдела
- *         parent:
- *           type: string
- *           description: ID родительского отдела (ссылка на модель Department) или null
  *         chief:
  *           type: string
  *           description: ID руководителя (ссылка на модель User) или null
@@ -159,6 +146,18 @@ export default router;
  *         - name
  *         - type
  */
+
+// *       - in: query
+// *         name: type
+// *         schema:
+// *           type: integer
+// *           enum: [0, 1]
+// *         description: Фильтр по типу отдела (1 - Отдел, 2 - Группа)
+// *       - in: query
+// *         name: parent
+// *         schema:
+// *           type: string
+// *         description: Фильтр по ID родительского отдела
 
 /**
  * @swagger
@@ -174,17 +173,6 @@ export default router;
  *         schema:
  *           type: string
  *         description: Фильтр по названию отдела (регистронезависимый)
- *       - in: query
- *         name: type
- *         schema:
- *           type: integer
- *           enum: [0, 1]
- *         description: Фильтр по типу отдела (1 - Отдел, 2 - Группа)
- *       - in: query
- *         name: parent
- *         schema:
- *           type: string
- *         description: Фильтр по ID родительского отдела
  *       - in: query
  *         name: chief
  *         schema:

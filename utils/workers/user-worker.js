@@ -199,22 +199,17 @@ const processData = async (year, month, calendar, absences, holidays, events) =>
         //   dayData.attended = false;
         //   dayData.dayStatus = "workday";
         // }
-
       }
+      
       // Добавляем информацию о времени прихода и ухода
       dayData.arrival = attendance?.arrival || null;
       dayData.departure = attendance?.departure || null;
-
       // Вычисляем продолжительность рабочего дня (в часах)
       if (dayData.arrival && dayData.departure) {
         dayData.workDuration = calculateWorkDuration(eventsMap.get(dateDay) || []);
       }
-
       dayData.events = reorderEventsWithFirstAndLast(eventsMap.get(dateDay) || []);
 
-      // if (dateDay === 11) {
-      //   console.log(dayData)
-      // }
       result.push(dayData);
     }
 
