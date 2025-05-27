@@ -6,11 +6,13 @@ import { connect } from "mongoose";
 import cors from "cors";
 import { createServer } from "http";
 
+import { serve, setup } from "swagger-ui-express";
 import { ErrorMiddleware } from "./middleware/error.js";
 import PassportAuth from "./middleware/auth.js";
 import Router from "./routes.js";
+
+import { createCalendar } from "./utils/helper.js";
 import { swaggerApiSpec, options } from "./swagger-doc.js";
-import { serve, setup } from "swagger-ui-express";
 import { initializeRedis } from "./utils/redis.js";
 import { initSocket } from "./utils/socket.io.js"
 // import { elasticsearchConnection } from "./utils/elasticsearch/elasticsearch.js";
@@ -44,6 +46,8 @@ app.use(ErrorMiddleware);
     server.listen(process.env.PORT, () => {
       console.log(`Server is running on PORT: ${process.env.PORT}`);
     });
+
+    await createCalendar();
   } catch (error) {
     console.error(error);
   }
