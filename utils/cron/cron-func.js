@@ -87,16 +87,19 @@ export const createCalendar = async () => {
 
 export const checkDoorStatus = async () => {
   try {
-    let doors = await DoorModel.find({ status: "active" }, "title ip port").lean();
+    let doors = await DoorModel.find({ }, "title ip port type") // status: "active"
+      .populate({ path: "branch", select: "-_id title" })
+      .lean();
     let io = await getIo();
 
     let doorsInfo = await Promise.all(doors.map(async (door) => {
       door.status = await new Promise((resolve) => {
-        tcp.ping({ address: door.id, port: door.port, timeout: 1000 }, (err, data) => {
+        tcp.ping({ address: door.ip, port: door.port, timeout: 1000 }, (err, data) => {
+          console.log(`Ping: ${data.avg}`, `Door: ${door.ip}:${door.port}`)
           if (err || !data.avg) {
             resolve("offline");
           } else {
-            resolve("success");
+            resolve("online");
           }
         });
       });
@@ -104,7 +107,6 @@ export const checkDoorStatus = async () => {
       return door;
     }));
 
-    console.log(doorsInfo);
     io.emit("doors-status", doorsInfo);
   } catch (error) {
     console.error("Error in Check door status:", error);
