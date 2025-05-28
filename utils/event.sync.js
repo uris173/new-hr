@@ -1,6 +1,7 @@
 import { DoorModel } from "../models/settings/door.js";
 import { UserModel } from "../models/data/user.js";
 import { EventModel } from "../models/data/event.js";
+import { getIo } from "./socket.io.js";
 import { Worker } from "worker_threads";
 
 export const syncing = async (data) => {
@@ -28,6 +29,8 @@ export const syncing = async (data) => {
       events = events.filter(e => e !== null);
       
       await EventModel.insertMany(events);
+      let io = await getIo();
+      io.emit("new-events", { count: events.length });
     });
 
     worker.on("error", (error) => {

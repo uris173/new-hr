@@ -58,12 +58,9 @@ export const getLastEvents = async (req, res, next) => {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
-    // let enterDoors = await DoorModel.find({ type: "enter", status: "active" }, "_id").lean();
-    // let exitDoors = await DoorModel.find({ type: "exit", status: "active" }, "_id").lean();
-
     let users = await UserModel.find({ role: { $ne: "admin" }, status: "active" }, "_id").lean();
-    let arrivedToday = await EventModel.distinct("user", { time: { $gte: todayStart }, action: "enter" }); // door: { $in: enterDoors.map(d => d._id) }
-    let notArrivedToday = users.filter(user => !arrivedToday.includes(user._id.toString()));
+    let arrivedToday = await EventModel.distinct("user", { time: { $gte: todayStart }, action: "enter" });
+    let notArrivedToday = users.filter(user => !arrivedToday.map(u => u.toString()).includes(user._id.toString()));
 
     let populateOptions = [
       {
@@ -84,11 +81,11 @@ export const getLastEvents = async (req, res, next) => {
       }
     ];
 
-    let lastEnter = await EventModel.findOne({ action: "enter" }, "type action time user door pictureURL") // door: { $in: enterDoors.map(d => d._id) }
+    let lastEnter = await EventModel.findOne({ action: "enter" }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastExit = await EventModel.findOne({ action: "exit" }, "type action time user door pictureURL") // door: { $in: exitDoors.map(d => d._id) }
+    let lastExit = await EventModel.findOne({ action: "exit" }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 });
 

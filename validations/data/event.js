@@ -63,11 +63,11 @@ export const EventQueryFilter = (data) => Joi.object({
     }),
 
   limit: Joi.number()
-    .valid(0, 1, 30, 50, 100)
+    // .valid(0, 1, 30, 50, 100)
     .optional()
     .messages({
       "number.base": "limitBase",
-      "any.only": "limitOnly",
+      // "any.only": "limitOnly",
     }),
   page: Joi.number()
     .optional()

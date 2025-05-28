@@ -1,5 +1,6 @@
 import { UserModel } from "../../models/data/user.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
+import { DoorLoggerModel } from "../../models/logger/door-logger.js";
 import { DoorModel } from "../../models/settings/door.js";
 import { getIo } from "../socket.io.js";
 import tcp from "tcp-ping";
@@ -99,9 +100,11 @@ export const checkDoorStatus = async () => {
           if (err || !data.avg) {
             resolve("offline");
             await DoorModel.updateOne({ _id: door._id }, { doorStatus: "offline" });
+            await DoorLoggerModel.create({ door: door._id, status: "offline" });
           } else {
             resolve("online");
             await DoorModel.updateOne({ _id: door._id }, { doorStatus: "online" });
+            await DoorLoggerModel.create({ avg: data.avg, door: door._id, status: "online" });
           }
         });
       });
