@@ -6,6 +6,7 @@ import { syncing } from "./event.sync.js";
 
 /*
   new-user = fullName, faceUrl, employeeNo
+  doors-status - [{ _d, title, status }]
 */
 
 let io = null;

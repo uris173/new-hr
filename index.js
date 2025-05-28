@@ -11,7 +11,7 @@ import { ErrorMiddleware } from "./middleware/error.js";
 import PassportAuth from "./middleware/auth.js";
 import Router from "./routes.js";
 
-import { createCalendar } from "./utils/helper.js";
+import { scheduleCronOnceInMonth } from "./utils/cron.js";
 import { swaggerApiSpec, options } from "./swagger-doc.js";
 import { initializeRedis } from "./utils/redis.js";
 import { initSocket } from "./utils/socket.io.js"
@@ -47,7 +47,7 @@ app.use(ErrorMiddleware);
       console.log(`Server is running on PORT: ${process.env.PORT}`);
     });
 
-    await createCalendar();
+    scheduleCronOnceInMonth();
   } catch (error) {
     console.error(error);
   }
