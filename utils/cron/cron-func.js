@@ -94,12 +94,14 @@ export const checkDoorStatus = async () => {
 
     let doorsInfo = await Promise.all(doors.map(async (door) => {
       door.status = await new Promise((resolve) => {
-        tcp.ping({ address: door.ip, port: door.port, timeout: 1000 }, (err, data) => {
+        tcp.ping({ address: door.ip, port: door.port, timeout: 1000 }, async (err, data) => {
           console.log(`Ping: ${data.avg}`, `Door: ${door.ip}:${door.port}`)
           if (err || !data.avg) {
             resolve("offline");
+            await DoorModel.updateOne({ _id: door._id }, { doorStatus: "offline" });
           } else {
             resolve("online");
+            await DoorModel.updateOne({ _id: door._id }, { doorStatus: "online" });
           }
         });
       });

@@ -9,6 +9,8 @@ export const getDoors = async (req, res, next) => {
     let user = await UserModel.findById(_id, "doors").lean();
     let filter = {
       status: "active",
+      doorStatus: "online",
+      isOpen: true,
       ...(user.doors && user.doors.length > 0 && { _id: { $in: user.doors } })
     }
 
@@ -22,7 +24,7 @@ export const getDoors = async (req, res, next) => {
 
 export const getOpenDoors = async (req, res, next) => {
   try {
-    let doors = await DoorModel.find({ isOpen: true, status: "active" }, "ip port login password");
+    let doors = await DoorModel.find({ doorStatus: "online", isOpen: true, status: "active" }, "ip port login password");
     res.status(200).json(doors);
   } catch (error) {
     console.error(error);
@@ -34,6 +36,8 @@ export const getLastDoorEvent = async (req, res, next) => {
   try {
     let filter = {
       status: "active",
+      doorStatus: "online",
+      isOpen: true,
       ...(user.doors && user.doors.length > 0 && { _id: { $in: user.doors } })
     }
 
@@ -145,7 +149,7 @@ export const getNotSyncedUsers = async (req, res, next) => {
 
 export const openDoorsNotSyncedUsers = async (req, res, next) => {
   let doorIds = req.body;
-  let { users, dooors} = await getUsersNotSynced(doorIds);
+  let { users, doors } = await getUsersNotSynced(doorIds);
 
   res.status(200).json({ users, doors });
 }

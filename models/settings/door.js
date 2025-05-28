@@ -18,6 +18,11 @@ const doorSchema = new Schema({
     type: Boolean,
     default: false
   },
+  doorStatus: {
+    type: String,
+    enum: ["online", "offline"],
+    default: "online"
+  },
   status: {
     type: String,
     enum: ["active", "inactive", "deleted"],
