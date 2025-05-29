@@ -16,6 +16,10 @@ import Holiday from "./routers/settings/holiday.js";
 import Reason from "./routers/settings/reason.js";
 import Absence from "./routers/settings/absence.js"
 
+// logger
+import DoorLogger from "./routers/logger/door.js";
+import RouteLogs from "./routers/logger/route-logs.js";
+
 // statistic
 import UserStatistic from "./routers/statistic/user.js";
 import HomeStatistic from "./routers/statistic/home.js";
@@ -37,6 +41,9 @@ router.use('/door', Door);
 router.use('/holiday', Holiday);
 router.use('/reason', Reason);
 router.use('/absence', Absence);
+
+router.use('/logger/door', DoorLogger);
+router.use('/logger/route-logs', RouteLogs);
 
 router.use('/statistic/user', UserStatistic);
 router.use('/statistic/home', HomeStatistic);

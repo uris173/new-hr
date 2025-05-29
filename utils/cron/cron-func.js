@@ -1,6 +1,6 @@
 import { UserModel } from "../../models/data/user.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
-import { DoorLoggerModel } from "../../models/logger/door-logger.js";
+import { DoorLoggerModel } from "../../models/logger/door.js";
 import { DoorModel } from "../../models/settings/door.js";
 import { getIo } from "../socket.io.js";
 import tcp from "tcp-ping";

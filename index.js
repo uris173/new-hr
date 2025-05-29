@@ -15,6 +15,8 @@ import { scheduleCron } from "./utils/cron.js";
 import { swaggerApiSpec, options } from "./swagger-doc.js";
 import { initializeRedis } from "./utils/redis.js";
 import { initSocket } from "./utils/socket.io.js"
+
+import { logger, auth } from "./middleware/logger.js";
 // import { elasticsearchConnection } from "./utils/elasticsearch/elasticsearch.js";
 // import { createUserIndex } from "./utils/elasticsearch/index/user.index.js";
 
@@ -26,9 +28,10 @@ const server = createServer(app);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(PassportAuth.initialize());
-
 app.use('/api-docs/v1', serve, setup(swaggerApiSpec, options));
+
+app.use(PassportAuth.initialize());
+app.use(auth, logger);
 app.use('/files', express.static('files'));
 app.use(Router);
 app.use(ErrorMiddleware);
