@@ -197,7 +197,8 @@ export const UpdateDepartment = (data) => Joi.object({
             }
             return value;
           })
-          .required()
+          .allow(null, "")
+          .optional()
           .messages({
             "string.base": "_idBase",
             "any.required": "_idRequired"
