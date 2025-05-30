@@ -10,8 +10,6 @@ import { hash } from "argon2";
 
 import { UserQueryFilter, UserCreate, UserUpdate, AddUserCalendar, UpdateUserCalendar } from "../../validations/data/user.js";
 import { calculateWorkDuration, reorderEventsWithFirstAndLast } from "../../utils/helper.js";
-import { getIo, emitToAdmin } from "../../utils/socket.io.js"
-import { getRedisAllData } from "../../utils/redis.js"
 let select = 'fullName role faceUrl department gender status employeeNo';
 
 export const canView = (user) => {
@@ -98,13 +96,13 @@ export const create = async (req, res, next) => {
     .populate({ path: "department", select: "name" })
     .lean();
 
-    let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    let io = await getIo();
-    findSecuritySessions.forEach(session => {
-      io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-    })
-    io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-    await emitToAdmin("worker", { _id: user._id });
+    // let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    // let io = await getIo();
+    // findSecuritySessions.forEach(session => {
+    //   io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
+    // });
+    // io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
+    // await emitToAdmin("worker", { _id: user._id });
 
     let findDepartment = await DepartmentModel.findById(department, "-_id workTime.day").lean();
     let date = new Date();
@@ -327,13 +325,6 @@ export const changeStatus = async (req, res, next) => {
     if (!user) throw { status: 400, message: "userNotFound" };
     await emitToAdmin("worker", { _id: user._id });
 
-    // let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    // let io = await getIo();
-    // findSecuritySessions.forEach(session => {
-    //   io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-    // });
-    // io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
@@ -376,12 +367,12 @@ export const remove = async (req, res, next) => {
     if (!user) throw { status: 400, message: "userNotFound" };
     // await WorkerModel.updateMany({ user: id }, { status: "deleted" });
 
-    let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    let io = await getIo();
-    findSecuritySessions.forEach(session => {
-      io.to(session._id).emit('user-remove', user.employeeNo);
-    });
-    io.to("hr-script69").emit('user-remove', user.employeeNo);
+    // let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    // let io = await getIo();
+    // findSecuritySessions.forEach(session => {
+    //   io.to(session._id).emit('user-remove', user.employeeNo);
+    // });
+    // io.to("hr-script69").emit('user-remove', user.employeeNo);
 
     res.status(200).json({ message: "deleted" });
   } catch (error) {

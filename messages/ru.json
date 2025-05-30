@@ -14,6 +14,7 @@
   "holidayNotFound": "Праздник не найден!",
   "reasonNotFound": "Причина не найдена!",
   "absenceNotFound": "Отсутствие не найдено!",
+  "userSyncedDoorNotFound": "Синхронизированная дверь пользователя не найдена!",
 
   "tokenInvalid": "Токен недействителен!",
   "tokenExpired": "Срок жизни токена истек!",
@@ -283,5 +284,12 @@
   "absenceStartBase": "Поле 'start' должно быть датой.",
 
   "absenceEndRequired": "Поле 'end' обязательно для заполнения.",
-  "absenceEndBase": "Поле 'end' должно быть датой."
+  "absenceEndBase": "Поле 'end' должно быть датой.",
+
+
+  "userSyncedDoorUserRequired": "Поле 'user' обязательно для заполнения.",
+  "userSyncedDoorUserBase": "Пользователь должен быть строкой.",
+
+  "userSyncedDoorDoorRequired": "Поле 'door' обязательно для заполнения.",
+  "userSyncedDoorDoorBase": "Дверь должна быть строкой."
 }

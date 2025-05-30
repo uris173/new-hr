@@ -143,6 +143,7 @@ export const UpdateAbsence = (data) => Joi.object({
       "string.base": "_idBase",
       "any.required": "_idRequired"
     }),
+
   user: Joi.string()
     .custom((value, helpers) => {
       if (!Types.ObjectId.isValid(value)) {

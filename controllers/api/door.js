@@ -2,6 +2,7 @@ import { Worker } from "worker_threads";
 import { DoorModel } from "../../models/settings/door.js"
 import { EventModel } from "../../models/data/event.js";
 import { UserModel } from "../../models/data/user.js";
+import { UserSyncedDoorModel } from "../../models/settings/user-synced-door.js";
 
 export const getDoors = async (req, res, next) => {
   try {
@@ -156,15 +157,8 @@ export const openDoorsNotSyncedUsers = async (req, res, next) => {
 
 export const syncDoors = async (req, res, next) => {
   try {
-    let { userId, doorId } = req.body;
-
-    let findDoor = await DoorModel.findById(doorId, "-_id ip port type").lean();
-    if (!findDoor) throw { status: 400, message: "doorNotFound" };
-
-    let user = await UserModel.findByIdAndUpdate(userId, { 
-      $addToSet: { sync: { ip: findDoor.ip, port: findDoor.port, type: findDoor.type } }
-    }, { new: true, select: "_id" });
-    if (!user) throw { status: 400, message: "userNotFound" };
+    let { userId, doorId, status, reason } = req.body;
+    await UserSyncedDoorModel.findOneAndUpdate({ user: userId, door: doorId }, { status });
 
     res.status(200).json({ message: "synced" });
   } catch (error) {
@@ -175,7 +169,7 @@ export const syncDoors = async (req, res, next) => {
 
 export const existsDoorEvent = async (req, res, next) => {
   try {
-    let { door, serialNo, employeeNoString, time } = req.body;
+    let { door, employeeNoString, time } = req.body;
     let event = await EventModel.findOne({
       door,
       employeeNoString,

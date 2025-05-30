@@ -14,7 +14,7 @@ export const scheduleCron = () => {
   schedule("*/10 * * * * *", async () => {
     try {
       console.log("Running Cron every 10 seconds to check door status");
-      await checkDoorStatus();
+      // await checkDoorStatus();
     } catch (error) {
       console.error("Error in Cron every 5 seconds:", error);
     }

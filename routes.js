@@ -15,6 +15,7 @@ import Door from "./routers/settings/door.js";
 import Holiday from "./routers/settings/holiday.js";
 import Reason from "./routers/settings/reason.js";
 import Absence from "./routers/settings/absence.js"
+import UserSyncedDoor from "./routers/settings/user-synced-door.js";
 
 // logger
 import DoorLogger from "./routers/logger/door.js";
@@ -41,6 +42,7 @@ router.use('/door', Door);
 router.use('/holiday', Holiday);
 router.use('/reason', Reason);
 router.use('/absence', Absence);
+router.use('/user-synced-door', UserSyncedDoor);
 
 router.use('/logger/door', DoorLogger);
 router.use('/logger/route-logs', RouteLogs);

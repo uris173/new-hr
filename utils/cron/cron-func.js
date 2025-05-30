@@ -104,7 +104,7 @@ export const checkDoorStatus = async () => {
           } else {
             resolve("online");
             await DoorModel.updateOne({ _id: door._id }, { doorStatus: "online" });
-            await DoorLoggerModel.create({ avg: data.avg, door: door._id, status: "online" });
+            // await DoorLoggerModel.create({ avg: data.avg, door: door._id, status: "online" });
           }
         });
       });

@@ -25,18 +25,6 @@ const userSchema = new Schema({
     type: Types.ObjectId,
     ref: 'door'
   }],
-  sync: [{
-    ip: String,
-    port: String,
-    type: {
-      type: String,
-      enum: ["enter", "exit"]
-    },
-    status: {
-      type: Boolean,
-      default: true
-    }
-  }],
   status: {
     type: String,
     enum: ["active", "inactive", "deleted"],
