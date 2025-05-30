@@ -1,13 +1,17 @@
 import { UserModel } from "../../models/data/user.js";
+import { DoorModel } from "../../models/settings/door.js";
 import { DepartmentModel } from "../../models/data/department.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
 import { AbsenceModel } from "../../models/settings/absence.js";
 import { HolidayModel } from "../../models/settings/holiday.js";
 import { EventModel } from "../../models/data/event.js";
+import { UserSyncedDoorModel } from "../../models/settings/user-synced-door.js";
 // import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
 
+import { getRedisAllData } from "../../utils/redis.js"
+import { getIo } from "../../utils/socket.io.js"
 import { UserQueryFilter, UserCreate, UserUpdate, AddUserCalendar, UpdateUserCalendar } from "../../validations/data/user.js";
 import { calculateWorkDuration, reorderEventsWithFirstAndLast } from "../../utils/helper.js";
 let select = 'fullName role faceUrl department gender status employeeNo';
@@ -73,7 +77,7 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address } = req.body;
+    let { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address, doors } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
@@ -96,13 +100,15 @@ export const create = async (req, res, next) => {
     .populate({ path: "department", select: "name" })
     .lean();
 
-    // let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    // let io = await getIo();
-    // findSecuritySessions.forEach(session => {
-    //   io.to(session._id).emit('new-user', { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-    // });
-    // io.to("hr-script69").emit("new-user", { _id: user._id, fullName: user.fullName, faceUrl: user.faceUrl, employeeNo: user.employeeNo, gender: user.gender });
-    // await emitToAdmin("worker", { _id: user._id });
+    let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    let io = await getIo();
+    let findDoors = await DoorModel.find({ _id: { $in: doors } }, "ip port login password").lean();
+
+    for (const door of findDoors) {
+      await UserSyncedDoorModel.create({ user: user._id, door: door._id })
+      io.to(session._id).emit('new-user', { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
+      io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
+    };
 
     let findDepartment = await DepartmentModel.findById(department, "-_id workTime.day").lean();
     let date = new Date();
@@ -338,7 +344,7 @@ export const update = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { _id, fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address } = req.body;
+    let { _id, fullName, phone, password, role, faceUrl, gender, department, birthDay, address, doors } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
@@ -350,7 +356,15 @@ export const update = async (req, res, next) => {
     let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address }, { new: true, select })
       .populate({ path: "department", select: "name" });
 
-    await emitToAdmin("worker", { _id: user._id });
+    let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    let io = await getIo();
+    let findDoors = await DoorModel.find({ _id: { $in: doors } }, "ip port login password").lean();
+
+    for (const door of findDoors) {
+      await UserSyncedDoorModel.create({ user: user._id, door: door._id })
+      io.to(session._id).emit('new-user', { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
+      io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
+    };
 
     res.status(200).json(user);
   } catch (error) {
