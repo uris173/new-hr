@@ -77,7 +77,7 @@ export const create = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { role: userRole } = req.user;
-    let { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address, doors } = req.body;
+    let { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address } = req.body;
 
     let canUserCreate = canCreate(userRole, role);
     if (!canUserCreate) throw { status: 400, message: "youDontHaveAccess" };
