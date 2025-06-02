@@ -377,16 +377,22 @@ export const remove = async (req, res, next) => {
   try {
     let { id } = req.params;
 
-    let user = await UserModel.findByIdAndUpdate(id, { status: "deleted", sync: [] }, { new: true, select: "_id employeeNo" });
+    let user = await UserModel.findByIdAndUpdate(id, { status: "deleted" }, { new: true, select: "_id employeeNo" });
     if (!user) throw { status: 400, message: "userNotFound" };
-    // await WorkerModel.updateMany({ user: id }, { status: "deleted" });
 
-    // let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    // let io = await getIo();
-    // findSecuritySessions.forEach(session => {
-    //   io.to(session._id).emit('user-remove', user.employeeNo);
-    // });
-    // io.to("hr-script69").emit('user-remove', user.employeeNo);
+    let syncedDoors = await UserSyncedDoorModel.find({ user: user._id }, "door")
+      .populate({ path: "door", select: "ip port login password" })
+      .lean();
+
+    let findSecuritySessions = await getRedisAllData(`session:*:security`);
+    let io = await getIo();
+    
+    for (const syncedDoor of syncedDoors) {
+      io.to("hr-script69").emit('user-remove', { _id: syncedDoor._id, door: syncedDoors.door, employeeNo: user.employeeNo });
+      for (const session of findSecuritySessions) {
+        io.to(session._id).emit('user-remove', { _id: syncedDoor._id, door: syncedDoor.door, employeeNo: user.employeeNo });
+      };
+    };
 
     res.status(200).json({ message: "deleted" });
   } catch (error) {

@@ -157,7 +157,14 @@ export const openDoorsNotSyncedUsers = async (req, res, next) => {
 
 export const syncDoors = async (req, res, next) => {
   try {
-    let { userId, doorId, status, reason } = req.body;
+    let { userId, doorId, status } = req.body;
+
+    if (status === "removed") {
+      let user = await UserModel.findOne({ employeeNo: userId }, "_id").lean();
+      await UserSyncedDoorModel.findOneAndDelete({ user: user._id, door: doorId });
+      return res.status(200).json({ message: "removed" });
+    }
+
     await UserSyncedDoorModel.findOneAndUpdate({ user: userId, door: doorId }, { status });
 
     res.status(200).json({ message: "synced" });

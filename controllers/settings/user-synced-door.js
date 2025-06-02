@@ -64,7 +64,7 @@ export const create = async (req, res, next) => {
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();
 
-    findSecuritySessions.forEach(session => {
+    for (const session of findSecuritySessions) {
       io.to(session._id).emit('new-user', {
         _id: data.user._id,
         door: data.door,
@@ -73,7 +73,7 @@ export const create = async (req, res, next) => {
         employeeNo: data.user.employeeNo,
         gender: data.user.gender
       });
-    });
+    }
 
     io.to("hr-script69").emit("new-user", {
       _id: data.user._id,
@@ -101,7 +101,7 @@ export const tryAgain = async (req, res, next) => {
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();
 
-    findSecuritySessions.forEach(session => {
+    for (const session of findSecuritySessions) {
       io.to(session._id).emit('new-user', {
         _id: data.user._id,
         door: data.door,
@@ -110,7 +110,7 @@ export const tryAgain = async (req, res, next) => {
         employeeNo: data.user.employeeNo,
         gender: data.user.gender
       });
-    });
+    };
 
     io.to("hr-script69").emit("new-user", {
       _id: data.user._id,
@@ -138,9 +138,9 @@ export const remove = async (req, res, next) => {
 
     let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();
-    findSecuritySessions.forEach(session => {
+    for (const session of findSecuritySessions) {
       io.to(session._id).emit('user-remove', { door: data.door, employeeNo: data.user.employeeNo});
-    });
+    };
     io.to("hr-script69").emit('user-remove', { door: data.door, employeeNo: data.user.employeeNo });
 
     res.status(200).json({ message: "deleted" });
