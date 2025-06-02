@@ -121,7 +121,7 @@ export const getDoorEvents = async (req, res, next) => {
       },
     ];
 
-    let doors = await DoorModel.find({ status: "active" }, "_id title branch")
+    let doors = await DoorModel.find({ status: "active", doorStatus: "online" }, "_id title branch")
       .populate({ path: 'branch', select: "-_id title" })
       .lean();
 
@@ -136,15 +136,6 @@ export const getDoorEvents = async (req, res, next) => {
     }));
 
     res.status(200).json(doors);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
-export const getBestVisit = async (req, res, next) => {
-  try {
-    
   } catch (error) {
     console.error(error);
     next(error);

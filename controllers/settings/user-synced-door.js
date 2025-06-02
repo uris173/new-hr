@@ -1,4 +1,5 @@
 import { UserSyncedDoorModel } from "../../models/settings/user-synced-door.js";
+import { DoorModel } from "../../models/settings/door.js";
 import { CreateUserSyncedDoor } from "../../validations/settings/user-synced-door.js";
 import { getRedisAllData } from "../../utils/redis.js"
 import { getIo } from "../../utils/socket.io.js"
@@ -16,7 +17,14 @@ export const all = async (req, res, next) => {
     };
 
     let populate = null;
-    if (door) populate = { path: "user", select: "fullName" };
+    if (door) populate = {
+      path: "user",
+      select: "faceUrl fullName department",
+      populate: {
+        path: "department",
+        select: "-_id name",
+      }
+    };
     else if (user) populate = { path: "door", select: "title ip port" };
 
     let count = await UserSyncedDoorModel.countDocuments(filter);
@@ -27,7 +35,13 @@ export const all = async (req, res, next) => {
       .skip(skip)
       .lean();
 
-    res.status(200).json({ count, data });
+    let doorInfo = await DoorModel.findById(door, "title ip port").lean();
+
+    res.status(200).json({
+      ...(door && { doorInfo }),
+      count,
+      data
+    });
   } catch (error) {
     console.error(error);
     next(error);
