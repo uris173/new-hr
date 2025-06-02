@@ -168,9 +168,12 @@ export const getOne = async (req, res, next) => {
     let { id } = req.params;
     let { pick } = req.query;
 
-    pick = pick ? JSON.parse(pick) : `${select} phone doors birthDay address`;
-    let user = await UserModel.findById(id, pick);
+    pick = pick ? JSON.parse(pick) : `${select} phone birthDay address`;
+    let user = await UserModel.findById(id, pick).lean();
     if (!user) throw { status: 404, message: "userNotFound" };
+
+    let syncedDoors = await UserSyncedDoorModel.find({ user: id }, "-_id door").lean();
+    user.door = syncedDoors.map(d => d.door);
 
     res.status(200).json(user);
   } catch (error) {

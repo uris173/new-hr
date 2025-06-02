@@ -130,7 +130,7 @@ export const tryAgain = async (req, res, next) => {
 
 export const remove = async (req, res, next) => {
   try {
-    let data = await UserSyncedDoorModel.findById(req.params.id).populate([
+    let data = await UserSyncedDoorModel.findByIdAndDelete(req.params.id).populate([
       { path: "user", select: "employeeNo" },
       { path: "door", select: "ip port login password" }
     ]).lean();
