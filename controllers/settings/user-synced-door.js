@@ -11,13 +11,17 @@ export const all = async (req, res, next) => {
     limit = limit || 30;
     let skip = (page - 1) * limit;
     let filter = {
-      door,
+      ...(door && { door }),
       ...(user && { user })
     };
 
+    let populate = null;
+    if (door) populate = { path: "user", select: "fullName" };
+    else if (user) populate = { path: "door", select: "title ip port" };
+
     let count = await UserSyncedDoorModel.countDocuments(filter);
     let data = await UserSyncedDoorModel.find(filter)
-      .populate({ path: "user", select: "fullName" })
+      .populate(populate)
       .sort({ _id: -1 })
       .limit(limit)
       .skip(skip)
@@ -30,7 +34,7 @@ export const all = async (req, res, next) => {
   }
 };
 
-export const crate = async (req, res, next) => {
+export const create = async (req, res, next) => {
   try {
     let { error } = CreateUserSyncedDoor(req.body);
     if (error) throw { status: 400, message: error.details[0].message };

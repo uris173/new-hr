@@ -2,14 +2,14 @@ import { Router } from "express";
 import passport from "../../middleware/auth.js";
 import { validateObjectId } from "../../middleware/validate.js";
 import { top } from "../../middleware/role.js";
-import { all, crate, tryAgain, remove } from "../../controllers/settings/user-synced-door.js";
+import { all, create, tryAgain, remove } from "../../controllers/settings/user-synced-door.js";
 
 const router = Router();
 
 router.route('/')
   .all(passport.authenticate('jwt', { session: false }), top)
   .get(all)
-  .post(crate);
+  .post(create);
 
 router.route('/:id')
   .all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
