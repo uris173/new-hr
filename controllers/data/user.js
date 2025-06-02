@@ -364,7 +364,10 @@ export const update = async (req, res, next) => {
     let findDoors = await DoorModel.find({ _id: { $in: doors } }, "ip port login password").lean();
 
     for (const door of findDoors) {
-      await UserSyncedDoorModel.create({ user: user._id, door: door._id })
+      let findExists = await UserSyncedDoorModel.findOne({ user: user._id, door: door._id }, "_id");
+      if (findExists) continue;
+
+      await UserSyncedDoorModel.create({ user: user._id, door: door._id });
       io.to(session._id).emit('new-user', { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
       io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
     };
