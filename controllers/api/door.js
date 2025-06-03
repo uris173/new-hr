@@ -161,7 +161,7 @@ export const syncDoors = async (req, res, next) => {
 
     if (status === "removed") {
       let user = await UserModel.findOne({ employeeNo: userId }, "_id").lean();
-      await UserSyncedDoorModel.findOneAndDelete({ user: user._id, door: doorId });
+      await UserSyncedDoorModel.deleteOne({ user: user._id, door: doorId });
       return res.status(200).json({ message: "removed" });
     }
 

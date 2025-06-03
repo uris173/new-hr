@@ -97,16 +97,14 @@ export const create = async (req, res, next) => {
 
     let newUser = await UserModel.create({ fullName, phone, password: await hash(password), role, faceUrl, gender, department, employeeNo, doors, birthDay, address });
     let user = await UserModel.findById(newUser._id, select)
-    .populate({ path: "department", select: "name" })
-    .lean();
+      .populate({ path: "department", select: "name" })
+      .lean();
 
-    let findSecuritySessions = await getRedisAllData(`session:*:security`);
     let io = await getIo();
     let findDoors = await DoorModel.find({ _id: { $in: doors } }, "ip port login password").lean();
 
     for (const door of findDoors) {
       await UserSyncedDoorModel.create({ user: user._id, door: door._id })
-      io.to(session._id).emit('new-user', { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
       io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
     };
 
@@ -170,9 +168,9 @@ export const getOne = async (req, res, next) => {
 
     pick = pick ? JSON.parse(pick) : `${select} phone birthDay address`;
     let user = await UserModel.findById(id, pick).lean();
-    if (!user) throw { status: 404, message: "userNotFound" };
+    if (!user) throw { status: 400, message: "userNotFound" };
 
-    let syncedDoors = await UserSyncedDoorModel.find({ user: id }, "-_id door").lean();
+    let syncedDoors = await UserSyncedDoorModel.find({ user: id, status: "success" }, "-_id door").lean();
     user.doors = syncedDoors.map(d => d.door);
 
     res.status(200).json(user);
@@ -359,11 +357,19 @@ export const update = async (req, res, next) => {
     let user = await UserModel.findByIdAndUpdate(_id, { fullName, phone, password, role, faceUrl, gender, department, doors, birthDay, address }, { new: true, select })
       .populate({ path: "department", select: "name" });
 
-    let findSecuritySessions = await getRedisAllData(`session:*:security`);
-    // io.to(session._id).emit('new-user', { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
     let io = await getIo();
     let findDoors = await DoorModel.find({ _id: { $in: doors } }, "ip port login password").lean();
-    let findSyncedDoors = await UserSyncedDoorModel.find({ user: _id, status:  }, "-_id door").lean();
+
+    let removeSyncedDoors = findSyncedDoors.filter(d => !doors.includes(d.door.toString()));
+    if (removeSyncedDoors.length) {
+      let removedDoorIds = removeSyncedDoors.map(d => d.door.toString());
+      let removedDoors = await DoorModel.find({ _id: { $in: removedDoorIds } }, "ip port login password").lean();
+
+      for (const door of removedDoors) {
+        io.to("hr-script69").emit('user-remove', { _id: user._id, door, employeeNo: findUser.employeeNo });
+      }
+    }
+
 
     for (const door of findDoors) {
       let findExists = await UserSyncedDoorModel.findOne({ user: user._id, door: door._id }, "_id");

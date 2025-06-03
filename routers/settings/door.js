@@ -78,6 +78,10 @@ export default router;
  *         isOpen:
  *           type: boolean
  *           description: Флаг на доступ двери извне
+ *         doorStatus:
+ *           type: string
+ *           enum: [online, offline]
+ *           description: Статус двери (онлайн/офлайн)
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -203,6 +207,18 @@ export default router;
  *         schema:
  *           type: string
  *         description: Фильтр по названию двери (частичное совпадение)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [active, inactive, deleted]
+ *         description: Фильтр по статусу двери
+ *       - in: query
+ *         name: doorStatus
+ *         schema:
+ *           type: string
+ *           enum: [online, offline]
+ *         description: Фильтр по рабочему статусу двери
  *       - in: query
  *         name: page
  *         schema:

@@ -7,12 +7,13 @@ export const all = async (req, res, next) => {
     let { error } = DoorQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { branch, title, page, limit } = req.query;
+    let { branch, title, status, doorStatus, page, limit } = req.query;
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
-      status: { $ne: "deleted" },
+      status: status ? status : { $ne: "deleted" },
+      ...(doorStatus && { doorStatus }),
       ...(branch && { branch }),
       ...(title && { title: new RegExp(title, "i") }),
     };
