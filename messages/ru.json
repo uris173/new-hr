@@ -199,6 +199,9 @@
   "branchCustom": "Неверный формат идентификатора филиала.",
 
 
+  "doorStatusBase": "Поле 'doorStatus' должно быть строкой.",
+  "doorStatusOnly": "Поле 'doorStatus' может быть только 'online' или 'offline'.",
+
   "doorIpBase": "Поле 'ip' должно быть строкой.",
   "doorIpEmpty": "Поле 'ip' не может быть пустым.",
   "doorIpRequired": "Поле 'ip' обязательно для заполнения.",

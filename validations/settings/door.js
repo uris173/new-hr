@@ -24,6 +24,22 @@ export const DoorQueryFilter = (data) => Joi.object({
       "string.max": "titleMax",
     }),
 
+  status: Joi.string()
+    .valid("active", "inactive", "deleted")
+    .optional()
+    .messages({
+      "string.base": "statusBase",
+      "any.only": "statusOnly",
+    }),
+
+  doorStatus: Joi.string()
+    .valid("online", "offline")
+    .optional()
+    .messages({
+      "string.base": "doorStatusBase",
+      "any.only": "doorStatusOnly",
+    }),
+
   limit: Joi.number()
     .valid(0, 1, 30, 50, 100)
     .optional()
