@@ -360,6 +360,7 @@ export const update = async (req, res, next) => {
     let io = await getIo();
     let findDoors = await DoorModel.find({ _id: { $in: doors } }, "ip port login password").lean();
 
+    let findSyncedDoors = await UserSyncedDoorModel.find({ user: _id, status: "success" }, "-_id door").lean()
     let removeSyncedDoors = findSyncedDoors.filter(d => !doors.includes(d.door.toString()));
     if (removeSyncedDoors.length) {
       let removedDoorIds = removeSyncedDoors.map(d => d.door.toString());
