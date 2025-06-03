@@ -373,10 +373,7 @@ export const update = async (req, res, next) => {
 
 
     for (const door of findDoors) {
-      let findExists = await UserSyncedDoorModel.findOne({ user: user._id, door: door._id }, "_id");
-      if (findExists) continue;
-
-      await UserSyncedDoorModel.create({ user: user._id, door: door._id });
+      await UserSyncedDoorModel.findOneAndUpdate({ user: user._id, door: door._id }, { user: user._id, door: door._id }, { upsert: true});
       io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo: findUser.employeeNo, gender });
     };
 
