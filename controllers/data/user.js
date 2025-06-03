@@ -330,7 +330,7 @@ export const changeStatus = async (req, res, next) => {
     ).populate({ path: "department", select: "name" });
 
     if (!user) throw { status: 400, message: "userNotFound" };
-    await emitToAdmin("worker", { _id: user._id });
+    // await emitToAdmin("worker", { _id: user._id });
 
     res.status(200).json(user);
   } catch (error) {
@@ -371,9 +371,11 @@ export const update = async (req, res, next) => {
       }
     }
 
-
     for (const door of findDoors) {
-      await UserSyncedDoorModel.findOneAndUpdate({ user: user._id, door: door._id }, { user: user._id, door: door._id }, { upsert: true});
+      let findSuccessSync = await UserSyncedDoorModel.findOne({ user: user._id, door: door._id, status: "success" })
+      if (findSuccessSync) continue
+
+      await UserSyncedDoorModel.findOneAndUpdate({ user: _id, door: door._id }, { status: "pending" }, { upsert: true });
       io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo: findUser.employeeNo, gender });
     };
 

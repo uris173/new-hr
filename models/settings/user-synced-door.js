@@ -11,7 +11,7 @@ const userSyncedDoorScheme = new Schema({
   },
   status: {
     type: String,
-    emum: ["pending", "success", "error"],
+    enum: ["pending", "success", "error"],
     default: "pending"
   }
 }, { timestamps: true });
