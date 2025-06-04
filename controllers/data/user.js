@@ -105,7 +105,7 @@ export const create = async (req, res, next) => {
 
     for (const door of findDoors) {
       await UserSyncedDoorModel.create({ user: user._id, door: door._id })
-      io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo, gender });
+      io.to("hr-script69").emit("new-user", { _id: user._id, door, fullName, faceUrl, employeeNo: employeeNo.toString(), gender });
     };
 
     let findDepartment = await DepartmentModel.findById(department, "-_id workTime.day").lean();
@@ -401,7 +401,7 @@ export const remove = async (req, res, next) => {
     let io = await getIo();
     
     for (const syncedDoor of syncedDoors) {
-      io.to("hr-script69").emit('user-remove', { _id: syncedDoor._id, door: syncedDoors.door, employeeNo: user.employeeNo });
+      io.to("hr-script69").emit('user-remove', { _id: syncedDoor._id, door: syncedDoor.door, employeeNo: user.employeeNo });
       for (const session of findSecuritySessions) {
         io.to(session._id).emit('user-remove', { _id: syncedDoor._id, door: syncedDoor.door, employeeNo: user.employeeNo });
       };

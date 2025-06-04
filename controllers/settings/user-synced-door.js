@@ -57,7 +57,14 @@ export const create = async (req, res, next) => {
 
     let newUserSyncedDoor = await UserSyncedDoorModel.create({ user, door });
     let data = await UserSyncedDoorModel.findById(newUserSyncedDoor._id).populate([
-      { path: "user", select: "fullName faceUrl employeeNo gender" },
+      {
+        path: "user",
+        select: "fullName faceUrl employeeNo gender department",
+        populate: {
+          path: "department",
+          select: "-_id name"
+        }
+      },
       { path: "door", select: "ip port login password" }
     ]).lean();
 
@@ -94,7 +101,14 @@ export const create = async (req, res, next) => {
 export const tryAgain = async (req, res, next) => {
   try {
     let data = await UserSyncedDoorModel.findById(req.params.id).populate([
-      { path: "user", select: "fullName faceUrl employeeNo gender" },
+      {
+        path: "user",
+        select: "fullName faceUrl employeeNo gender department",
+        populate: {
+          path: "department",
+          select: "-_id name"
+        }
+      },
       { path: "door", select: "ip port login password" }
     ]).lean();
 

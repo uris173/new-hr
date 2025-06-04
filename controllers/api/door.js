@@ -3,6 +3,7 @@ import { DoorModel } from "../../models/settings/door.js"
 import { EventModel } from "../../models/data/event.js";
 import { UserModel } from "../../models/data/user.js";
 import { UserSyncedDoorModel } from "../../models/settings/user-synced-door.js";
+import { getIo } from "../../utils/socket.io.js";
 
 export const getDoors = async (req, res, next) => {
   try {
@@ -165,7 +166,13 @@ export const syncDoors = async (req, res, next) => {
       return res.status(200).json({ message: "removed" });
     }
 
-    await UserSyncedDoorModel.findOneAndUpdate({ user: userId, door: doorId }, { status });
+    let sync = await UserSyncedDoorModel.findOneAndUpdate({ user: userId, door: doorId }, { status })
+      .populate([
+        { path: "user", select: "fullName" },
+        { path: "door", select: "title" }
+      ]);
+    let io = await getIo();
+    io.emit("sync-status", { status, user: sync.user, door: sync.door });
 
     res.status(200).json({ message: "synced" });
   } catch (error) {
