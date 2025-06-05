@@ -1,5 +1,5 @@
 import Queue from "bull";
-import { syncing } from "../event.sync";
+import { syncing } from "../event.sync.js";
 
 const eventQueue = new Queue("event-sync");
 eventQueue.process(2, async (job) => {
