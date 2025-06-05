@@ -184,16 +184,22 @@ export const syncDoors = async (req, res, next) => {
 export const existsDoorEvent = async (req, res, next) => {
   try {
     let { door, employeeNoString, time } = req.body;
+
+    let user = await UserModel.findOne({ employeeNo: employeeNoString }, "_id").lean();
+    if (!user) {
+      return res.status(200).json({ exists: "stop" });
+    }
+
     let event = await EventModel.findOne({
       door,
       employeeNoString,
       time: { $gte: new Date(new Date(time).getTime() - 60000), $lte: new Date(new Date(time).getTime() + 60000) },
     }, "_id").lean();
     if (!event) {
-      return res.status(200).json({ exists: false });
+      return res.status(200).json({ exists: "stop" });
     }
 
-    res.status(200).json({ exists: true });
+    res.status(200).json({ exists: "continue" });
   } catch (error) {
     console.error(error);
     next(error);
