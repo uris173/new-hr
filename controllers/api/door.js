@@ -16,7 +16,7 @@ export const getDoors = async (req, res, next) => {
       ...(user.doors && user.doors.length > 0 && { _id: { $in: user.doors } })
     }
 
-    let doors = await DoorModel.find(filter, "ip port login password");
+    let doors = await DoorModel.find(filter, "ip port login password type");
     res.status(200).json(doors);
   } catch (error) {
     console.error(error);
@@ -26,7 +26,7 @@ export const getDoors = async (req, res, next) => {
 
 export const getOpenDoors = async (req, res, next) => {
   try {
-    let doors = await DoorModel.find({ doorStatus: "online", isOpen: true, status: "active" }, "ip port login password");
+    let doors = await DoorModel.find({ doorStatus: "online", isOpen: true, status: "active" }, "ip port login password type");
     res.status(200).json(doors);
   } catch (error) {
     console.error(error);
@@ -117,32 +117,9 @@ const getUsersNotSynced = async (doorIds) => {
 
 export const getNotSyncedUsers = async (req, res, next) => {
   try {
-    let { _id } = req.user;
-    let findSecurity = await UserModel.findById(_id, "-_id doors");
+    let users = await UserModel.find({ status: "active" }, "-_id employeeNo").lean();
 
-    let { users, dooors } = await getUsersNotSynced(findSecurity.doors);
-
-    // let doors = [];
-    // let users = await Promise.all(findSecurity.doors.map(async door => {
-    //   let obj = {};
-    //   let findDoor = await DoorModel.findById(door, "_id ip login password").lean();
-    //   if (!obj[door]) {
-    //     obj[door] = [];
-    //   }
-    //
-    //   let users = await UserModel.find({
-    //     "sync.ip": { $ne: findDoor.ip },
-    //     status: "active",
-    //     role: { $ne: "admin" }
-    //   }, "fullName faceUrl employeeNo gender").lean();
-    //
-    //   obj[door] = users;
-    //   doors.push(findDoor);
-    //
-    //   return obj;
-    // }));
-
-    res.status(200).json({ users, doors });
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
     next(error);
