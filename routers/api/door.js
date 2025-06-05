@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js"
-import { getDoors, getOpenDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, openDoorsNotSyncedUsers, syncDoors, existsDoorEvent } from "../../controllers/api/door.js";
+import { getDoors, getOpenDoors, getLastDoorEvent, postDoorEvents, getNotSyncedUsers, openDoorsNotSyncedUsers, syncDoors, existsDoorEvent, getUserByEmployee } from "../../controllers/api/door.js";
 const router = Router();
 
 router.get("/", passport.authenticate("jwt", { session: false }), getDoors);
@@ -11,6 +11,7 @@ router.get("/user-not-synced", passport.authenticate("jwt", { session: false }),
 router.post("/open-doors/user-not-synced", openDoorsNotSyncedUsers);
 router.post("/post-sync", syncDoors);
 router.post("/exists-event", existsDoorEvent);
+router.post("/exists-user", getUserByEmployee);
 
 
 export default router;
@@ -373,6 +374,51 @@ export default router;
  *         description: Неверные параметры запроса
  *       401:
  *         description: Не авторизован 
+ */
+
+/**
+ * @swagger
+ * /api/door/exists-user:
+ *   post:
+ *     summary: Проверить существование пользователя по номеру сотрудника
+ *     description: Проверяет, существует ли пользователь с указанным номером сотрудника. Возвращает объект с полем exists, указывающим на наличие пользователя.
+ *     tags:
+ *       - Users
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               employeeNo:
+ *               type: string
+ *               description: Номер сотрудника для проверки
+ *           example:
+ *             employeeNo: "EMP12345"
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exists:
+ *                   type: boolean
+ *                   description: Существует ли пользователь с указанным номером сотрудника
+ *             example:
+ *               exists: true
+ *       400:
+ *         description: Неверные параметры запроса
+ *       401:
+ *         description: Не авторизован
+ *       403:
+ *         description: Доступ запрещен
+ *       500:
+ *         description: Внутренняя ошибка сервера
  */
 
 /**

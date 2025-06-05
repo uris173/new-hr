@@ -199,3 +199,19 @@ export const existsDoorEvent = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserByEmployee = async (req, res, next) => {
+  try {
+    let { employeeNo } = req.body;
+
+    let user = await UserModel.findOne({ employeeNo }, "_id").lean();
+    if (user) {
+      return res.status(200).json({ exists: true });
+    }
+
+    res.status(200).json({ exists: false });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
