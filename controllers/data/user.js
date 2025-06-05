@@ -125,7 +125,7 @@ export const create = async (req, res, next) => {
         calendar.push({
           user: user._id,
           date: currentDate,
-          shift: "off",
+          shift: "full_day",
           status: "active"
         });
       }

@@ -383,9 +383,7 @@ export default router;
  *     summary: Проверить существование пользователя по номеру сотрудника
  *     description: Проверяет, существует ли пользователь с указанным номером сотрудника. Возвращает объект с полем exists, указывающим на наличие пользователя.
  *     tags:
- *       - Users
- *     security:
- *       - bearerAuth: []
+ *       - API Doors
  *     requestBody:
  *       required: true
  *       content:
