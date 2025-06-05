@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { UserModel } from "../models/data/user.js";
 import { getRedisData, setRedisData, deleteRedisData, getRedisAllData } from "./redis.js";
 import { syncing } from "./event.sync.js";
+import eventQueue from "./queue/event-queue.js";
 
 /*
   new-user = fullName, faceUrl, employeeNo
@@ -86,7 +87,8 @@ export const initSocket = (server) => {
     }
 
     socket.on("event-sync", async (data) => {
-      await syncing(data);
+      // await syncing(data);
+      await eventQueue.add(data);
     });
 
     socket.on("sync-end", async (data) => {

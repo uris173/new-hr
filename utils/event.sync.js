@@ -1,12 +1,12 @@
 import { DoorModel } from "../models/settings/door.js";
 import { UserModel } from "../models/data/user.js";
 import { EventModel } from "../models/data/event.js";
+
 import { getIo } from "./socket.io.js";
 import { Worker } from "worker_threads";
 
 export const syncing = async (data) => {
   try {
-    // console.log(__dirname, '../utils/workers/door-worker.js')
     const worker = new Worker('./utils/workers/door-worker.js', { workerData: data });
 
     worker.on("message", async (data) => {
