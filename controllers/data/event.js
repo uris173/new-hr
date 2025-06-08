@@ -82,9 +82,11 @@ export const create = async (req, res, next) => {
 
 export const eventSync = async (req, res, next) => {
   try {
-    let { start, end } = req.body;
+    let { start, end, door } = req.body;
+
+    let findDoor = await DoorModel.find({ _id: door }, "ip port login password");
     let io = await getIo();
-    io.to("hr-script69").emit("event-sync", { start, end });
+    io.to("hr-script69").emit("event-sync", { start, end, door: findDoor });
 
     res.status(200).json({ message: "syncStarted" });
   } catch (error) {

@@ -7,7 +7,7 @@ router.get("/", passport.authenticate("jwt", { session: false }), getDoors);
 router.get("/open-doors", getOpenDoors)
 router.get("/last-event", getLastDoorEvent);
 router.post("/post-events", postDoorEvents);
-router.get("/user-not-synced", passport.authenticate("jwt", { session: false }), getNotSyncedUsers);
+router.get("/user-not-synced", getNotSyncedUsers);
 router.post("/open-doors/user-not-synced", openDoorsNotSyncedUsers);
 router.post("/post-sync", syncDoors);
 router.post("/exists-event", existsDoorEvent);
