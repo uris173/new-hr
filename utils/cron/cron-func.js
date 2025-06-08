@@ -27,18 +27,6 @@ export const getDatesByWeekDay = (year, month, weekDay) => {
     .filter(date => date.getDay() === weekDay);
 };
 
-function getWeekdayDatesWithIndex(year, month, weekDay) {
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const dates = [];
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day);
-    if (date.getDay() === weekDay) {
-      dates.push({ date, index: dates.length });
-    }
-  }
-  return dates;
-}
-
 export const createCalendar = async () => {
   try {
     const now = new Date();
