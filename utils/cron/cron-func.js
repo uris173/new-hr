@@ -1,5 +1,6 @@
 import { UserModel } from "../../models/data/user.js";
 import { CalendarModel } from "../../models/settings/calendar.js";
+import { DepartmentModel } from "../../models/data/department.js";
 import { DoorLoggerModel } from "../../models/logger/door.js";
 import { DoorModel } from "../../models/settings/door.js";
 import { getIo } from "../socket.io.js";
@@ -7,69 +8,70 @@ import tcp from "tcp-ping";
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function* getUserBatches(batchSize = 100) {
-  let skip = 0;
-  while (true) {
+export const getUserBatches = async (batchSize = 100) => {
+  const total = await UserModel.countDocuments({ status: "active" });
+  const batches = [];
+  for (let skip = 0; skip < total; skip += batchSize) {
     const users = await UserModel.find({ status: "active" }, "_id")
       .skip(skip)
       .limit(batchSize)
       .lean();
-
-    if (!users.length) break;
-    yield users;
-    skip += batchSize;
+    if (users.length) batches.push(users);
   }
+  return batches;
 };
 
-async function* getDatesByWeekDay (year, month, weekDay) {
+export const getDatesByWeekDay = (year, month, weekDay) => {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  return Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1))
+    .filter(date => date.getDay() === weekDay);
+};
+
+function getWeekdayDatesWithIndex(year, month, weekDay) {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const dates = [];
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month, day);
     if (date.getDay() === weekDay) {
-      dates.push(date);
+      dates.push({ date, index: dates.length });
     }
   }
   return dates;
-};
+}
 
 export const createCalendar = async () => {
   try {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
-    const prevMonth = month === 0 ? 11 : month - 1;
-    const prevYear = month === 0 ? year - 1 : year;
 
-    for await (const users of getUserBatches(100)) {
+    const batches = await getUserBatches(100);
+    for (const users of batches) {
       for (const user of users) {
-        const prevCalendars = await CalendarModel.find({
-          user: user._id,
-          date: {
-            $gte: new Date(prevYear, prevMonth, 1, 0, 0, 0),
-            $lte: new Date(prevYear, prevMonth + 1, 0, 23, 59, 59)
-          }
-        }, "date shift status").lean();
+        // Получаем департамент пользователя с рабочим расписанием
+        const userWithDept = await UserModel.findById(user._id).populate({
+          path: "department",
+          select: "workTime"
+        }).lean();
 
-        if (!prevCalendars.length) continue;
+        if (!userWithDept?.department?.workTime?.length) continue;
 
-        const weekDayMap = new Map();
-        prevCalendars.forEach(calendar => {
-          const weekDay = new Date(calendar.date).getDay();
-          if (!weekDayMap.has(weekDay)) weekDayMap.set(weekDay, []);
-          weekDayMap.get(weekDay).push(calendar);
-        });
-
+        const workTime = userWithDept.department.workTime; // [{ day: 1, startTime, endTime }, ...]
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         const newCalendars = [];
-        for (let weekDay of weekDayMap.keys()) {
-          const template = weekDayMap.get(weekDay)[0];
-          const dates = getDatesByWeekDay(year, month, weekDay);
-          for (const date of dates) {
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const date = new Date(year, month, day);
+          const weekDay = date.getDay(); // 0 - воскресенье, 1 - понедельник, ...
+
+          // Находим рабочий день в расписании департамента
+          const deptWorkDay = workTime.find(wt => wt.day === weekDay);
+          if (deptWorkDay) {
             newCalendars.push({
               user: user._id,
               date,
-              shift: template.shift,
-              status: template.status
+              shift: "full_day", // или deptWorkDay.shift, если есть
+              status: "active"
             });
           }
         }
@@ -78,9 +80,9 @@ export const createCalendar = async () => {
           await CalendarModel.insertMany(newCalendars);
         }
       }
-
-      await sleep(5000);
+      await sleep(5000); // если нужно делать паузы между батчами
     }
+    console.log("Календари по департаменту успешно созданы");
   } catch (error) {
     console.error("Error in Create calendar:", error);
   }
