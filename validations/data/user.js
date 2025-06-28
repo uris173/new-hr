@@ -76,6 +76,22 @@ export const UserQueryFilter = (data) => Joi.object({
       "array.includes": "userIdArrayIncludes",
     }),
 
+  gender: Joi.string()
+    .valid("male", "female")
+    .default("active")
+    .messages({
+      "string.base": "userGenderBase",
+      "any.only": "userGenderBase",
+    }),
+
+  presence: Joi.string()
+    .valid("came", "not came")
+    .default("active")
+    .messages({
+      "string.base": "userPresenceBase",
+      "any.only": "userPresenceBase"
+    }),
+
   limit: Joi.number()
     // .valid(0, 1, 30, 50, 100)
     .min(0)

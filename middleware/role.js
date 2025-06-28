@@ -20,6 +20,14 @@ export const canCreate = (currentRole, newRole) => {
   return false;
 };
 
+export const oneC = (req, res, next) => {
+  if (req.headers["authorization"] === "5rBz62VvAozmVmUJz0aJVw==.inLyM0N6Np3OHsZbgFV5OBhZ9qWdhtM8YvPtpV7DCpg=") {
+    return next();
+  }
+
+  throw { status: 403, message: "authError" };
+}
+
 export const admin = async (req, res, next) => {
   if (req.user) {
     let { role } = req.user;

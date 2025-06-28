@@ -1,6 +1,7 @@
 import { EventModel } from "../../models/data/event.js";
 import { DoorModel } from "../../models/settings/door.js";
 import { UserModel } from "../../models/data/user.js";
+import { departmentUsers } from "../../utils/helper.js";
 
 export const eventsCount = async (req, res, next) => {
   try {
@@ -16,23 +17,26 @@ export const eventsCount = async (req, res, next) => {
     const monthStart = new Date(now);
     monthStart.setDate(1);
     monthStart.setHours(0, 0, 0, 0);
+
+    let depUsers = await departmentUsers(req.user, "user");
     
     const results = await EventModel.aggregate([
       {
         $facet: {
           today: [
-            { $match: { time: { $gte: todayStart } } },
+            { $match: { time: { $gte: todayStart } }, ...depUsers },
             { $count: "count" }
           ],
           week: [
-            { $match: { time: { $gte: weekStart } } },
+            { $match: { time: { $gte: weekStart } }, ...depUsers },
             { $count: "count" }
           ],
           month: [
-            { $match: { time: { $gte: monthStart } } },
+            { $match: { time: { $gte: monthStart } }, ...depUsers },
             { $count: "count" }
           ],
           total: [
+            { $math: { ...depUsers } },
             { $count: "count" }
           ]
         }
@@ -55,11 +59,12 @@ export const eventsCount = async (req, res, next) => {
 
 export const getLastEvents = async (req, res, next) => {
   try {
+    let depUsers = await departmentUsers(req.user, "user");
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
-    let users = await UserModel.find({ role: { $ne: "admin" }, status: "active" }, "_id").lean();
-    let arrivedToday = await EventModel.distinct("user", { time: { $gte: todayStart }, action: "enter" });
+    let users = await UserModel.find({ ...(["chief"].includes(req.user.role) ? { _id: depUsers.user } : { }), role: { $ne: "admin" }, status: "active" }, "_id").lean();
+    let arrivedToday = await EventModel.distinct("user", { ...depUsers, time: { $gte: todayStart }, action: "enter" });
     let notArrivedToday = users.filter(user => !arrivedToday.map(u => u.toString()).includes(user._id.toString()));
 
     let populateOptions = [
@@ -81,15 +86,15 @@ export const getLastEvents = async (req, res, next) => {
       }
     ];
 
-    let lastEnter = await EventModel.findOne({ action: "enter" }, "type action time user door pictureURL")
+    let lastEnter = await EventModel.findOne({ action: "enter", ...depUsers }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastExit = await EventModel.findOne({ action: "exit" }, "type action time user door pictureURL")
+    let lastExit = await EventModel.findOne({ action: "exit", ...depUsers }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 });
 
-    let lastEvents = await EventModel.find({ time: { $gte: todayStart }, _id: { $nin: [lastEnter?._id, lastExit?._id] } }, "type action time user door pictureURL")
+    let lastEvents = await EventModel.find({ ...depUsers, time: { $gte: todayStart }, _id: { $nin: [lastEnter?._id, lastExit?._id] } }, "type action time user door pictureURL")
       .populate(populateOptions)
       .sort({ time: -1 })
       .limit(10);
@@ -110,6 +115,8 @@ export const getLastEvents = async (req, res, next) => {
 
 export const getDoorEvents = async (req, res, next) => {
   try {
+    let depUsers = await departmentUsers(req.user, "user");
+
     let populateOptions = [
       {
         path: "user",
@@ -126,7 +133,7 @@ export const getDoorEvents = async (req, res, next) => {
       .lean();
 
     doors = await Promise.all(doors.map(async (door) => {
-      let doorEvents = await EventModel.find({ door: door._id }, "branch time user pictureURL")
+      let doorEvents = await EventModel.find({ ...depUsers, door: door._id }, "branch time user pictureURL")
         .populate(populateOptions)
         .sort({ time: -1 })
         .limit(10);

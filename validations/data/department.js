@@ -114,7 +114,7 @@ export const CreateDepartment = (data) => Joi.object({
             "any.required": "departmentWorkTimeStartTimeRequired"
           }),
         endTime: Joi.date()
-          .greater(Joi.ref("startTime"))
+          // .greater(Joi.ref("startTime"))
           .required()
           .messages({
             "date.base": "departmentWorkTimeEndTimeBase",
@@ -223,7 +223,7 @@ export const UpdateDepartment = (data) => Joi.object({
             "any.required": "departmentWorkTimeStartTimeRequired"
           }),
         endTime: Joi.date()
-          .greater(Joi.ref("startTime"))
+          // .greater(Joi.ref("startTime"))
           .required()
           .messages({
             "date.base": "departmentWorkTimeEndTimeBase",

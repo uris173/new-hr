@@ -3,6 +3,7 @@ import { DoorModel } from "../../models/settings/door.js";
 import { UserModel } from "../../models/data/user.js";
 import { EventQueryFilter } from "../../validations/data/event.js";
 import { getIo } from "../../utils/socket.io.js";
+import { departmentUsers } from "../../utils/helper.js";
 let select = "-createdAt -updatedAt -__v";
 
 export const all = async (req, res, next) => {
@@ -12,10 +13,13 @@ export const all = async (req, res, next) => {
     
     let { limit, page, type, user, door, department, branch } = req.query;
 
+    let depUsers = await departmentUsers(req.user, "user");
+
     limit = parseInt(limit) || 30;
     page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
+      ...depUsers,
       ...(type && { type }),
       ...(user && { user }),
       ...(door && { door }),

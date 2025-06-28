@@ -1,3 +1,5 @@
+import { UserModel } from "../../models/data/user.js";
+import { EventModel } from "../../models/data/event.js";
 import { DepartmentModel } from "../../models/data/department.js";
 import { DepartmentQueryFilter, CreateDepartment, UpdateDepartment } from "../../validations/data/department.js";
 import { emitToAdmin } from "../../utils/socket.io.js";
@@ -11,10 +13,14 @@ export const all = async (req, res, next) => {
     let { limit, page, name, type, parent, chief, pick } = req.query
     pick = pick ? JSON.parse(pick) : select;
 
-    limit = parseInt(limit) || 30;
+    let startDay = new Date().setHours(0, 0, 0, 0);
+    let endDay = new Date().setHours(23, 59, 59, 999);
+
+    limit = parseInt(limit) ?? 30;
     page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
+      ...(!["admin", "boss"].includes(req.user.role) ? { _id: req.user.department } : { }),
       status: { $ne: "deleted" },
       ...(name && { name: new RegExp(name, 'i') }),
       ...(type && { type }),
@@ -23,7 +29,7 @@ export const all = async (req, res, next) => {
     };
 
     let count = await DepartmentModel.countDocuments(filter);
-    let data = await DepartmentModel.find(filter, pick)
+    let data = await DepartmentModel.find(filter, `${pick} -workTime`)
     .populate([
       // { path: 'parent', select: '-_id name' },
       { path: 'chief', select: '-_id fullName' }
@@ -32,6 +38,17 @@ export const all = async (req, res, next) => {
     .limit(limit)
     .skip(skip)
     .lean();
+
+    data = await Promise.all(data.map(async d => {
+      let users = await UserModel.find({ department: d._id }, "_id").lean();
+      let userEvents = await EventModel.distinct("user", { user: { $in: users.map(u => u._id) }, time: { $gte: startDay, $lte: endDay } });
+
+      d.users = users.length;
+      d.camed = userEvents.length;
+      d.notCamed = users.length - userEvents.length;
+
+      return d;
+    }))
 
     res.status(200).json({
       count,
@@ -123,6 +140,10 @@ export const update = async (req, res, next) => {
       { path: 'chief', select: 'fullName' }
     ])
     .lean();
+
+    if (chief) {
+      await UserModel.findOneAndUpdate({ _id: chief, role: { $ne: 'chief' } }, { role: "chief" });
+    }
     await emitToAdmin("department", { _id: department._id });
 
     res.status(200).json(department);

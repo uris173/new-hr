@@ -1,14 +1,15 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
 import { validateObjectId } from "../../middleware/validate.js";
-import { top } from "../../middleware/role.js";
+import { top, manage } from "../../middleware/role.js";
 import { all, getOne, create, update, remove } from "../../controllers/settings/reason.js";
 
 const router = Router();
 
+router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
+
 router.route('/')
 .all(passport.authenticate('jwt', { session: false }), top)
-.get(all)
 .post(create)
 .put(update);
 

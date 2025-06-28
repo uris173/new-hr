@@ -107,6 +107,8 @@
   "branchLocationCoordinatesLength": "Поле 'coordinates' должно содержать 2 числа, разделенных запятой.",
 
 
+  "userPresenceBase": "Поле 'presence' должно быть одним из значений: came, not came.",
+
   "userIdCustom": "Неверный формат идентификатора пользователя.",
   "userIdBase": "Пользователь должен быть строкой.",
   "userIdArrayBase": "Пользователь должен быть массивом.",
