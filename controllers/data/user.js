@@ -71,6 +71,50 @@ export const all = async (req, res, next) => {
   }
 };
 
+export const securityUsers = async (req, res, next) => {
+  try {
+    let { error } = UserQueryFilter(req.query);
+    if (error) throw { status: 400, message: error.details[0].message };
+
+    let { _id } = req.user;
+    let { page, limit, fullName, role, employeeNo, status, pick } = req.query;
+    pick = pick ? JSON.parse(pick) : select;
+
+    limit = parseInt(limit) || 30;
+    page = parseInt(page) || 1;
+    let skip = (page - 1) * limit;
+    let filter = {
+      status: { $ne: "deleted" },
+      ...(fullName && { fullName: new RegExp(fullName, 'i') }),
+      ...(role ? { role } : canView(req.user)),
+      ...(employeeNo && { employeeNo }),
+      ...(status && { status })
+    };
+
+    let security = await UserModel.findById(_id, "doors").lean();
+    let syncedDoorsUsers = await UserSyncedDoorModel.distinct("user", { door: { $in: security.doors }, status: "success" }).lean();
+    
+    let count = await UserModel.countDocuments({ _id: { $in: syncedDoorsUsers }, ...filter });
+    let data = await UserModel.find({ _id: { $in: syncedDoorsUsers }, ...filter }, pick)
+    .populate({ path: "department", select: "name" })
+    .sort({ _id: -1 })
+    .limit(limit)
+    .skip(skip)
+    .lean();
+
+    res.status(200).json({
+      count,
+      page,
+      limit,
+      totalPage: Math.ceil(count / limit),
+      data
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export const create = async (req, res, next) => {
   try {
     let { error } = UserCreate(req.body);

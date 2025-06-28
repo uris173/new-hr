@@ -6,6 +6,7 @@ const router = Router();
 
 import {
   all,
+  securityUsers,
   create,
   getUserInfo,
   getOne,
@@ -24,6 +25,8 @@ router.route('/')
 .get(all)
 .post(create)
 .put(update);
+
+router.get('/security', passport.authenticate('jwt', { session: false }), top, securityUsers);
 
 router.route('/calendar')
 .all(passport.authenticate('jwt', { session: false }), top)

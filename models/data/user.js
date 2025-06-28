@@ -21,10 +21,10 @@ const userSchema = new Schema({
   employeeNo: String,
   birthDay: Date,
   address: String,
-  // doors: [{
-  //   type: Types.ObjectId,
-  //   ref: 'door'
-  // }],
+  doors: [{
+    type: Types.ObjectId,
+    ref: 'door'
+  }],
   status: {
     type: String,
     enum: ["active", "inactive", "deleted"],
