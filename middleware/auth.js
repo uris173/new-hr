@@ -4,7 +4,7 @@ dotenv.config();
 import passport from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 import { UserModel } from "../models/data/user.js";
-let select = 'fullName phone role'
+let select = 'fullName phone role department';
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

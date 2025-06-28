@@ -1,3 +1,31 @@
+import { DepartmentModel } from "../models/data/department.js";
+import { UserModel } from "../models/data/user.js";
+
+export const departmentUsers = async (requestUser, field) => {
+  if (["chief"].includes(requestUser.role)) {
+    let findDepartmetnChief = await DepartmentModel.findOne({ _id: requestUser.department }, "chief").lean();
+    let filter = { };
+    if (requestUser._id.toString() === findDepartmetnChief.chief.toString()) {
+      filter = { department: findDepartmetnChief._id };
+      let users = await UserModel.find(filter, "_id").lean();
+      users = users.map(u => u._id);
+
+      return { [field]: { $in: users } };
+    }
+
+    return { [field]: { $in: [] } };
+    // let filter = {
+    //   ...(["chief"].includes(requestUser.role) ? { department: requestUser.department } : { })
+    // };
+    // let users = await UserModel.find(filter, "_id").lean();
+    // users = users.map(u => u._id);
+    //
+    // return { [field]: { $in: users } };
+  }
+
+  return { };
+};
+
 export const calculateWorkDuration = (data) => {
   const events = data.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
   let totalMinutes = 0;

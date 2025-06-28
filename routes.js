@@ -27,8 +27,10 @@ import HomeStatistic from "./routers/statistic/home.js";
 
 // api
 import ApiDoor from "./routers/api/door.js";
+import ApiEvent from "./routers/api/event.js";
 
 router.use('/api/door', ApiDoor);
+router.use('/api/event', ApiEvent);
 
 router.use('/upload', Upload);
 router.use('/auth', Auth);

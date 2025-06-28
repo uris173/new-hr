@@ -1,12 +1,12 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { top } from "../../middleware/role.js";
+import { top, manage } from "../../middleware/role.js";
 import { validateObjectId } from "../../middleware/validate.js";
 const router = Router();
 
 import { getUserCalendar } from "../../controllers/statistic/user.js";
 
-router.get("/calendar", passport.authenticate("jwt", { session: false }), validateObjectId("query", "_id"), top, getUserCalendar);
+router.get("/calendar", passport.authenticate("jwt", { session: false }), validateObjectId("query", "_id"), manage, getUserCalendar);
 
 export default router;
 

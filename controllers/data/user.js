@@ -6,6 +6,7 @@ import { AbsenceModel } from "../../models/settings/absence.js";
 import { HolidayModel } from "../../models/settings/holiday.js";
 import { EventModel } from "../../models/data/event.js";
 import { UserSyncedDoorModel } from "../../models/settings/user-synced-door.js";
+import { departmentUsers } from "../../utils/helper.js";
 // import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
@@ -20,7 +21,7 @@ export const canView = (user) => {
   let returnedData = {
     "admin": { role: { $in: ["boss", "chief", "worker", "security", "guest"] } },
     "boss": { role: { $in: ["chief", "worker", "security", "guest"] } },
-    "chief": { role: "worker", department: user.department },
+    "chief": { role: ["chief", "worker"], department: user.department },
     "security": { _id: user._id },
     "worker": { _id: user._id }
   };
@@ -33,15 +34,19 @@ export const all = async (req, res, next) => {
     let { error } = UserQueryFilter(req.query);
     if (error) throw { status: 400, message: error.details[0].message };
 
-    let { page, limit, fullName, role, department, employeeNo, status, pick, users, ninUsers } = req.query;
+    let { page, limit, fullName, gender, role, department, employeeNo, status, pick, users, ninUsers, presence } = req.query;
     pick = pick ? JSON.parse(pick) : select;
 
-    limit = parseInt(limit) || 30;
+    let depUsers = await departmentUsers(req.user, "_id");
+
+    limit = parseInt(limit) ?? 30;
     page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
+      ...depUsers,
       status: { $ne: "deleted" },
       ...(fullName && { fullName: new RegExp(fullName, 'i') }),
+      ...(gender && { gender }),
       ...(department && { department }),
       ...(role ? { role } : canView(req.user)),
       ...(employeeNo && { employeeNo }),
@@ -49,6 +54,18 @@ export const all = async (req, res, next) => {
       ...(users && { _id: { $in: users } }),
       ...(ninUsers && { _id: { $nin: ninUsers } }),
     };
+
+    if (presence) {
+      let startDay = new Date().setHours(0, 0, 0, 0);
+      let endDay = new Date().setHours(23, 59, 59, 999);
+
+      let userEvents = await EventModel.distinct("user", { ...(["chief"].includes(req.user.role) ? { _id: depUsers.user } : { }), time: { $gte: startDay, $lte: endDay } });
+      if (presence === "came") {
+        filter._id = { $in: userEvents }
+      } else {
+        filter._id = { $nin: userEvents }
+      }
+    }
 
     let count = await UserModel.countDocuments(filter);
     let data = await UserModel.find(filter, pick)

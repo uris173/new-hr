@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { top } from "../../middleware/role.js";
+import { top, manage } from "../../middleware/role.js";
 import { validateObjectId } from "../../middleware/validate.js";
 const router = Router();
 
@@ -20,9 +20,10 @@ import {
   remove
 } from "../../controllers/data/user.js";
 
+router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
+
 router.route('/')
 .all(passport.authenticate('jwt', { session: false }), top)
-.get(all)
 .post(create)
 .put(update);
 
@@ -40,7 +41,7 @@ router.route('/calendar/:id')
 .all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
 .get(getUserCalendar)
 
-router.get("/info/:id", passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), top, getUserInfo)
+router.get("/info/:id", passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), manage, getUserInfo)
 router.get('/status/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top, changeStatus);
 
 router.route('/:id')
@@ -320,6 +321,12 @@ export default router;
  *         schema:
  *           type: string
  *         description: Фильтр по полному имени пользователя (регистронезависимый)
+ *       - in: query
+ *         name: gender
+ *         schema:
+ *           type: string
+ *           enum: ["male", "female"]
+ *         description: Фильтр по полу пользователя
  *       - in: query
  *         name: role
  *         schema:

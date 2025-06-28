@@ -29,8 +29,10 @@ export const syncing = async (data) => {
       events = events.filter(e => e !== null);
       
       await EventModel.insertMany(events);
-      let io = await getIo();
-      io.emit("new-events", { count: events.length });
+      if (events.length) {
+        let io = await getIo();
+        io.emit("new-events", { count: events.length });
+      }
     });
 
     worker.on("error", (error) => {

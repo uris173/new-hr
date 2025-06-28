@@ -9,6 +9,7 @@ import {
 const generateToken = (user, generate, refresh, exp) => {
   const payload = {
     _id: user._id,
+    role: user.role,
     fullName: user.fullName,
     phone: user.phone,
     department: user.department,
@@ -82,7 +83,7 @@ export const login = async (req, res, next) => {
     if (error) throw { status: 400, message: error.details[0].message };
 
     let { phone, password } = req.body;
-    let findUser = await UserModel.findOne({ phone }, 'fullName phone password faceUrl department status');
+    let findUser = await UserModel.findOne({ phone }, 'fullName phone password role faceUrl department status');
 
     if (!findUser) throw { status: 400, message: "userNotFound" };
     if (!(await verify(findUser.password, password))) throw { status: 400, message: "incorectPassword" };
@@ -124,7 +125,7 @@ export const userVerify = async (req, res, next) => {
     const user = req.user;
     if (!user) throw { status: 403, message: "authError" };
 
-    let findUser = await UserModel.findById(user._id, "fullName phone faceUrl department");
+    let findUser = await UserModel.findById(user._id, "fullName phone faceUrl department role");
     if (!user) throw { status: 400, message: "userNotFound" };
 
     res.status(200).json(generateToken(findUser, false, false));
