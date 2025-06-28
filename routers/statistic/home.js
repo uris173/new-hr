@@ -1,13 +1,13 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { top, manage } from "../../middleware/role.js";
+import { all } from "../../middleware/role.js";
 const router = Router();
 
 import { eventsCount, getDoorEvents, getLastEvents} from "../../controllers/statistic/home.js";
 
-router.get("/events-count", passport.authenticate("jwt", { session: false }), manage, eventsCount);
-router.get("/last-events", passport.authenticate("jwt", { session: false }), manage, getLastEvents);
-router.get("/door-events", passport.authenticate("jwt", { session: false }), manage, getDoorEvents);
+router.get("/events-count", passport.authenticate("jwt", { session: false }), all, eventsCount);
+router.get("/last-events", passport.authenticate("jwt", { session: false }), all, getLastEvents);
+router.get("/door-events", passport.authenticate("jwt", { session: false }), all, getDoorEvents);
 
 export default router;
 

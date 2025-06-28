@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { top, manage } from "../../middleware/role.js";
+import { top, manage, security } from "../../middleware/role.js";
 import { validateObjectId } from "../../middleware/validate.js";
 const router = Router();
 
@@ -27,7 +27,7 @@ router.route('/')
 .post(create)
 .put(update);
 
-router.get('/security', passport.authenticate('jwt', { session: false }), top, securityUsers);
+router.get('/security', passport.authenticate('jwt', { session: false }), security, securityUsers);
 
 router.route('/calendar')
 .all(passport.authenticate('jwt', { session: false }), top)

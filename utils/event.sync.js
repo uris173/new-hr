@@ -27,11 +27,22 @@ export const syncing = async (data) => {
         return event
       }));
       events = events.filter(e => e !== null);
+      let uniqueDoorIds = [...new Set(events.map(event => event.door))];
       
       await EventModel.insertMany(events);
       if (events.length) {
         let io = await getIo();
         io.emit("new-events", { count: events.length });
+      }
+      if (uniqueDoorIds.length) {
+        let io = await getIo();
+        for (let doorId of uniqueDoorIds) {
+          let findSecurity = await UserModel.findOne({ role: "security", door: [doorId] }, "_id").lean();
+          if (findSecurity) {
+            let findDoorEvents = events.filter(event => event.door.toString() === doorId.toString());
+            io.to(findSecurity._id.toString()).emit("new-events", { findDoorEvents });
+          }
+        }
       }
     });
 

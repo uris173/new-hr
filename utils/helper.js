@@ -1,7 +1,8 @@
 import { DepartmentModel } from "../models/data/department.js";
+import { UserSyncedDoorModel } from "../models/settings/user-synced-door.js";
 import { UserModel } from "../models/data/user.js";
 
-export const departmentUsers = async (requestUser, field) => {
+export const getUsers = async (requestUser, field) => {
   if (["chief"].includes(requestUser.role)) {
     let findDepartmetnChief = await DepartmentModel.findOne({ _id: requestUser.department }, "chief").lean();
     let filter = { };
@@ -21,6 +22,10 @@ export const departmentUsers = async (requestUser, field) => {
     // users = users.map(u => u._id);
     //
     // return { [field]: { $in: users } };
+  } else if (["security"].includes(requestUser.role)) {
+    let security = await UserModel.findOne({ _id: requestUser._id }, "door").lean();
+    let users = await UserSyncedDoorModel.distinct("user", { door: { $in: security.doors } });
+    return { [field]: { $in: users } };
   }
 
   return { };

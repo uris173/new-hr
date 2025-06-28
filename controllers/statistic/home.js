@@ -1,7 +1,7 @@
 import { EventModel } from "../../models/data/event.js";
 import { DoorModel } from "../../models/settings/door.js";
 import { UserModel } from "../../models/data/user.js";
-import { departmentUsers } from "../../utils/helper.js";
+import { getUsers } from "../../utils/helper.js";
 
 export const eventsCount = async (req, res, next) => {
   try {
@@ -18,7 +18,7 @@ export const eventsCount = async (req, res, next) => {
     monthStart.setDate(1);
     monthStart.setHours(0, 0, 0, 0);
 
-    let depUsers = await departmentUsers(req.user, "user");
+    let depUsers = await getUsers(req.user, "user");
     
     const results = await EventModel.aggregate([
       {
@@ -59,7 +59,7 @@ export const eventsCount = async (req, res, next) => {
 
 export const getLastEvents = async (req, res, next) => {
   try {
-    let depUsers = await departmentUsers(req.user, "user");
+    let depUsers = await getUsers(req.user, "user");
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
@@ -115,7 +115,7 @@ export const getLastEvents = async (req, res, next) => {
 
 export const getDoorEvents = async (req, res, next) => {
   try {
-    let depUsers = await departmentUsers(req.user, "user");
+    let depUsers = await getUsers(req.user, "user");
 
     let populateOptions = [
       {

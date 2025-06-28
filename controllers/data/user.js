@@ -6,7 +6,7 @@ import { AbsenceModel } from "../../models/settings/absence.js";
 import { HolidayModel } from "../../models/settings/holiday.js";
 import { EventModel } from "../../models/data/event.js";
 import { UserSyncedDoorModel } from "../../models/settings/user-synced-door.js";
-import { departmentUsers } from "../../utils/helper.js";
+import { getUsers } from "../../utils/helper.js";
 // import { WorkerModel } from "../../models/data/worker.js";
 import { canCreate } from "../../middleware/role.js"
 import { hash } from "argon2";
@@ -37,7 +37,7 @@ export const all = async (req, res, next) => {
     let { page, limit, fullName, gender, role, department, employeeNo, status, pick, users, ninUsers, presence } = req.query;
     pick = pick ? JSON.parse(pick) : select;
 
-    let depUsers = await departmentUsers(req.user, "_id");
+    let depUsers = await getUsers(req.user, "_id");
 
     limit = parseInt(limit) ?? 30;
     page = parseInt(page) || 1;
