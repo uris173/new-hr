@@ -61,11 +61,11 @@ const processData = async (data) => {
 
   return Object.entries(data).flatMap(([doorId, events]) =>
     events.map((event) => ({
-      type: event.type,
-      time: event.time,
-      employeeNoString: event.employeeNoString,
-      serialNo: event.serialNo,
-      pictureURL: event.pictureURL,
+      type: event?.type,
+      time: event?.time,
+      employeeNoString: event?.employeeNoString,
+      serialNo: event?.serialNo,
+      pictureURL: event?.pictureURL,
       door: doorId,
     }))
   );

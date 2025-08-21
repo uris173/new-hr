@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { top, manage, security } from "../../middleware/role.js";
+import { top, all as allMid, security } from "../../middleware/role.js";
 import { validateObjectId } from "../../middleware/validate.js";
 const router = Router();
 
@@ -20,7 +20,7 @@ import {
   remove
 } from "../../controllers/data/user.js";
 
-router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
+router.get("/", passport.authenticate("jwt", { session: false }), allMid, all);
 
 router.route('/')
 .all(passport.authenticate('jwt', { session: false }), top)
@@ -41,7 +41,7 @@ router.route('/calendar/:id')
 .all(passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top)
 .get(getUserCalendar)
 
-router.get("/info/:id", passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), manage, getUserInfo)
+router.get("/info/:id", passport.authenticate('jwt', { session: false }), validateObjectId("params", "id"), allMid, getUserInfo)
 router.get('/status/:id', passport.authenticate('jwt', { session: false }), validateObjectId('params', 'id'), top, changeStatus);
 
 router.route('/:id')

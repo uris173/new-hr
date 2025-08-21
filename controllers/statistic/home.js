@@ -64,7 +64,7 @@ export const getLastEvents = async (req, res, next) => {
     todayStart.setHours(0, 0, 0, 0);
 
     let users = await UserModel.find({ ...(["chief"].includes(req.user.role) ? { _id: depUsers.user } : { }), role: { $ne: "admin" }, status: "active" }, "_id").lean();
-    let arrivedToday = await EventModel.distinct("user", { ...depUsers, time: { $gte: todayStart }, action: "enter" });
+    let arrivedToday = await EventModel.distinct("user", { ...depUsers, time: { $gte: todayStart } });
     let notArrivedToday = users.filter(user => !arrivedToday.map(u => u.toString()).includes(user._id.toString()));
 
     let populateOptions = [

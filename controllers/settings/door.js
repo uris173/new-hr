@@ -88,6 +88,7 @@ export const update = async (req, res, next) => {
       .populate({ path: "branch", select: "title" });
     if (!door) throw { status: 400, message: "doorNotFound" };
 
+    console.log(door)
     res.status(200).json(door);
   } catch (error) {
     console.error(error);

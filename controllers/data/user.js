@@ -19,8 +19,8 @@ let select = 'fullName role faceUrl department gender status employeeNo';
 
 export const canView = (user) => {
   let returnedData = {
-    "admin": { role: { $in: ["boss", "chief", "worker", "security", "guest"] } },
-    "boss": { role: { $in: ["chief", "worker", "security", "guest"] } },
+    "admin": { role: { $in: ["boss", "chief", "worker", "security", "observer", "guest"] } },
+    "boss": { role: { $in: ["chief", "worker", "security", "observer", "guest"] } },
     "chief": { role: ["chief", "worker"], department: user.department },
     "security": { _id: user._id },
     "worker": { _id: user._id }
@@ -43,8 +43,8 @@ export const all = async (req, res, next) => {
     page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
-      ...depUsers,
       status: { $ne: "deleted" },
+      ...depUsers,
       ...(fullName && { fullName: new RegExp(fullName, 'i') }),
       ...(gender && { gender }),
       ...(department && { department }),

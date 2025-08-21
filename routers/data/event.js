@@ -1,13 +1,13 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { manage } from "../../middleware/role.js";
+import { all as allMid } from "../../middleware/role.js";
 const router = Router();
 
 import { all, eventSync, create } from "../../controllers/data/event.js";
 
-router.get("/", passport.authenticate("jwt", { session: false }), manage, all);
-router.post("/", passport.authenticate("jwt", { session: false }), manage, create);
-router.post("/sync", passport.authenticate("jwt", { session: false }), manage, eventSync);
+router.get("/", passport.authenticate("jwt", { session: false }), allMid, all);
+router.post("/", passport.authenticate("jwt", { session: false }), allMid, create);
+router.post("/sync", passport.authenticate("jwt", { session: false }), allMid, eventSync);
 
 
 export default router;

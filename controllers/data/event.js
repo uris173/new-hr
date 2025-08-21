@@ -88,9 +88,14 @@ export const eventSync = async (req, res, next) => {
   try {
     let { start, end, door } = req.body;
 
+    let startDate = new Date(start);
+    startDate.setHours(0, 0, 0, 0);
+    let endDate = new Date(end);
+    endDate.setHours(23, 59, 59, 999);
+
     let findDoor = await DoorModel.find({ _id: door }, "ip port login password");
     let io = await getIo();
-    io.to("hr-script69").emit("event-sync", { start, end, door: findDoor });
+    io.to("hr-script69").emit("event-sync", { start: startDate, end: endDate, door: findDoor });
 
     res.status(200).json({ message: "syncStarted" });
   } catch (error) {

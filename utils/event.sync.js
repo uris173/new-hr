@@ -11,13 +11,17 @@ export const syncing = async (data) => {
 
     worker.on("message", async (data) => {
       let events = await Promise.all(data.map(async (event) => {
+        // if (event.employeeNoString === "59") {
+        //   console.log(events._id, event.employeeNoString, event.time)
+        // }
         let findUser = await UserModel.findOne({ employeeNo: event.employeeNoString }, "_id");
         if (!findUser) return null;
-        let findExists = await EventModel.findOne({
-          time: { $gte: new Date(new Date(event.time).getTime() - 60000), $lte: new Date(new Date(event.time).getTime() + 60000) },
-          door: event.door,
+        // console.log(event.time)
+        let findExists = event?.time ? await EventModel.findOne({
+          time: { $gte: new Date(new Date(event?.time).getTime() - 60000), $lte: new Date(new Date(event?.time).getTime() + 60000) },
+          door: event?.door,
           user: findUser._id
-        });
+        }) : null;
         if (findExists) return null;
 
         let findDoor = await DoorModel.findById(event.door, "-_id type").lean();

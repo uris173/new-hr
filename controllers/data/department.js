@@ -20,7 +20,7 @@ export const all = async (req, res, next) => {
     page = parseInt(page) || 1;
     let skip = (page - 1) * limit;
     let filter = {
-      ...(!["admin", "boss"].includes(req.user.role) ? { _id: req.user.department } : { }),
+      ...(!["admin", "boss", "observer"].includes(req.user.role) ? { _id: req.user.department } : { }),
       status: { $ne: "deleted" },
       ...(name && { name: new RegExp(name, 'i') }),
       ...(type && { type }),

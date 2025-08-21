@@ -12,7 +12,7 @@ export const UserQueryFilter = (data) => Joi.object({
     }),
 
   role: Joi.string()
-    .valid('boss', 'chief', 'worker', "security", 'guest')
+    .valid('boss', 'chief', 'worker', "observer", "security", 'guest')
     .messages({
       'any.only': 'Роль должна быть одной из: boss, chief, worker, guest.',
       'string.empty': 'Роль не может быть пустой.'
@@ -143,7 +143,7 @@ export const UserCreate = (data) => Joi.object({
     }),
   
   role: Joi.string()
-    .valid("boss", "chief", "worker", "security", "security", "guest")
+    .valid('boss', 'chief', 'worker', "observer", "security", 'guest')
     .required()
     .messages({
       'any.only': 'userRoleOnly',
@@ -275,7 +275,7 @@ export const UserUpdate = (data) => Joi.object({
     }),
   
   role: Joi.string()
-    .valid("boss", "chief", "worker", "security", "guest")
+    .valid('boss', 'chief', 'worker', "observer", "security", 'guest')
     .required()
     .messages({
       'any.only': 'userRoleOnly',

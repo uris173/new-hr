@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "../../middleware/auth.js";
-import { top, manage } from "../../middleware/role.js";
+import { top, all } from "../../middleware/role.js";
 import { validateObjectId } from "../../middleware/validate.js";
 const router = Router();
 
@@ -15,7 +15,7 @@ import {
 
 router.post('/staff-positions', passport.authenticate('jwt', { session: false }), top, getStaffPosition);
 
-router.get("/history", passport.authenticate("jwt", { session: false }), manage, allWorkerHistory);
+router.get("/history", passport.authenticate("jwt", { session: false }), all, allWorkerHistory);
 
 router.route("/history")
 .all(passport.authenticate('jwt', { session: false }), top)

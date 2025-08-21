@@ -89,11 +89,11 @@ export const checkDoorStatus = async () => {
           // console.log(`Ping: ${data.avg}`, `Door: ${door.ip}:${door.port}`)
           if (err || !data.avg) {
             resolve("offline");
-            await DoorModel.updateOne({ _id: door._id }, { doorStatus: "offline" });
+            // await DoorModel.updateOne({ _id: door._id }, { status: "offline" });
             await DoorLoggerModel.create({ door: door._id, status: "offline" });
           } else {
             resolve("online");
-            await DoorModel.updateOne({ _id: door._id }, { doorStatus: "online" });
+            // await DoorModel.updateOne({ _id: door._id }, { status: "online" });
             // await DoorLoggerModel.create({ avg: data.avg, door: door._id, status: "online" });
           }
         });

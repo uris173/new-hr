@@ -124,7 +124,6 @@ export const CreateDoor = (data) => Joi.object({
     }),
   
   password: Joi.string()
-    .pattern(new RegExp("^[a-zA-Z0-9]"))
     .min(3)
     .max(50)
     .required()
@@ -224,7 +223,6 @@ export const UpdateDoor = (data) => Joi.object({
     }),
   
   password: Joi.string()
-    .pattern(new RegExp("^[a-zA-Z0-9]"))
     .min(3)
     .max(50)
     .required()
